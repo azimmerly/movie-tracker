@@ -1,0 +1,16 @@
+# dependencies
+node_modules
+
+# testing
+coverage
+
+# environment variables
+.env*
+
+# logs
+logs
+*.log
+npm-debug.log*
+
+# mac
+.DS_Store
