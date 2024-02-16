@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+  }
+
+  html {
+    box-sizing: border-box;
+  }
+
+  body {
+    overflow-y: auto;
+  }
+
+  input:focus {
+    outline-color: theme(colors.indigo.600);
+  }
+}
