@@ -24,7 +24,7 @@ const HomePage = async () => {
             Sign-in / Sign-up to get started!
           </h1>
           <Link
-            href="/sign-in"
+            href="/sign-up"
             className="flex w-fit items-center justify-center gap-2.5 rounded-full bg-indigo-600 px-7 py-2.5 font-medium text-white shadow hover:bg-indigo-500"
           >
             <FaCircleUser className="h-4.5 w-4.5" />
