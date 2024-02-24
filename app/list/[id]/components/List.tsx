@@ -5,7 +5,7 @@ import axios from "axios";
 import Image from "next/image";
 import { useState } from "react";
 
-import { LoadingDots } from "@/app/components";
+import { ErrorMessage, LoadingDots } from "@/app/components";
 import type { ListType, MovieType } from "@/app/types";
 import { filterMovies } from "@/app/utils/filterMovies";
 import placeholder from "@/public/placeholder-1.svg";
@@ -31,11 +31,7 @@ export const List = ({ id }: ListProps) => {
   });
 
   if (error) {
-    return (
-      <p className="font-semibold text-slate-700">
-        Oops! Something went wrong...
-      </p>
-    );
+    return <ErrorMessage />;
   }
 
   if (isPending) {

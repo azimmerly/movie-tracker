@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
 
-import { LoadingDots } from "@/app/components";
+import { ErrorMessage, LoadingDots } from "@/app/components";
 import { ListType } from "@/app/types";
 import placeholder from "@/public/placeholder-1.svg";
 import { ListCard } from ".";
@@ -21,11 +21,7 @@ export const MyLists = () => {
   });
 
   if (error) {
-    return (
-      <p className="font-semibold text-slate-700">
-        Oops! Something went wrong...
-      </p>
-    );
+    return <ErrorMessage />;
   }
 
   return (
