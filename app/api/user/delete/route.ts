@@ -21,7 +21,9 @@ export async function DELETE() {
     });
 
     if (!prismaUser) {
-      throw Error("User not found");
+      return new NextResponse(JSON.stringify({ error: "User not found" }), {
+        status: 404,
+      });
     }
 
     await prisma.user.delete({
@@ -35,7 +37,7 @@ export async function DELETE() {
     });
   } catch (err) {
     return new NextResponse(JSON.stringify({ error: "Something went wrong" }), {
-      status: 403,
+      status: 500,
     });
   }
 }

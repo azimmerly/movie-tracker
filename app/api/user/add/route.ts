@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
 
     if (existingEmail) {
       return new NextResponse(
-        JSON.stringify({ message: "User with this email already exists" }),
+        JSON.stringify({ error: "User with this email already exists" }),
         { status: 409 },
       );
     }
@@ -42,12 +42,11 @@ export async function POST(request: NextRequest) {
     });
 
     return new NextResponse(JSON.stringify({ message: "Account created" }), {
-      status: 200,
+      status: 201,
     });
   } catch (err) {
-    return new NextResponse(
-      JSON.stringify({ message: "Something went wrong" }),
-      { status: 500 },
-    );
+    return new NextResponse(JSON.stringify({ error: "Something went wrong" }), {
+      status: 500,
+    });
   }
 }
