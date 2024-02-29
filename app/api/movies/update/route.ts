@@ -13,9 +13,33 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  const { isFavorite, isWatched, movieId } = await request.json();
-
   try {
+    const { isFavorite, isWatched, movieId } = await request.json();
+
+    const prismaUser = await prisma.user.findUnique({
+      where: {
+        email: session.user?.email as string,
+      },
+    });
+
+    if (!prismaUser) {
+      return new NextResponse(JSON.stringify({ error: "User not found" }), {
+        status: 404,
+      });
+    }
+
+    const movie = await prisma.movie.findUnique({
+      where: {
+        id: movieId,
+      },
+    });
+
+    if (movie?.userId !== prismaUser.id) {
+      return new NextResponse(JSON.stringify({ error: "Not authorized" }), {
+        status: 403,
+      });
+    }
+
     await prisma.movie.update({
       where: {
         id: movieId,
@@ -31,7 +55,7 @@ export async function POST(request: NextRequest) {
     });
   } catch (err) {
     return new NextResponse(JSON.stringify({ error: "Something went wrong" }), {
-      status: 403,
+      status: 500,
     });
   }
 }

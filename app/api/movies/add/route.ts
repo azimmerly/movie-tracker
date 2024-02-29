@@ -14,14 +14,10 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  type RequestDataType = {
-    newMovie: MovieType;
-    listId: string;
-  };
-
-  const { newMovie, listId }: RequestDataType = await request.json();
-
   try {
+    type RequestDataType = { newMovie: MovieType; listId: string };
+    const { newMovie, listId }: RequestDataType = await request.json();
+
     const prismaUser = await prisma.user.findUnique({
       where: {
         email: session.user?.email as string,
@@ -29,7 +25,21 @@ export async function POST(request: NextRequest) {
     });
 
     if (!prismaUser) {
-      throw Error("User not found");
+      return new NextResponse(JSON.stringify({ error: "User not found" }), {
+        status: 404,
+      });
+    }
+
+    const list = await prisma.list.findUnique({
+      where: {
+        id: listId,
+      },
+    });
+
+    if (list?.userId !== prismaUser.id) {
+      return new NextResponse(JSON.stringify({ error: "Not authorized" }), {
+        status: 403,
+      });
     }
 
     await prisma.movie.create({
@@ -49,11 +59,11 @@ export async function POST(request: NextRequest) {
     });
 
     return new NextResponse(JSON.stringify({ message: "Movie added" }), {
-      status: 200,
+      status: 201,
     });
   } catch (err) {
     return new NextResponse(JSON.stringify({ error: "Something went wrong" }), {
-      status: 403,
+      status: 500,
     });
   }
 }
