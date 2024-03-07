@@ -14,15 +14,15 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  const { title, id } = await request.json();
-
-  if (!isValidListTitle(title)) {
-    return new NextResponse(JSON.stringify({ error: "Invalid title" }), {
-      status: 401,
-    });
-  }
-
   try {
+    const { title, id } = await request.json();
+
+    if (!isValidListTitle(title)) {
+      return new NextResponse(JSON.stringify({ error: "Invalid title" }), {
+        status: 400,
+      });
+    }
+
     await prisma.list.update({
       where: {
         id: id,
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     });
   } catch (err) {
     return new NextResponse(JSON.stringify({ error: "Something went wrong" }), {
-      status: 403,
+      status: 500,
     });
   }
 }

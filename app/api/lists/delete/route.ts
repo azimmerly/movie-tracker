@@ -13,9 +13,9 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  const { listId } = await request.json();
-
   try {
+    const { listId } = await request.json();
+
     await prisma.list.delete({
       where: {
         id: listId,
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     });
   } catch (err) {
     return new NextResponse(JSON.stringify({ error: "Something went wrong" }), {
-      status: 403,
+      status: 500,
     });
   }
 }

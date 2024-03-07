@@ -14,15 +14,15 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  const { title } = await request.json();
-
-  if (!isValidListTitle(title)) {
-    return new NextResponse(JSON.stringify({ error: "Invalid title" }), {
-      status: 401,
-    });
-  }
-
   try {
+    const { title } = await request.json();
+
+    if (!isValidListTitle(title)) {
+      return new NextResponse(JSON.stringify({ error: "Invalid title" }), {
+        status: 400,
+      });
+    }
+
     const prismaUser = await prisma.user.findUnique({
       where: {
         email: session.user?.email as string,
@@ -30,7 +30,9 @@ export async function POST(request: NextRequest) {
     });
 
     if (!prismaUser) {
-      throw Error("User not found");
+      return new NextResponse(JSON.stringify({ error: "User not found" }), {
+        status: 404,
+      });
     }
 
     await prisma.list.create({
@@ -41,11 +43,11 @@ export async function POST(request: NextRequest) {
     });
 
     return new NextResponse(JSON.stringify({ message: "List created" }), {
-      status: 200,
+      status: 201,
     });
   } catch (err) {
     return new NextResponse(JSON.stringify({ error: "Something went wrong" }), {
-      status: 403,
+      status: 500,
     });
   }
 }
