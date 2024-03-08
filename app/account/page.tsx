@@ -14,7 +14,7 @@ const AccountPage = async () => {
   }
 
   return (
-    <div className="mt-20 flex flex-col items-center gap-12 text-slate-700 sm:items-start">
+    <div className="mt-12 flex flex-col items-center gap-12 text-slate-700 sm:mt-20 sm:items-start">
       <div className="flex w-fit items-center gap-4 rounded-xl bg-white px-5 py-3 shadow sm:px-10 sm:py-6">
         {session.user.image ? (
           <Image

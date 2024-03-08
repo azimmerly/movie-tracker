@@ -40,36 +40,20 @@ export const MovieDetailsModal = ({ movie }: MovieDetailsModalProps) => {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="relative z-10 mx-2 mt-24 h-fit w-full max-w-2xl rounded-lg bg-white p-3 shadow-xl sm:p-6 md:mt-56"
+            className="relative z-10 mx-4 mt-24 h-fit w-full max-w-2xl rounded-lg bg-white p-3 shadow-xl sm:p-6 md:mt-36"
           >
-            <div className="my-6 flex flex-col items-center">
+            <div className="mb-3 mt-6 flex flex-col items-center">
               <Image
                 priority
                 width={192}
                 height={240}
                 alt={title}
                 src={`https://image.tmdb.org/t/p/w342${image}`}
-                className="w-36 rounded-lg shadow-md md:w-56"
+                className="w-32 rounded-lg shadow-md md:w-56"
               />
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
-                <h1 className="text-center text-2xl font-bold text-slate-700">
-                  {title}
-                </h1>
-                <p className="mt-0.5 text-lg font-medium text-slate-500">
-                  ({year})
-                </p>
-              </div>
-              {!!tagline && (
-                <p className="mt-2 text-center text-sm text-slate-600">
-                  &quot;{tagline}&quot;
-                </p>
-              )}
-              {!!runtime && (
-                <p className="mt-1 text-center text-sm text-slate-600">
-                  <span className="font-semibold">Runtime: </span>
-                  {formatRuntime(runtime)}
-                </p>
-              )}
+              <h2 className="mt-6 text-center text-xl font-bold text-slate-700 sm:mt-8 sm:text-2xl">
+                {title}
+              </h2>
               <div className="mt-4 flex flex-wrap gap-1.5">
                 {genres?.map((genre, i) => (
                   <div
@@ -80,8 +64,25 @@ export const MovieDetailsModal = ({ movie }: MovieDetailsModalProps) => {
                   </div>
                 ))}
               </div>
+              {!!tagline && (
+                <p className="mt-4 text-center text-sm text-slate-600">
+                  &quot;{tagline}&quot;
+                </p>
+              )}
+              <div className="mt-1 flex flex-wrap gap-2 text-center text-sm text-slate-600">
+                {!!runtime && (
+                  <p>
+                    <span className="font-semibold">Runtime: </span>
+                    {formatRuntime(runtime)}
+                  </p>
+                )}
+                <p>
+                  <span className="font-semibold">Year: </span>
+                  {year}
+                </p>
+              </div>
               {!!description && (
-                <p className="mt-8 text-justify text-[15px] text-slate-700">
+                <p className="mt-6 max-w-xl rounded-lg bg-slate-100 p-4 text-justify text-sm text-slate-700 sm:mt-8">
                   {description}
                 </p>
               )}
@@ -90,7 +91,7 @@ export const MovieDetailsModal = ({ movie }: MovieDetailsModalProps) => {
                   target="_blank"
                   rel="noreferrer noopener"
                   href={`https://www.imdb.com/title/${imdbId}`}
-                  className="mt-8 flex items-center gap-2 rounded-full bg-indigo-600 px-5 py-2 text-sm font-medium text-white shadow transition hover:bg-indigo-500"
+                  className="mt-6 flex items-center gap-2 rounded-full bg-indigo-600 px-5 py-2 text-sm font-medium text-white shadow transition hover:bg-indigo-500"
                 >
                   <FaArrowUpRightFromSquare className="h-3 w-3" />
                   View on IMDb
@@ -99,10 +100,10 @@ export const MovieDetailsModal = ({ movie }: MovieDetailsModalProps) => {
             </div>
             <button
               onClick={() => setIsModalOpen(false)}
-              className="absolute right-3 top-3"
+              className="absolute right-2 top-2 sm:right-3 sm:top-3"
               aria-label="close"
             >
-              <FaXmark className="h-7 w-7 text-slate-600 transition hover:text-slate-500" />
+              <FaXmark className="h-6 w-6 text-slate-600 transition hover:text-slate-500 sm:h-7 sm:w-7" />
             </button>
           </div>
         </div>

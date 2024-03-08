@@ -18,7 +18,7 @@ const ListPage = async ({ params }: ListPageProps) => {
   }
 
   return (
-    <div className="mt-20 flex flex-col gap-4">
+    <div className="mt-12 flex flex-col gap-4 sm:mt-20">
       <List id={params.id} />
     </div>
   );

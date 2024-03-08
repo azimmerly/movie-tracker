@@ -61,7 +61,7 @@ export const List = ({ id }: ListProps) => {
           />
         </div>
       ) : (
-        <div className="my-2 flex flex-col gap-3">
+        <div className="my-2 flex flex-col gap-4">
           {filteredMovies.length ? (
             filteredMovies.map((movie: MovieType) => {
               return <MovieCard key={movie.id} movie={movie} listId={id} />;

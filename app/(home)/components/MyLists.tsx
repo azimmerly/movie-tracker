@@ -26,10 +26,10 @@ export const MyLists = () => {
 
   return (
     <div>
-      <h1 className="mb-8 w-fit text-5xl font-bold text-slate-700">
+      <h1 className="mb-6 w-fit text-3xl font-bold text-slate-700 sm:text-4xl">
         My Movie Lists
       </h1>
-      <div className="mt-4 flex flex-wrap justify-center gap-3 md:justify-start">
+      <div className="flex flex-wrap justify-center gap-4 md:justify-start">
         {isPending ? (
           <LoadingDots className="mt-12 flex w-full justify-center" />
         ) : (

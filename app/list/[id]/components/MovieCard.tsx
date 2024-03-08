@@ -43,7 +43,7 @@ export const MovieCard = ({ movie, listId }: MovieCardProps) => {
   };
 
   return (
-    <div className="relative flex min-h-[200px] w-full items-center gap-4 rounded-lg bg-white p-2 shadow sm:p-4">
+    <div className="relative flex w-full items-center gap-4 rounded-lg bg-white p-3 shadow sm:p-4">
       <Image
         width={96}
         height={120}

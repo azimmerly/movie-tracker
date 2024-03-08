@@ -13,7 +13,7 @@ export const Nav = async () => {
 
   return (
     <nav className="flex w-full justify-center bg-indigo-600 py-3">
-      <div className="flex w-full max-w-5xl justify-between px-2 sm:px-4">
+      <div className="flex w-full max-w-5xl justify-between px-4">
         <Link href="/" className="flex items-center gap-3 text-white">
           <FaFilm className="h-7 w-7" />
           <p className={`hidden text-2xl  sm:block ${righteous.className}`}>

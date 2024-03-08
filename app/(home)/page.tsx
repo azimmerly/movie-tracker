@@ -12,15 +12,15 @@ const HomePage = async () => {
 
   if (!session?.user) {
     return (
-      <div className="mt-28 flex flex-col items-center gap-16">
+      <div className="mt-12 flex flex-col items-center gap-12 sm:mt-28">
         <Image
           priority
           src={placeholder}
           alt="no movies in this list"
-          className="h-full max-h-72 w-auto"
+          className="mx-14 h-full max-h-72 w-auto"
         />
         <div className="flex flex-col items-center gap-4">
-          <h1 className="text-2xl font-semibold text-slate-600">
+          <h1 className="mx-4 text-center text-xl font-semibold text-slate-600 sm:text-2xl">
             Sign-in / Sign-up to get started!
           </h1>
           <Link
@@ -36,7 +36,7 @@ const HomePage = async () => {
   }
 
   return (
-    <div className="mt-20 flex flex-col gap-16">
+    <div className="mt-12 flex flex-col gap-12 sm:mt-20">
       <AddListForm />
       <MyLists />
     </div>

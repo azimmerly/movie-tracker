@@ -44,7 +44,7 @@ export const AddListForm = () => {
 
   return (
     <div>
-      <h2 className="mb-4 w-fit text-3xl font-bold text-indigo-600">
+      <h2 className="mb-4 w-fit text-2xl font-bold text-indigo-600 sm:text-3xl">
         Create a new list
       </h2>
       <form onSubmit={handleSubmit} className="flex flex-wrap gap-2">

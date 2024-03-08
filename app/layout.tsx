@@ -17,12 +17,14 @@ export const metadata: Metadata = {
 
 const toastOptions: DefaultToastOptions = {
   success: {
+    duration: 4000,
     iconTheme: {
       primary: "#4f46e5",
       secondary: "#fff",
     },
   },
   error: {
+    duration: 4000,
     iconTheme: {
       primary: "#f87171",
       secondary: "#fff",
@@ -41,7 +43,7 @@ const RootLayout = ({ children }: RootLayoutProps) => (
         <Toaster position="bottom-left" toastOptions={toastOptions} />
         <div className="flex min-h-screen flex-col items-center bg-slate-100">
           <Nav />
-          <main className="flex w-full max-w-5xl flex-auto flex-col px-2 sm:px-4">
+          <main className="flex w-full max-w-5xl flex-auto flex-col px-4 sm:px-4">
             {children}
           </main>
           <Footer />

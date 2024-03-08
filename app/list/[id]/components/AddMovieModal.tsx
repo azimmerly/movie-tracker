@@ -62,10 +62,10 @@ export const AddMovieModal = ({
             />
             <button
               onClick={closeModal}
-              className="absolute right-3 top-3"
+              className="absolute right-2 top-2 sm:right-3 sm:top-3"
               aria-label="close"
             >
-              <FaXmark className="h-7 w-7 text-slate-600 transition hover:text-slate-500" />
+              <FaXmark className="h-6 w-6 text-slate-600 transition hover:text-slate-500 sm:h-7 sm:w-7" />
             </button>
             {moviesNotFound && (
               <p className="my-12 flex justify-center font-semibold text-slate-600">

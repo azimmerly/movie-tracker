@@ -12,7 +12,7 @@ const SignInPage = async () => {
   }
 
   return (
-    <div className="col mt-20 flex flex-col items-center gap-6">
+    <div className="col mt-12 flex flex-col items-center gap-6 sm:mt-20">
       <SignInForm />
     </div>
   );
