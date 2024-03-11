@@ -9,7 +9,11 @@ import toast from "react-hot-toast";
 import { FaCircleUser } from "react-icons/fa6";
 import { z } from "zod";
 
-import { ProviderAuthButtons, ValidationError } from "@/app/components";
+import {
+  LoadingSpinner,
+  ProviderAuthButtons,
+  ValidationError,
+} from "@/app/components";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email"),
@@ -90,8 +94,17 @@ export const SignInForm = () => {
             disabled={isSubmitting}
             className="mt-4 flex w-full items-center justify-center gap-2 self-center rounded-full border-none bg-indigo-600 px-5 py-2 font-medium text-white transition hover:bg-indigo-500"
           >
-            <FaCircleUser className="h-4 w-4" />
-            Sign in
+            {isSubmitting ? (
+              <>
+                <LoadingSpinner />
+                <span>Signing in...</span>
+              </>
+            ) : (
+              <>
+                <FaCircleUser className="h-4 w-4" />
+                <span>Sign in</span>
+              </>
+            )}
           </button>
         </form>
         <ProviderAuthButtons />

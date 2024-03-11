@@ -10,7 +10,11 @@ import toast from "react-hot-toast";
 import { FaCircleUser } from "react-icons/fa6";
 import { z } from "zod";
 
-import { ProviderAuthButtons, ValidationError } from "@/app/components";
+import {
+  LoadingSpinner,
+  ProviderAuthButtons,
+  ValidationError,
+} from "@/app/components";
 
 const formSchema = z
   .object({
@@ -57,7 +61,7 @@ export const SignUpForm = () => {
       }
     } catch (err) {
       if (isAxiosError(err)) {
-        toast.error(err.response?.data.message);
+        toast.error(err.response?.data.error);
       }
     }
   };
@@ -151,8 +155,17 @@ export const SignUpForm = () => {
             disabled={isSubmitting}
             className="mt-4 flex w-full items-center justify-center gap-2 self-center rounded-full border-none bg-indigo-600 px-5 py-2 font-medium text-white transition hover:bg-indigo-500"
           >
-            <FaCircleUser className="h-4 w-4" />
-            Sign up
+            {isSubmitting ? (
+              <>
+                <LoadingSpinner />
+                <span>Creating account...</span>
+              </>
+            ) : (
+              <>
+                <FaCircleUser className="h-4 w-4" />
+                <span>Sign up</span>
+              </>
+            )}
           </button>
         </form>
         <ProviderAuthButtons />

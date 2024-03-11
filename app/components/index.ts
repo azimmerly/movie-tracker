@@ -1,6 +1,7 @@
 export { ErrorMessage } from "./ErrorMessage";
 export { Footer } from "./Footer";
 export { LoadingDots } from "./LoadingDots";
+export { LoadingSpinner } from "./LoadingSpinner";
 export { Nav } from "./Nav";
 export { NavAuthLinks } from "./NavAuthLinks";
 export { ProviderAuthButtons } from "./ProviderAuthButtons";
