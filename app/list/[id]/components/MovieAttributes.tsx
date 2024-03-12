@@ -1,7 +1,6 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios, { isAxiosError } from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import {
@@ -11,6 +10,7 @@ import {
   FaSquareCheck,
 } from "react-icons/fa6";
 
+import { updateMovie } from "@/app/actions/movies";
 import type { MovieType } from "@/app/types";
 
 type MovieAttributesProps = {
@@ -25,24 +25,39 @@ export const MovieAttributes = ({ listId, movie }: MovieAttributesProps) => {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
-    mutationFn: async () => {
-      await axios.post("/api/movies/update", {
-        isFavorite: favorite,
-        isWatched: watched,
-        movieId: movie.id,
-      });
+    mutationFn: updateMovie,
+    onError: () => {
+      toast.error("Something went wrong");
     },
-    onError: (err) => {
-      if (isAxiosError(err)) {
-        toast.error(err.response?.data.error);
+    onSuccess: (data) => {
+      if (!data.ok) {
+        toast.error(data.message);
+      } else {
+        queryClient.invalidateQueries({ queryKey: [`list-${listId}`] });
       }
-      setIsDisabled(false);
     },
-    onSuccess: () => {
+    onSettled: () => {
       setIsDisabled(false);
-      queryClient.invalidateQueries({ queryKey: [`list-${listId}`] });
     },
   });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { checked, name } = e.target;
+
+    setIsDisabled(true);
+
+    if (name === "watched") {
+      setWatched(checked);
+    } else if (name === "favorite") {
+      setFavorite(checked);
+    }
+
+    mutate({
+      isFavorite: name === "favorite" ? checked : favorite,
+      isWatched: name === "watched" ? checked : watched,
+      movieId: movie.id,
+    });
+  };
 
   return (
     <div className="mt-3 flex flex-wrap gap-4">
@@ -55,13 +70,10 @@ export const MovieAttributes = ({ listId, movie }: MovieAttributesProps) => {
         <input
           disabled={disabled}
           checked={watched}
+          name="watched"
           type="checkbox"
           className="hidden"
-          onChange={(e) => {
-            setWatched(e.target.checked);
-            setIsDisabled(true);
-            mutate();
-          }}
+          onChange={handleChange}
         />
         <span className="text-sm font-medium text-slate-700">Watched</span>
       </label>
@@ -73,14 +85,11 @@ export const MovieAttributes = ({ listId, movie }: MovieAttributesProps) => {
         )}
         <input
           disabled={disabled}
-          type="checkbox"
           checked={favorite}
-          onChange={(e) => {
-            setFavorite(e.target.checked);
-            setIsDisabled(true);
-            mutate();
-          }}
+          name="favorite"
+          type="checkbox"
           className="hidden"
+          onChange={handleChange}
         />
         <span className="text-sm font-medium text-slate-700">Favorite</span>
       </label>

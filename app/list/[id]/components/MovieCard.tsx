@@ -1,12 +1,12 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios, { isAxiosError } from "axios";
 import Image from "next/image";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { FaTrashCan } from "react-icons/fa6";
 
+import { deleteMovie } from "@/app/actions/movies";
 import type { MovieType } from "@/app/types";
 import { MovieAttributes, MovieDetailsModal } from ".";
 
@@ -21,25 +21,26 @@ export const MovieCard = ({ movie, listId }: MovieCardProps) => {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
-    mutationFn: async (id: string) => {
-      await axios.post("/api/movies/delete", { movieId: id });
+    mutationFn: deleteMovie,
+    onError: () => {
+      toast.error("Something went wrong");
     },
-    onError: (err) => {
-      if (isAxiosError(err)) {
-        toast.error(err.response?.data.error);
+    onSuccess: (data) => {
+      if (!data.ok) {
+        toast.error(data.message);
+      } else {
+        toast.success(data.message);
+        queryClient.invalidateQueries({ queryKey: [`list-${listId}`] });
       }
-      setIsDisabled(false);
     },
-    onSuccess: () => {
-      toast.success("Movie removed!");
+    onSettled: () => {
       setIsDisabled(false);
-      queryClient.invalidateQueries({ queryKey: [`list-${listId}`] });
     },
   });
 
-  const handleDelete = () => {
-    mutate(id);
+  const handleClick = () => {
     setIsDisabled(true);
+    mutate({ movieId: id });
   };
 
   return (
@@ -68,11 +69,7 @@ export const MovieCard = ({ movie, listId }: MovieCardProps) => {
         </div>
         <MovieAttributes listId={listId} movie={movie} />
         <MovieDetailsModal movie={movie} />
-        <button
-          aria-label="delete"
-          onClick={handleDelete}
-          disabled={isDisabled}
-        >
+        <button aria-label="delete" onClick={handleClick} disabled={isDisabled}>
           <FaTrashCan className="absolute right-2 top-2 h-3.5 w-3.5 text-slate-400 transition hover:text-red-400 sm:right-3 sm:top-3 sm:h-4 sm:w-4" />
         </button>
       </div>
