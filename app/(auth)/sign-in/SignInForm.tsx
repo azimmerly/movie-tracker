@@ -39,7 +39,7 @@ export const SignInForm = () => {
     if (!res?.ok) {
       toast.error("Invalid username or password");
     } else {
-      toast.success("Signed in!");
+      toast.success("Signed in");
       router.refresh();
     }
   };

@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios, { isAxiosError } from "axios";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -10,6 +9,7 @@ import toast from "react-hot-toast";
 import { FaCircleUser } from "react-icons/fa6";
 import { z } from "zod";
 
+import { addUser } from "@/app/actions/users";
 import {
   LoadingSpinner,
   ProviderAuthButtons,
@@ -45,24 +45,24 @@ export const SignUpForm = () => {
 
   const submitForm = async ({ username, email, password }: FormData) => {
     try {
-      await axios.post("/api/user/add", { username, email, password });
+      const res = await addUser({ username, email, password });
 
-      const res = await signIn("credentials", {
+      if (!res.ok) {
+        toast.error(res.message);
+        return;
+      }
+
+      toast.success(res.message);
+
+      await signIn("credentials", {
         email,
         password,
         redirect: false,
       });
 
-      if (!res?.ok) {
-        toast.error("Invalid username or password");
-      } else {
-        toast.success("Account created!");
-        router.refresh();
-      }
+      router.refresh();
     } catch (err) {
-      if (isAxiosError(err)) {
-        toast.error(err.response?.data.error);
-      }
+      toast.error("Something went wrong");
     }
   };
 
