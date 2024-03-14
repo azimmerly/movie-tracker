@@ -1,12 +1,11 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios, { isAxiosError } from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { FaPlus } from "react-icons/fa6";
 
-import { isValidListTitle } from "@/app/utils/validation";
+import { addList } from "@/app/actions/lists";
 
 export const AddListForm = () => {
   const [title, setTitle] = useState("");
@@ -14,32 +13,28 @@ export const AddListForm = () => {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
-    mutationFn: async (title: string) => {
-      await axios.post("/api/lists/add", { title });
+    mutationFn: addList,
+    onError: () => {
+      toast.error("Something went wrong");
     },
-    onError: (err) => {
-      if (isAxiosError(err)) {
-        toast.error(err.response?.data.error);
+    onSuccess: (data) => {
+      if (!data.ok) {
+        toast.error(data.message);
+      } else {
+        setTitle("");
+        toast.success(data.message);
+        queryClient.invalidateQueries({ queryKey: ["lists"] });
       }
-      setIsDisabled(false);
     },
-    onSuccess: () => {
-      toast.success("List created!");
-      setTitle("");
+    onSettled: () => {
       setIsDisabled(false);
-      queryClient.invalidateQueries({ queryKey: ["lists"] });
     },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!isValidListTitle(title)) {
-      return toast.error("List title must not be empty");
-    }
-
-    mutate(title);
     setIsDisabled(true);
+    mutate({ listTitle: title });
   };
 
   return (

@@ -1,10 +1,13 @@
+"use client";
+
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios, { isAxiosError } from "axios";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { FaArrowRight, FaTrashCan } from "react-icons/fa6";
 
+import { deleteList } from "@/app/actions/lists";
 import type { ListType } from "@/app/types";
 import placeholder from "@/public/placeholder-1.svg";
 
@@ -14,30 +17,34 @@ type ListCardProps = {
 
 export const ListCard = ({ list }: ListCardProps) => {
   const { id, title, movies } = list;
-
   const queryClient = useQueryClient();
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const getMovieCountText = (length: number) => {
     return `${length} ${length === 1 ? "movie" : "movies"}`;
   };
 
   const { mutate } = useMutation({
-    mutationFn: async (id: string) => {
-      await axios.post("/api/lists/delete", { listId: id });
+    mutationFn: deleteList,
+    onError: () => {
+      toast.error("Something went wrong");
     },
-    onError: (err) => {
-      if (isAxiosError(err)) {
-        toast.error(err.response?.data.error);
+    onSuccess: (data) => {
+      if (!data.ok) {
+        toast.error(data.message);
+      } else {
+        toast.success(data.message);
+        queryClient.invalidateQueries({ queryKey: ["lists"] });
       }
     },
-    onSuccess: () => {
-      toast.success("List deleted!");
-      queryClient.invalidateQueries({ queryKey: ["lists"] });
+    onSettled: () => {
+      setIsDisabled(false);
     },
   });
 
-  const handleDelete = () => {
-    mutate(id);
+  const handleClick = () => {
+    setIsDisabled(true);
+    mutate({ listId: id });
   };
 
   return (
@@ -81,7 +88,8 @@ export const ListCard = ({ list }: ListCardProps) => {
           View list
         </Link>
         <button
-          onClick={handleDelete}
+          disabled={isDisabled}
+          onClick={handleClick}
           aria-label="delete"
           className="mx-1 px-1"
         >

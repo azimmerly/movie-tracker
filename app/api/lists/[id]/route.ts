@@ -4,10 +4,13 @@ import { NextResponse, type NextRequest } from "next/server";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import prisma from "@/prisma/db";
 
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: { id: string } },
-) {
+type Params = {
+  params: {
+    id: string;
+  };
+};
+
+export async function GET(_request: NextRequest, { params }: Params) {
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -19,13 +22,13 @@ export async function GET(
   try {
     const { id } = params;
 
-    const prismaUser = await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
         email: session.user?.email as string,
       },
     });
 
-    if (!prismaUser) {
+    if (!user) {
       return new NextResponse(JSON.stringify({ error: "User not found" }), {
         status: 404,
       });
@@ -33,7 +36,7 @@ export async function GET(
 
     const data = await prisma.list.findUnique({
       where: {
-        id: id,
+        id,
       },
       include: {
         movies: {
@@ -55,7 +58,7 @@ export async function GET(
       });
     }
 
-    if (data.user?.id !== prismaUser?.id) {
+    if (data.user?.id !== user?.id) {
       return new NextResponse(JSON.stringify({ error: "Not authorized" }), {
         status: 403,
       });
