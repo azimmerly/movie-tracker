@@ -1,7 +1,6 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -15,19 +14,11 @@ type ListProps = {
   id: string;
 };
 
-const getList = async (listId: string) => {
-  if (!listId) {
-    return null;
-  }
-  const res = await axios.get(`/api/lists/${listId}`);
-  return res.data;
-};
-
 export const List = ({ id }: ListProps) => {
   const [filter, setFilter] = useState("all");
   const { data, error, isPending } = useQuery<ListType>({
     queryKey: [`list-${id}`],
-    queryFn: () => getList(id),
+    queryFn: () => fetch(`/api/lists/${id}`).then((res) => res.json()),
   });
 
   if (error) {

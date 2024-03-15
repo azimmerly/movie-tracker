@@ -1,7 +1,6 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import Image from "next/image";
 
 import { ErrorMessage, LoadingDots } from "@/app/components";
@@ -9,15 +8,10 @@ import { ListType } from "@/app/types";
 import placeholder from "@/public/placeholder-1.svg";
 import { ListCard } from ".";
 
-const getMyLists = async () => {
-  const res = await axios.get("/api/lists/get");
-  return res.data.lists;
-};
-
 export const MyLists = () => {
   const { data, error, isPending } = useQuery<ListType[]>({
     queryKey: ["lists"],
-    queryFn: getMyLists,
+    queryFn: () => fetch("/api/lists/get").then((res) => res.json()),
   });
 
   if (error) {

@@ -39,13 +39,13 @@ export async function GET() {
       },
     });
 
-    if (!data) {
+    if (!data?.lists) {
       return new NextResponse(JSON.stringify({ error: "Lists not found" }), {
         status: 404,
       });
     }
 
-    return new NextResponse(JSON.stringify(data), { status: 200 });
+    return new NextResponse(JSON.stringify(data.lists), { status: 200 });
   } catch (err) {
     return new NextResponse(JSON.stringify({ error: "Something went wrong" }), {
       status: 500,
