@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 
 import { searchMovies } from "@/app/actions/movieDb";
 import type { MovieType } from "@/app/types";
-import { isValidSearch } from "@/app/utils/validation";
+import { isValidSearchTerm } from "@/app/utils/validation";
 
 type MovieSearchFormProps = {
   closeModal: () => void;
@@ -23,7 +24,8 @@ export const MovieSearchForm = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!isValidSearch(searchInput)) {
+    if (!isValidSearchTerm(searchInput)) {
+      toast.error("Must include a movie title");
       return;
     }
 

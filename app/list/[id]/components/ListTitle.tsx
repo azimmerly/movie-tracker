@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa6";
 
 import { updateList } from "@/app/actions/lists";
+import { LIST_TITLE_MAX_CHARS } from "@/app/utils/validation";
 
 type ListTitleProps = {
   id: string;
@@ -82,7 +83,7 @@ export const ListTitle = ({ title, id }: ListTitleProps) => {
           <input
             autoFocus
             className="mb-5 w-full max-w-sm rounded-lg px-3 py-2 shadow"
-            maxLength={40}
+            maxLength={LIST_TITLE_MAX_CHARS}
             value={listTitle}
             onChange={(e) => setListTitle(e.target.value)}
             onKeyDown={(e) => e.key === "Escape" && handleCancel(e)}

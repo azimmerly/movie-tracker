@@ -3,10 +3,15 @@
 import { MovieDb } from "moviedb-promise";
 
 import { formatNewMovie, formatSearchMovies } from "@/app/utils/format";
+import { isValidSearchTerm } from "@/app/utils/validation";
 
 const moviedb = new MovieDb(process.env.MOVIEDB_API_KEY);
 
 export const searchMovies = async (movieTitle: string) => {
+  if (!isValidSearchTerm(movieTitle)) {
+    return;
+  }
+
   const res = await moviedb.searchMovie({
     query: movieTitle,
     include_adult: false,

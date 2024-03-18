@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { FaPlus } from "react-icons/fa6";
 
 import { addList } from "@/app/actions/lists";
+import { LIST_TITLE_MAX_CHARS } from "@/app/utils/validation";
 
 export const AddListForm = () => {
   const [title, setTitle] = useState("");
@@ -47,7 +48,7 @@ export const AddListForm = () => {
           name="title"
           type="text"
           value={title}
-          maxLength={40}
+          maxLength={LIST_TITLE_MAX_CHARS}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Spooky horror movies"
           className="max-w-md flex-1 rounded-lg px-3 py-2 shadow"
