@@ -16,7 +16,7 @@ export type MovieType = {
 export type ListType = {
   id: string;
   title: string;
-  createdAt: string;
+  createdAt: Date;
   isPublic: boolean;
   movies: MovieType[];
 };
