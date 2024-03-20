@@ -43,9 +43,10 @@ export const List = ({ id }: ListProps) => {
       {!data.movies.length ? (
         <div className="my-16 flex flex-col items-center gap-8">
           <p className="font-semibold text-slate-600">
-            You don’t have any movies in this list yet...
+            You don’t have any movies in this list...
           </p>
           <Image
+            priority
             src={placeholder}
             alt="add movies"
             className="h-full max-h-72 w-auto"
@@ -54,9 +55,9 @@ export const List = ({ id }: ListProps) => {
       ) : (
         <div className="my-2 flex flex-col gap-4">
           {filteredMovies.length ? (
-            filteredMovies.map((movie: MovieType) => {
-              return <MovieCard key={movie.id} movie={movie} listId={id} />;
-            })
+            filteredMovies.map((movie: MovieType, idx: number) => (
+              <MovieCard key={movie.id} movie={movie} listId={id} index={idx} />
+            ))
           ) : (
             <p className="mt-8 self-center font-medium text-slate-600">
               Your <span className="font-semibold">{filter}</span> movies will

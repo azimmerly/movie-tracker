@@ -35,6 +35,7 @@ export const MyLists = () => {
               Create a list to get started!
             </p>
             <Image
+              priority
               src={placeholder}
               alt="create a list"
               className="h-full max-h-72 w-auto"

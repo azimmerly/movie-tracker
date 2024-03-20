@@ -13,9 +13,10 @@ import { MovieAttributes, MovieDetailsModal } from ".";
 type MovieCardProps = {
   listId: string;
   movie: MovieType;
+  index: number;
 };
 
-export const MovieCard = ({ movie, listId }: MovieCardProps) => {
+export const MovieCard = ({ movie, listId, index }: MovieCardProps) => {
   const { id, title, year, genres, image } = movie;
   const [isDisabled, setIsDisabled] = useState(false);
   const queryClient = useQueryClient();
@@ -46,6 +47,7 @@ export const MovieCard = ({ movie, listId }: MovieCardProps) => {
   return (
     <div className="relative flex w-full items-center gap-4 rounded-lg bg-white p-3 shadow sm:p-4">
       <Image
+        priority={index <= 2}
         width={96}
         height={120}
         alt={title}
@@ -68,9 +70,24 @@ export const MovieCard = ({ movie, listId }: MovieCardProps) => {
           ))}
         </div>
         <MovieAttributes listId={listId} movie={movie} />
-        <MovieDetailsModal movie={movie} />
-        <button aria-label="delete" onClick={handleClick} disabled={isDisabled}>
-          <FaTrashCan className="absolute right-2 top-2 h-3.5 w-3.5 text-slate-400 transition hover:text-red-400 sm:right-3 sm:top-3 sm:h-4 sm:w-4" />
+        <div className="flex gap-2">
+          <MovieDetailsModal movie={movie} />
+          <button
+            aria-label="delete"
+            onClick={handleClick}
+            disabled={isDisabled}
+            className="mt-3 sm:hidden"
+          >
+            <FaTrashCan className="h-4 w-4 text-slate-400 transition hover:text-red-400" />
+          </button>
+        </div>
+        <button
+          aria-label="delete"
+          onClick={handleClick}
+          disabled={isDisabled}
+          className="absolute right-3 top-3 hidden sm:block"
+        >
+          <FaTrashCan className="h-4 w-4 text-slate-400 transition hover:text-red-400 " />
         </button>
       </div>
     </div>
