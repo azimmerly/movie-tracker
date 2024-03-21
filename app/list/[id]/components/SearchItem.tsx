@@ -46,6 +46,12 @@ export const SearchItem = ({ movie, listId, listMovies }: SearchItemProps) => {
   const handleClick = async () => {
     setIsDisabled(true);
     const newMovie = await getMovie(movie.movieDbId);
+
+    if (!newMovie) {
+      setIsDisabled(false);
+      return;
+    }
+
     mutate({ listId, newMovie });
   };
 

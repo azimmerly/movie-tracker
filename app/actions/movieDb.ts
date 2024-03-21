@@ -9,23 +9,30 @@ const moviedb = new MovieDb(process.env.MOVIEDB_API_KEY);
 
 export const searchMovies = async (movieTitle: string) => {
   if (!isValidSearchTerm(movieTitle)) {
-    return;
+    return null;
   }
 
-  const res = await moviedb.searchMovie({
-    query: movieTitle,
-    include_adult: false,
-  });
+  try {
+    const { results } = await moviedb.searchMovie({
+      query: movieTitle,
+      include_adult: false,
+    });
 
-  if (res.results?.length) {
-    return formatSearchMovies(res.results);
+    if (!results?.length) {
+      return null;
+    }
+
+    return formatSearchMovies(results);
+  } catch {
+    return null;
   }
-
-  return null;
 };
 
 export const getMovie = async (movieId: number) => {
-  const movie = await moviedb.movieInfo({ id: movieId });
-
-  return formatNewMovie(movie);
+  try {
+    const movie = await moviedb.movieInfo({ id: movieId });
+    return formatNewMovie(movie);
+  } catch {
+    return null;
+  }
 };
