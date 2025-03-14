@@ -1,0 +1,11 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: movie-tracker
+    ports:
+      - 5432:5432
+    volumes:
+      - ./docker/db:/var/lib/postgresql/data
