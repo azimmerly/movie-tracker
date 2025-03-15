@@ -7,6 +7,7 @@ const avatarVariants = tv({
   base: "inline-block overflow-hidden rounded-full shadow bg-gray-200 dark:bg-gray-600 shrink-0",
   variants: {
     size: {
+      xs: "size-3.5",
       sm: "size-4",
       md: "size-10",
       lg: "size-14",

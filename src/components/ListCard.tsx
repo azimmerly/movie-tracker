@@ -52,11 +52,11 @@ export const ListCard = ({
           />
         )}
       </div>
-      <Typography.Small muted className="mb-1 flex items-center gap-1.5">
-        <Avatar userImage={user.image} size="sm" />
+      <Typography.Tiny muted className="mb-1 flex items-center gap-1">
+        <Avatar userImage={user.image} size="xs" />
         {user.name}
-      </Typography.Small>
-      <Typography.Tiny className="flex items-start gap-1.5" muted>
+      </Typography.Tiny>
+      <Typography.Tiny className="flex items-start gap-1" muted>
         <CalendarDaysIcon className="-mt-px size-4" />
         {formatDate(createdAt)}
       </Typography.Tiny>
