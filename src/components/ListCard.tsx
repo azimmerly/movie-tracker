@@ -57,7 +57,7 @@ export const ListCard = ({
         {user.name}
       </Typography.Tiny>
       <Typography.Tiny className="flex items-start gap-1" muted>
-        <CalendarDaysIcon className="-mt-px size-4" />
+        <CalendarDaysIcon className="size-3.5" />
         {formatDate(createdAt)}
       </Typography.Tiny>
     </Card>
