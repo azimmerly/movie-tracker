@@ -1,7 +1,5 @@
 import { z } from "zod";
 
-const passwordSchema = z.string().min(8, { message: "Min 8 characters" });
-
 const emailSchema = z
   .string()
   .min(1, { message: "Required" })
@@ -16,7 +14,7 @@ const nameSchema = z
 
 export const signInSchema = z.object({
   email: emailSchema,
-  password: passwordSchema,
+  password: z.string().min(1, { message: "Required" }),
   rememberMe: z.boolean(),
 });
 
@@ -24,8 +22,8 @@ export const signUpSchema = z
   .object({
     name: nameSchema,
     email: emailSchema,
-    password: passwordSchema,
-    passwordConfirm: passwordSchema,
+    password: z.string().min(8, { message: "Min 8 characters" }),
+    passwordConfirm: z.string().min(1, { message: "Required" }),
   })
   .refine((data) => data.password === data.passwordConfirm, {
     path: ["passwordConfirm"],
