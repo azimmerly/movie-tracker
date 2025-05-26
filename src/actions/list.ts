@@ -9,7 +9,7 @@ import { db } from "@/lib/db";
 import { movie, movieList } from "@/lib/db/schema";
 import type { AddListData, MovieList, UpdateListData } from "@/types";
 
-export const addMovieList = async ({ title }: AddListData) => {
+export const addMovieList = async (data: AddListData) => {
   const session = await getSession();
   if (!session) {
     return { success: false, message: "Not authenticated" };
@@ -18,7 +18,7 @@ export const addMovieList = async ({ title }: AddListData) => {
   try {
     const [newList] = await db
       .insert(movieList)
-      .values({ title, userId: session.user.id })
+      .values({ ...data, userId: session.user.id })
       .returning({ id: movieList.id });
     revalidatePaths(["/", "/dashboard"]);
     return { success: true, data: newList };

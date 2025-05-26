@@ -8,6 +8,7 @@ const titleSchema = z
 
 export const addListSchema = z.object({
   title: titleSchema,
+  private: z.boolean(),
 });
 
 export const updateListSchema = z.object({

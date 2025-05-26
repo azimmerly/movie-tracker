@@ -5,11 +5,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { Session } from "better-auth";
 import { redirect } from "next/navigation";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { addMovieList } from "@/actions/list";
 import { Button } from "@/components/ui/Button";
+import { Checkbox } from "@/components/ui/Checkbox";
 import { Dialog } from "@/components/ui/Dialog";
 import { InputField } from "@/components/ui/InputField";
 import { Typography } from "@/components/ui/Typography";
@@ -22,9 +23,11 @@ type AddListDialogProps = {
 
 export const AddListDialog = ({ session }: AddListDialogProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const { register, reset, handleSubmit, formState } = useForm<AddListData>({
-    resolver: zodResolver(addListSchema),
-  });
+  const { register, reset, handleSubmit, formState, control } =
+    useForm<AddListData>({
+      resolver: zodResolver(addListSchema),
+      defaultValues: { private: false },
+    });
 
   const handleAddList = async (formData: AddListData) => {
     const res = await addMovieList(formData);
@@ -83,13 +86,25 @@ export const AddListDialog = ({ session }: AddListDialogProps) => {
             {...register("title")}
             errorMessage={formState.errors?.title?.message}
           />
+          <Controller
+            name="private"
+            control={control}
+            render={({ field }) => (
+              <Checkbox
+                label="Private list (only visible to you)"
+                checked={field.value}
+                onChange={field.onChange}
+                className="mt-1.5 text-gray-600 dark:text-gray-300"
+              />
+            )}
+          />
           <div className="mt-2 flex flex-col gap-2 sm:flex-row-reverse">
             <Button
               type="submit"
               variant="primary"
               className="w-full sm:w-fit"
               icon={PlusCircleIcon}
-              disabled={formState.isSubmitting || !formState.isDirty}
+              disabled={formState.isSubmitting || !formState.dirtyFields.title}
               busy={formState.isSubmitting}
             >
               Create

@@ -65,7 +65,7 @@ export const SignInForm = () => {
               label="Remember me"
               checked={field.value}
               onChange={field.onChange}
-              className="mt-1 text-sm"
+              className="mt-1 font-medium"
             />
           )}
         />

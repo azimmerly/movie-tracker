@@ -61,6 +61,7 @@ export const MovieActions = ({
           const starNum = index + 1;
           return (
             <StarIcon
+              role="button"
               key={starNum}
               className={twMerge(
                 "-mx-px size-5",
@@ -83,8 +84,9 @@ export const MovieActions = ({
           );
         })}
       </Field>
-      <Field>
+      <Field className="w-fit">
         <Checkbox
+          tabIndex={-1}
           disabled={formState.isSubmitting}
           checked={currentFavorite}
           onChange={(e) => handleUpdate("favorite", e)}

@@ -60,7 +60,7 @@ export const MovieList = ({ movies, owner, listId }: MoviesListProps) => {
               ({ id, listId, movieInfo, favorite, rating }, index) => (
                 <li key={id} className="flex justify-between py-3">
                   <div className="flex gap-3">
-                    <Link href={`/movie/${movieInfo.id}`}>
+                    <Link href={`/movie/${movieInfo.id}`} className="rounded">
                       <Image
                         width={80}
                         height={120}
