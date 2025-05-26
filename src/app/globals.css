@@ -14,3 +14,10 @@
     -ms-overflow-style: none;
   }
 }
+
+@layer base {
+  html {
+    overflow-x: hidden;
+    scrollbar-gutter: stable;
+  }
+}

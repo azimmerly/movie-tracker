@@ -39,7 +39,8 @@ export const MovieActions = ({
     value: Movie["rating"] | Movie["favorite"],
   ) => {
     if (!owner) {
-      return toast.info("Only lists you own can be modified");
+      toast.info("Only lists you own can be modified");
+      return;
     }
     handleSubmit(async () => {
       setValue(field, value);

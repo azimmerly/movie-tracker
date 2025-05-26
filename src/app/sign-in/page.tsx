@@ -14,7 +14,7 @@ const SignIn = async () => {
   }
 
   return (
-    <div className="-mt-16 flex flex-1 flex-col justify-center gap-8 px-3">
+    <div className="flex flex-1 flex-col justify-center gap-8 px-3">
       <div>
         <Image
           priority

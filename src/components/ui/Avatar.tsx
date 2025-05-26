@@ -4,7 +4,7 @@ import { type ClassNameValue, twMerge } from "tailwind-merge";
 import { tv, type VariantProps } from "tailwind-variants";
 
 const avatarVariants = tv({
-  base: "inline-block overflow-hidden rounded-full shadow bg-gray-200 dark:bg-gray-600 shrink-0",
+  base: "inline-block overflow-hidden rounded-full shadow-xs bg-gray-200 dark:bg-gray-600 shrink-0",
   variants: {
     size: {
       xs: "size-3.5",

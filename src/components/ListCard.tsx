@@ -22,10 +22,10 @@ export const ListCard = ({
   createdAt,
   user,
   movieCount,
-  private: listPrivate,
+  private: isPrivate,
 }: ListCardProps) => (
   <Link href={`/list/${id}`}>
-    <Card className="relative transition hover:shadow-md">
+    <Card className="relative transition will-change-transform backface-hidden hover:scale-[1.005] hover:shadow-md">
       <Typography.Large className="mb-1 leading-5 font-bold sm:mb-4">
         {title}
       </Typography.Large>
@@ -40,7 +40,7 @@ export const ListCard = ({
           }
           className="self-end font-semibold whitespace-nowrap"
         />
-        {!!listPrivate && (
+        {isPrivate && (
           <Chip
             variant="secondary"
             text={

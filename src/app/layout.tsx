@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => (
   <html lang="en" className={interFont.className} suppressHydrationWarning>
-    <body className="bg-offwhite overflow-x-hidden text-gray-900 dark:bg-gray-900 dark:text-white">
+    <body className="bg-offwhite text-gray-900 dark:bg-gray-900 dark:text-white">
       <div className="flex min-h-screen flex-col items-center antialiased">
         <Providers>
           <NavServer />
