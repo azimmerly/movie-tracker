@@ -22,7 +22,7 @@ import type {
   MovieSearchResponseData,
 } from "@/types";
 import { movieSearchSchema } from "@/utils/validation/movie";
-import { SearchList } from "./SearchList";
+import { SearchMovie } from "./SearchMovie";
 
 type AddMovieDialogProps = {
   listId: MovieList["id"];
@@ -112,11 +112,32 @@ export const AddMovieDialog = ({
           </div>
         </form>
         {movies && (
-          <SearchList
-            movies={movies}
-            listId={listId}
-            listMovieIds={listMovieIds}
-          />
+          <div className="scrollbar-hide mt-4 max-h-[360px] overflow-auto pb-4">
+            <div className="my-1 flex flex-col gap-2 px-1">
+              {!movies.length ? (
+                <Typography.Small
+                  muted
+                  className="mt-6 text-center font-medium"
+                >
+                  No movies found with that title...
+                </Typography.Small>
+              ) : (
+                <ul className="divide-y divide-gray-200 dark:divide-gray-700">
+                  {movies.map((movie, index) => (
+                    <SearchMovie
+                      {...movie}
+                      key={index}
+                      listId={listId}
+                      listMovieIds={listMovieIds}
+                    />
+                  ))}
+                  {movies.length > 3 && (
+                    <div className="from-offwhite via-offwhite pointer-events-none absolute right-0 bottom-0 left-0 h-16 bg-gradient-to-t to-transparent dark:from-gray-800 dark:via-gray-800" />
+                  )}
+                </ul>
+              )}
+            </div>
+          </div>
         )}
       </Dialog>
     </>

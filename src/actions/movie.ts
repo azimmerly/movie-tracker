@@ -2,7 +2,6 @@
 
 import { createFetch } from "@better-fetch/fetch";
 import { and, avg, eq, ne } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
 
 import { getSession } from "@/actions/auth";
 import { cleanupUnreferencedMovieInfo, revalidatePaths } from "@/actions/utils";
@@ -38,7 +37,8 @@ const movieDbFetch = createFetch({
 
 export const searchMovies = async ({ title }: MovieSearchData) => {
   try {
-    const movies = await movieDbFetch(`/search/movie?query=${title}`, {
+    const queryString = `query=${encodeURIComponent(title)}`;
+    const movies = await movieDbFetch(`/search/movie?${queryString}`, {
       output: movieSearchResponseSchema,
     });
     return { success: true, data: movies };
@@ -89,7 +89,7 @@ export const addMovie = async (data: AddMovieData) => {
       .values({ userId: session.user.id, movieInfoId: movieData!.id, listId })
       .returning({ id: movie.id });
 
-    revalidatePath(`/list/${listId}`);
+    revalidatePaths(["/", "/dashboard", `/list/${listId}`]);
     return { success: true, data: newMovie };
   } catch (e) {
     console.error(e);
@@ -122,7 +122,7 @@ export const deleteMovie = async (data: DeleteMovieData) => {
     }
 
     await cleanupUnreferencedMovieInfo();
-    revalidatePath(`/list/${listId}`);
+    revalidatePaths(["/", "/dashboard", `/list/${listId}`]);
     return { success: true, data: deletedMovie };
   } catch (e) {
     console.error(e);

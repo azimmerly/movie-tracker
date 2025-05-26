@@ -24,30 +24,34 @@ export const movieSearchSchema = z.object({
 export const movieSearchResponseSchema = z
   .object({
     results: z.array(
-      z
-        .object({
-          id: z.number(),
-          title: z.string(),
-          release_date: z.string(),
-          poster_path: z.string().nullable(),
-          genre_ids: z.array(z.number()),
-        })
-        .transform((data) => ({
-          id: data.id,
-          title: data.title,
-          year: data.release_date?.substring(0, 4),
-          imagePath: data.poster_path,
-          genreIds: data.genre_ids,
-        })),
+      z.object({
+        id: z.number(),
+        title: z.string(),
+        release_date: z.string(),
+        poster_path: z.string().nullable(),
+        genre_ids: z.array(z.number()),
+      }),
     ),
   })
-  .transform(({ results }) =>
-    results
-      .filter(({ year, genreIds, imagePath }) => {
-        return !!year && !!imagePath && !!genreIds.length;
+  .transform(({ results }) => {
+    const today = new Date().toISOString().split("T")[0];
+    return results
+      .filter((movie) => {
+        return (
+          !!movie.release_date &&
+          !!movie.poster_path &&
+          movie.genre_ids.length > 0 &&
+          movie.release_date <= today
+        );
       })
-      .slice(0, 12),
-  );
+      .slice(0, 15)
+      .map((movie) => ({
+        id: movie.id,
+        title: movie.title,
+        year: movie.release_date.substring(0, 4),
+        imagePath: movie.poster_path,
+      }));
+  });
 
 export const movieDetailsResponseSchema = z
   .object({
