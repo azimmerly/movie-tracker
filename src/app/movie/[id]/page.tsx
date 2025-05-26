@@ -17,9 +17,14 @@ type MoviePageProps = {
   params: Promise<{ id: number }>;
 };
 
+const getCachedMovieInfo = async (id: number) => {
+  "use cache";
+  return await getMovieInfo(id);
+};
+
 const MoviePage = async ({ params }: MoviePageProps) => {
   const { id } = await params;
-  const { data, success } = await getMovieInfo(id);
+  const { data, success } = await getCachedMovieInfo(id);
   const movie = data as MovieInfoWithRating;
 
   if (!success) {

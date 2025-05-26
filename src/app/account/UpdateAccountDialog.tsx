@@ -2,10 +2,10 @@ import { CheckCircleIcon } from "@heroicons/react/16/solid";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { User } from "better-auth";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import { revalidatePaths } from "@/actions/utils";
 import { Button } from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
 import { InputField } from "@/components/ui/InputField";
@@ -25,7 +25,6 @@ export const UpdateAccountDialog = ({
   onClose,
   user: { name, email, emailVerified },
 }: UpdateAccountDialogProps) => {
-  const router = useRouter();
   const { register, reset, handleSubmit, formState } = useForm<UpdateUserData>({
     defaultValues: { name, email },
     resolver: zodResolver(updateUserSchema),
@@ -70,7 +69,7 @@ export const UpdateAccountDialog = ({
 
     onClose();
     await Promise.all(updatePromises);
-    router.refresh();
+    revalidatePaths(["/", "/dashboard", "/account"]);
   };
 
   return (

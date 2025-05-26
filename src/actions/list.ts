@@ -1,10 +1,10 @@
 "use server";
 
-import { and, asc, desc, eq, sql } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import type { User } from "better-auth";
+import { and, asc, desc, eq } from "drizzle-orm";
 
 import { getSession } from "@/actions/auth";
-import { cleanupUnreferencedMovieInfo } from "@/actions/utils";
+import { cleanupUnreferencedMovieInfo, revalidatePaths } from "@/actions/utils";
 import { db } from "@/lib/db";
 import { movie, movieList } from "@/lib/db/schema";
 import type { AddListData, MovieList, UpdateListData } from "@/types";
@@ -20,7 +20,7 @@ export const addMovieList = async ({ title }: AddListData) => {
       .insert(movieList)
       .values({ title, userId: session.user.id })
       .returning({ id: movieList.id });
-    revalidatePath("/dashboard");
+    revalidatePaths(["/", "/dashboard"]);
     return { success: true, data: newList };
   } catch (e) {
     console.error(e);
@@ -44,8 +44,7 @@ export const updateMovieList = async ({ id, ...rest }: UpdateListData) => {
     if (!updatedList) {
       throw new Error("Movie list not found or unauthorized");
     }
-
-    revalidatePath(`/list/${id}`);
+    revalidatePaths(["/", "/dashboard", `/list/${id}`]);
     return { success: true, data: updatedList };
   } catch (e) {
     console.error(e);
@@ -70,7 +69,7 @@ export const deleteMovieList = async (id: MovieList["id"]) => {
     }
 
     await cleanupUnreferencedMovieInfo();
-    revalidatePath("/dashboard");
+    revalidatePaths(["/", "/dashboard"]);
     return { success: true, data: deletedList };
   } catch (e) {
     console.error(e);
@@ -105,17 +104,12 @@ export const getAllMovieLists = async (filterBy?: string) => {
   }
 };
 
-export const getUserMovieLists = async (sortBy?: string) => {
-  const session = await getSession();
-  if (!session) {
-    return { success: false, message: "Not authenticated" };
-  }
-
+export const getUserMovieLists = async (userId: User["id"], sort?: string) => {
   try {
     const userMovieLists = await db.query.movieList.findMany({
-      where: eq(movieList.userId, session.user.id),
+      where: eq(movieList.userId, userId),
       orderBy:
-        sortBy === "title" ? asc(movieList.title) : desc(movieList.createdAt),
+        sort === "title" ? asc(movieList.title) : desc(movieList.createdAt),
       columns: { id: true, title: true, createdAt: true, private: true },
       with: {
         user: {
@@ -134,24 +128,18 @@ export const getUserMovieLists = async (sortBy?: string) => {
 };
 
 export const getMovieListById = async (id: MovieList["id"]) => {
-  const session = await getSession();
-  const sessionUserId = session?.user.id ?? null;
-
   try {
     const list = await db.query.movieList.findFirst({
       where: eq(movieList.id, id),
       columns: { id: true, title: true, createdAt: true, private: true },
       with: {
         user: {
-          columns: { name: true, image: true },
+          columns: { id: true, name: true, image: true },
         },
         movies: {
           orderBy: movie.createdAt,
           with: { movieInfo: true },
         },
-      },
-      extras: {
-        owner: sql`${movieList.userId} = ${sessionUserId}`.as("owner"),
       },
     });
     return { success: true, data: list };

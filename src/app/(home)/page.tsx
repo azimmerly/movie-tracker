@@ -10,10 +10,15 @@ type HomeProps = {
   searchParams: Promise<{ filter?: string }>;
 };
 
+const getCachedAllMovieLists = async (filter?: string) => {
+  "use cache";
+  return await getAllMovieLists(filter);
+};
+
 const Home = async ({ searchParams }: HomeProps) => {
   const { filter } = await searchParams;
   const session = await getSession();
-  const { data: lists, success } = await getAllMovieLists(filter);
+  const { data: lists, success } = await getCachedAllMovieLists(filter);
 
   if (!success || !lists) {
     return <ErrorMessage />;

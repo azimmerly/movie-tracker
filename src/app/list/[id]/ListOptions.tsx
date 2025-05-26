@@ -16,16 +16,12 @@ import { DeleteListDialog } from "./DeleteListDialog";
 import { UpdateListDialog } from "./UpdateListDialog";
 
 type ListOptionsProps = {
-  listId: MovieList["id"];
-  listTitle: MovieList["title"];
-  listPrivate: MovieList["private"];
+  id: MovieList["id"];
+  title: MovieList["title"];
+  isPrivate: MovieList["private"];
 };
 
-export const ListOptions = ({
-  listId,
-  listTitle,
-  listPrivate,
-}: ListOptionsProps) => {
+export const ListOptions = ({ id, title, isPrivate }: ListOptionsProps) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
 
@@ -36,12 +32,12 @@ export const ListOptions = ({
       onClick: () => setIsUpdateDialogOpen(true),
     },
     {
-      label: listPrivate ? "Make public" : "Make private",
-      icon: listPrivate ? EyeIcon : EyeSlashIcon,
+      label: isPrivate ? "Make public" : "Make private",
+      icon: isPrivate ? EyeIcon : EyeSlashIcon,
       onClick: async () => {
         const res = await updateMovieList({
-          id: listId,
-          private: !listPrivate,
+          id,
+          private: !isPrivate,
         });
         if (res.success) {
           toast.success("List visibility updated");
@@ -65,13 +61,13 @@ export const ListOptions = ({
         ellipsisOnMobile
       />
       <UpdateListDialog
-        id={listId}
-        title={listTitle}
+        id={id}
+        title={title}
         open={isUpdateDialogOpen}
         onClose={() => setIsUpdateDialogOpen(false)}
       />
       <DeleteListDialog
-        id={listId}
+        id={id}
         open={isDeleteDialogOpen}
         onClose={() => setIsDeleteDialogOpen(false)}
       />

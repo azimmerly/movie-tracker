@@ -5,7 +5,7 @@ import { and, avg, eq, ne } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 import { getSession } from "@/actions/auth";
-import { cleanupUnreferencedMovieInfo } from "@/actions/utils";
+import { cleanupUnreferencedMovieInfo, revalidatePaths } from "@/actions/utils";
 import { MOVIE_DB_API_URL } from "@/consts";
 import { env } from "@/env";
 import { db } from "@/lib/db";
@@ -149,13 +149,12 @@ export const updateMovie = async (data: UpdateMovieData) => {
           eq(movie.userId, session.user.id),
         ),
       )
-      .returning({ id: movie.id });
+      .returning({ id: movie.id, movieInfoId: movie.movieInfoId });
 
     if (!updatedMovie) {
       throw new Error("Movie not found or unauthorized");
     }
-
-    revalidatePath(`/list/${listId}`);
+    revalidatePaths([`/list/${listId}`, `/movie/${updatedMovie.movieInfoId}`]);
     return { success: true, data: updatedMovie };
   } catch (e) {
     console.error(e);

@@ -2,6 +2,7 @@ import { CalendarDaysIcon } from "@heroicons/react/20/solid";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { notFound, redirect, RedirectType } from "next/navigation";
 
+import { getSession } from "@/actions/auth";
 import { getMovieListById } from "@/actions/list";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { Avatar } from "@/components/ui/Avatar";
@@ -14,9 +15,15 @@ type ListPageProps = {
   params: Promise<{ id: string }>;
 };
 
+const getCachedMovieListById = async (id: string) => {
+  "use cache";
+  return await getMovieListById(id);
+};
+
 const ListPage = async ({ params }: ListPageProps) => {
   const { id } = await params;
-  const { data: list, success } = await getMovieListById(id);
+  const session = await getSession();
+  const { data: list, success } = await getCachedMovieListById(id);
 
   if (!success) {
     return <ErrorMessage />;
@@ -26,11 +33,12 @@ const ListPage = async ({ params }: ListPageProps) => {
     notFound();
   }
 
-  if (!list.owner && list.private) {
+  const { user, private: isPrivate, title, createdAt, movies } = list;
+  const owner = session?.user.id === user.id;
+
+  if (!owner && isPrivate) {
     redirect("/", RedirectType.replace);
   }
-
-  const { title, owner, createdAt, user, movies } = list;
 
   return (
     <div className="flex flex-col">
@@ -38,13 +46,7 @@ const ListPage = async ({ params }: ListPageProps) => {
         <Typography.H1 className="leading-8 hyphens-auto">
           {title}
         </Typography.H1>
-        {!!owner && (
-          <ListOptions
-            listId={id}
-            listTitle={title}
-            listPrivate={list.private}
-          />
-        )}
+        {owner && <ListOptions id={id} title={title} isPrivate={isPrivate} />}
       </div>
       <div className="flex flex-col gap-0.5">
         <Typography.Small className="flex items-center gap-1.5 font-medium">
@@ -56,7 +58,7 @@ const ListPage = async ({ params }: ListPageProps) => {
           {formatDate(createdAt)}
         </Typography.Small>
         <Typography.Small className="flex items-center gap-1.5" muted>
-          {list.private ? (
+          {isPrivate ? (
             <>
               <EyeSlashIcon strokeWidth={2} className="size-4" />
               Visible only to you
@@ -69,7 +71,7 @@ const ListPage = async ({ params }: ListPageProps) => {
           )}
         </Typography.Small>
       </div>
-      <MovieList listId={id} movies={movies} owner={!!owner} />
+      <MovieList listId={id} movies={movies} owner={owner} />
     </div>
   );
 };
