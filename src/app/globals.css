@@ -18,6 +18,8 @@
 @layer base {
   html {
     overflow-x: hidden;
-    scrollbar-gutter: stable;
+    @media (min-width: 640px) {
+      scrollbar-gutter: stable both-edges;
+    }
   }
 }

@@ -5,7 +5,7 @@ import {
   DialogPanel,
   Button as HeadlessButton,
 } from "@headlessui/react";
-import { UserCircleIcon } from "@heroicons/react/16/solid";
+import { UserCircleIcon, UserPlusIcon } from "@heroicons/react/16/solid";
 import {
   ArrowRightStartOnRectangleIcon,
   Bars3Icon,
@@ -40,11 +40,17 @@ export const NavClient = ({ user, navLinks }: NavClientProps) => {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const navigateIfNotCurrent = (targetPath: string) => {
+    if (pathname !== targetPath) {
+      router.push(targetPath);
+    }
+  };
+
   const accountOptions = [
     {
       label: "Account",
       icon: Cog6ToothIcon,
-      onClick: () => router.push("/account"),
+      onClick: () => navigateIfNotCurrent("/account"),
     },
     {
       label: "Sign out",
@@ -109,12 +115,21 @@ export const NavClient = ({ user, navLinks }: NavClientProps) => {
           </div>
           <div className="hidden lg:flex">
             {!user ? (
-              <Button
-                icon={UserCircleIcon}
-                onClick={() => router.push("/sign-in")}
-              >
-                Sign In
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  icon={UserCircleIcon}
+                  onClick={() => navigateIfNotCurrent("/sign-in")}
+                >
+                  Sign in
+                </Button>
+                <Button
+                  variant="secondary"
+                  icon={UserPlusIcon}
+                  onClick={() => navigateIfNotCurrent("/sign-up")}
+                >
+                  Create account
+                </Button>
+              </div>
             ) : (
               <DropdownMenu
                 iconButton={<Avatar size="md" userImage={user.image} />}
@@ -170,24 +185,37 @@ export const NavClient = ({ user, navLinks }: NavClientProps) => {
                   href={href}
                   onClick={() => setMobileMenuOpen(false)}
                   aria-current={pathname === href ? "page" : undefined}
-                  className="-mx-3 block rounded-md px-3 py-2 hover:bg-gray-100 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden dark:hover:bg-gray-800"
+                  className="block rounded-md px-3 py-2 hover:bg-gray-100 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden dark:hover:bg-gray-800"
                 >
                   {label}
                 </Link>
               ))}
             </div>
-            <div className="py-6">
+            <div className="py-5">
               {!user ? (
-                <Button
-                  icon={UserCircleIcon}
-                  className="w-full"
-                  onClick={() => {
-                    router.push("/sign-in");
-                    setMobileMenuOpen(false);
-                  }}
-                >
-                  Sign In
-                </Button>
+                <div className="flex flex-col gap-3">
+                  <Button
+                    icon={UserCircleIcon}
+                    className="w-full"
+                    onClick={() => {
+                      navigateIfNotCurrent("/sign-in");
+                      setMobileMenuOpen(false);
+                    }}
+                  >
+                    Sign in
+                  </Button>
+                  <Button
+                    icon={UserPlusIcon}
+                    className="w-full"
+                    variant="secondary"
+                    onClick={() => {
+                      navigateIfNotCurrent("/sign-up");
+                      setMobileMenuOpen(false);
+                    }}
+                  >
+                    Create account
+                  </Button>
+                </div>
               ) : (
                 <div className="space-y-1.5 font-medium">
                   {accountOptions.map(({ label, icon: Icon, onClick }) => (

@@ -11,7 +11,7 @@ const buttonVariants = tv({
     variant: {
       primary: "bg-blue-600 text-white hover:bg-blue-500",
       secondary:
-        "bg-white text-gray-900 hover:bg-gray-50 ring-1 ring-inset ring-gray-200 dark:text-white dark:bg-white/10 dark:hover:bg-white/20 dark:ring-transparent",
+        "bg-white text-gray-700 hover:bg-gray-50 ring-1 ring-inset ring-gray-200 dark:text-white dark:bg-white/10 dark:hover:bg-white/20 dark:ring-transparent",
       destructive: "bg-red-600 text-white hover:bg-red-500",
     },
     size: {
