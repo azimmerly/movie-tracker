@@ -36,7 +36,7 @@ const MoviePage = async ({ params }: MoviePageProps) => {
   }
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center gap-7 sm:mt-16">
       <Image
         priority
         width={240}
@@ -46,57 +46,61 @@ const MoviePage = async ({ params }: MoviePageProps) => {
         src={getMovieImage(movie.imagePath, "lg")}
         className="h-[240px] w-40 rounded-md shadow sm:h-[360px] sm:w-60"
       />
-      <Typography.H2 className="mt-4">{movie.title}</Typography.H2>
-      {movie.avgRating && (
-        <Typography.Small className="mt-2 flex items-center gap-1">
-          <StarIcon className="mb-px size-4.5 fill-amber-400 dark:fill-amber-500" />
-          <strong className="font-semibold">{movie.avgRating}</strong> average
-          user rating
-        </Typography.Small>
-      )}
-      <div className="mt-4 flex flex-wrap gap-1">
-        {movie.genres.slice(0, 3).map((genre) => (
-          <Chip
-            key={genre}
-            text={genre}
-            variant="primary"
-            className="font-semibold"
-          />
-        ))}
+      <div className="flex flex-col items-center gap-2">
+        <Typography.H2>{movie.title}</Typography.H2>
+        {movie.tagline && (
+          <Typography.Small
+            muted
+            className="max-w-md text-center"
+          >{`"${movie.tagline}"`}</Typography.Small>
+        )}
       </div>
-      {movie.tagline && (
-        <Typography.Small
-          muted
-          className="mt-4 max-w-md text-center"
-        >{`"${movie.tagline}"`}</Typography.Small>
-      )}
-      <div className="mt-3 flex flex-wrap justify-center gap-3 sm:gap-4">
-        {movie.runtime && (
-          <Typography.Small muted className="flex items-center gap-1">
-            <ClockIcon className="size-4" strokeWidth={2} />
-            {formatRuntime(movie.runtime)}
+      <div className="flex flex-col items-center gap-3">
+        {movie.avgRating && (
+          <Typography.Small className="flex items-center gap-1">
+            <StarIcon className="mb-px size-4.5 fill-amber-400 dark:fill-amber-500" />
+            <strong className="font-semibold">{movie.avgRating}</strong> average
+            user rating
           </Typography.Small>
         )}
-        {movie.year && (
-          <Typography.Small muted className="flex items-center gap-1">
-            <CalendarDaysIcon className="size-4" />
-            {movie.year}
-          </Typography.Small>
-        )}
-        {movie.imdbId && (
-          <Typography.Link
-            target="_blank"
-            rel="noopener noreferrer"
-            href={`${IMDB_MOVIE_URL}/${movie.imdbId}`}
-            className="flex items-center gap-1 text-sm font-medium"
-          >
-            <ArrowTopRightOnSquareIcon className="size-4" />
-            View on IMDb
-          </Typography.Link>
-        )}
+        <div className="flex flex-wrap gap-1">
+          {movie.genres.slice(0, 3).map((genre) => (
+            <Chip
+              key={genre}
+              text={genre}
+              variant="primary"
+              className="font-semibold"
+            />
+          ))}
+        </div>
+        <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
+          {movie.runtime && (
+            <Typography.Small muted className="flex items-center gap-1">
+              <ClockIcon className="size-4" strokeWidth={2} />
+              {formatRuntime(movie.runtime)}
+            </Typography.Small>
+          )}
+          {movie.year && (
+            <Typography.Small muted className="flex items-center gap-1">
+              <CalendarDaysIcon className="size-4" />
+              {movie.year}
+            </Typography.Small>
+          )}
+          {movie.imdbId && (
+            <Typography.Link
+              target="_blank"
+              rel="noopener noreferrer"
+              href={`${IMDB_MOVIE_URL}/${movie.imdbId}`}
+              className="flex items-center gap-1 text-sm font-medium"
+            >
+              <ArrowTopRightOnSquareIcon className="size-4" />
+              View on IMDb
+            </Typography.Link>
+          )}
+        </div>
       </div>
       {movie.description && (
-        <Typography.Small className="mt-6 max-w-xl border-l-2 border-blue-500/60 px-2 text-justify">
+        <Typography.Small className="max-w-xl border-l-2 border-blue-500/60 px-2 text-justify">
           {movie.description}
         </Typography.Small>
       )}
