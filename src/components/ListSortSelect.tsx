@@ -4,16 +4,17 @@ import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 import { Select, type SelectOption } from "@/components/ui/Select";
-import { useUpdateQueryString } from "@/utils/useUpdateQueryString";
+import { useQueryString } from "@/utils/useQueryString";
 
 const sortOptions = [
-  { value: "date", label: "Date added" },
+  { value: "date", label: "Date created" },
   { value: "title", label: "List title" },
+  { value: "count", label: "Movie count" },
 ];
 
 export const ListSortSelect = () => {
   const searchParams = useSearchParams();
-  const updateQueryString = useUpdateQueryString();
+  const { setQueryParam } = useQueryString();
   const initialSort =
     sortOptions.find(({ value }) => value === searchParams.get("sort")) ??
     sortOptions[0];
@@ -21,7 +22,7 @@ export const ListSortSelect = () => {
 
   const handleUpdate = (option: SelectOption) => {
     setSortBy(option);
-    updateQueryString("sort", option.value);
+    setQueryParam("sort", option.value);
   };
 
   return (

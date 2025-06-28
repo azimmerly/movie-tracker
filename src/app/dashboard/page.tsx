@@ -1,26 +1,30 @@
-import Image from "next/image";
 import { redirect } from "next/navigation";
 
 import { getSession } from "@/actions/auth";
 import { getUserMovieLists } from "@/actions/list";
-import ticketImage from "@/assets/ticket.png";
 import { AddListDialog } from "@/components/AddListDialog";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { ListCard } from "@/components/ListCard";
+import { ListSearchInput } from "@/components/ListSearchInput";
+import { ListSortSelect } from "@/components/ListSortSelect";
+import { NoListsMessage } from "@/components/NoListsMessage";
 import { Typography } from "@/components/ui/Typography";
-import { ListSortSelect } from "./ListSortSelect";
 
 type MyListsProps = {
-  searchParams: Promise<{ sort?: string }>;
+  searchParams: Promise<{ search?: string; sort?: string }>;
 };
 
-const getCachedUserMovieLists = async (userId: string, sort?: string) => {
+const getCachedUserMovieLists = async (
+  userId: string,
+  search?: string,
+  sort?: string,
+) => {
   "use cache";
-  return await getUserMovieLists(userId, sort);
+  return await getUserMovieLists(userId, search, sort);
 };
 
 const MyLists = async ({ searchParams }: MyListsProps) => {
-  const { sort } = await searchParams;
+  const { search, sort } = await searchParams;
   const session = await getSession();
 
   if (!session) {
@@ -29,6 +33,7 @@ const MyLists = async ({ searchParams }: MyListsProps) => {
 
   const { data: lists, success } = await getCachedUserMovieLists(
     session.user.id,
+    search,
     sort,
   );
 
@@ -37,33 +42,30 @@ const MyLists = async ({ searchParams }: MyListsProps) => {
   }
 
   return (
-    <>
-      <Typography.H1 className="mb-6">My movie lists</Typography.H1>
+    <div className="flex flex-col gap-10">
+      <Typography.H1>My movie lists</Typography.H1>
       <div className="flex flex-col-reverse items-end justify-between gap-3 sm:flex-row">
         <AddListDialog session={session?.session} />
-        <ListSortSelect />
+        <div className="flex w-full items-end justify-end gap-2">
+          <ListSearchInput />
+          <ListSortSelect />
+        </div>
       </div>
-      <div className="mt-8 flex flex-col gap-2">
+
+      {search && (
+        <Typography.Small className="mt-4 -mb-4 text-center" muted>
+          Showing results for <strong>{`"${search}"`}</strong>
+        </Typography.Small>
+      )}
+
+      <div className="flex flex-col gap-2.5">
         {lists?.length ? (
-          lists.map((list) => (
-            <ListCard {...list} key={list.id} movieCount={list.movies.length} />
-          ))
+          lists.map((list) => <ListCard {...list} key={list.id} />)
         ) : (
-          <div className="mt-28 text-center">
-            <Image
-              priority
-              draggable={false}
-              src={ticketImage}
-              alt="movie ticket"
-              className="mx-auto size-20"
-            />
-            <Typography.Body muted className="font-medium">
-              Create a list to get started!
-            </Typography.Body>
-          </div>
+          <NoListsMessage />
         )}
       </div>
-    </>
+    </div>
   );
 };
 

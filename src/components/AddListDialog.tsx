@@ -53,7 +53,7 @@ export const AddListDialog = ({ session }: AddListDialogProps) => {
       <Button
         onClick={handleClick}
         icon={PlusCircleIcon}
-        className="w-full sm:w-fit"
+        className="w-full min-w-max sm:w-fit"
       >
         Create new list
       </Button>
@@ -91,7 +91,7 @@ export const AddListDialog = ({ session }: AddListDialogProps) => {
             control={control}
             render={({ field }) => (
               <Checkbox
-                label="Private list (only visible to you)"
+                label="Private (only visible to you)"
                 checked={field.value}
                 onChange={field.onChange}
                 className="mt-1.5 text-gray-600 dark:text-gray-300"

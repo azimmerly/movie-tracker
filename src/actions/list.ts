@@ -1,13 +1,26 @@
 "use server";
 
 import type { User } from "better-auth";
-import { and, asc, desc, eq } from "drizzle-orm";
+import { and, asc, count, desc, eq, ilike, sql } from "drizzle-orm";
 
 import { getSession } from "@/actions/auth";
 import { cleanupUnreferencedMovieInfo, revalidatePaths } from "@/actions/utils";
 import { db } from "@/lib/db";
-import { movie, movieList } from "@/lib/db/schema";
+import { movie, movieList, user } from "@/lib/db/schema";
 import type { AddListData, MovieList, UpdateListData } from "@/types";
+
+const getOrderBy = (sort?: string) => {
+  switch (sort) {
+    case "date":
+      return desc(movieList.createdAt);
+    case "title":
+      return asc(movieList.title);
+    case "count":
+      return desc(sql`movie_count`);
+    default:
+      return desc(movieList.createdAt);
+  }
+};
 
 export const addMovieList = async (data: AddListData) => {
   const session = await getSession();
@@ -77,25 +90,26 @@ export const deleteMovieList = async (id: MovieList["id"]) => {
   }
 };
 
-export const getAllMovieLists = async (filterBy?: string) => {
+export const getAllMovieLists = async (search?: string, sort?: string) => {
   try {
-    let allMovieLists = await db.query.movieList.findMany({
-      where: eq(movieList.private, false),
-      orderBy: desc(movieList.createdAt),
-      columns: { id: true, title: true, createdAt: true },
-      with: {
-        user: {
-          columns: { name: true, image: true },
-        },
-        movies: {
-          columns: { id: true },
-        },
-      },
-    });
+    const whereClause = search
+      ? and(eq(movieList.private, false), ilike(movieList.title, `%${search}%`))
+      : eq(movieList.private, false);
 
-    if (filterBy === "non-empty") {
-      allMovieLists = allMovieLists.filter(({ movies }) => !!movies.length);
-    }
+    const allMovieLists = await db
+      .select({
+        id: movieList.id,
+        title: movieList.title,
+        createdAt: movieList.createdAt,
+        movieCount: count(movie.id).as("movie_count"),
+        user: { name: user.name, image: user.image },
+      })
+      .from(movieList)
+      .where(whereClause)
+      .leftJoin(movie, eq(movieList.id, movie.listId))
+      .innerJoin(user, eq(movieList.userId, user.id))
+      .groupBy(movieList.id, user.id)
+      .orderBy(getOrderBy(sort));
 
     return { success: true, data: allMovieLists };
   } catch (e) {
@@ -104,22 +118,32 @@ export const getAllMovieLists = async (filterBy?: string) => {
   }
 };
 
-export const getUserMovieLists = async (userId: User["id"], sort?: string) => {
+export const getUserMovieLists = async (
+  userId: User["id"],
+  search?: string,
+  sort?: string,
+) => {
   try {
-    const userMovieLists = await db.query.movieList.findMany({
-      where: eq(movieList.userId, userId),
-      orderBy:
-        sort === "title" ? asc(movieList.title) : desc(movieList.createdAt),
-      columns: { id: true, title: true, createdAt: true, private: true },
-      with: {
-        user: {
-          columns: { name: true, image: true },
-        },
-        movies: {
-          columns: { id: true },
-        },
-      },
-    });
+    const whereClause = search
+      ? and(eq(movieList.userId, userId), ilike(movieList.title, `%${search}%`))
+      : eq(movieList.userId, userId);
+
+    const userMovieLists = await db
+      .select({
+        id: movieList.id,
+        title: movieList.title,
+        createdAt: movieList.createdAt,
+        private: movieList.private,
+        movieCount: count(movie.id).as("movie_count"),
+        user: { name: user.name, image: user.image },
+      })
+      .from(movieList)
+      .where(whereClause)
+      .leftJoin(movie, eq(movieList.id, movie.listId))
+      .innerJoin(user, eq(movieList.userId, user.id))
+      .groupBy(movieList.id, user.id)
+      .orderBy(getOrderBy(sort));
+
     return { success: true, data: userMovieLists };
   } catch (e) {
     console.error(e);

@@ -72,7 +72,7 @@ export const DropdownMenu = ({
     )}
     <MenuItems
       transition
-      className="absolute right-0 z-10 mt-1.5 min-w-36 origin-top-right rounded-md bg-white p-1 whitespace-nowrap shadow-lg ring-1 ring-gray-200/70 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in dark:bg-gray-800 dark:ring-gray-700/70"
+      className="absolute right-0 z-10 mt-1.5 min-w-42 origin-top-right rounded-md bg-white p-1 whitespace-nowrap shadow-lg ring-1 ring-gray-200/70 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in dark:bg-gray-800 dark:ring-gray-700/70"
     >
       {options.map(
         ({ label, icon: Icon, onClick, hidden }) =>
@@ -80,9 +80,9 @@ export const DropdownMenu = ({
             <MenuItem key={label}>
               <Button
                 onClick={onClick}
-                className="flex w-full cursor-pointer items-center rounded-sm py-2 pr-6 pl-2 text-sm data-focus:bg-gray-50 dark:data-focus:bg-gray-700"
+                className="flex w-full items-center rounded-sm py-2 pr-6 pl-2 text-sm data-focus:bg-gray-50 dark:data-focus:bg-gray-700"
               >
-                <Icon aria-hidden="true" className="mr-1.5 size-[18px]" />
+                <Icon aria-hidden="true" className="mr-2 size-[18px]" />
                 {label}
               </Button>
             </MenuItem>
