@@ -19,13 +19,14 @@ export const SignInForm = () => {
   const { control, register, handleSubmit, formState, reset } =
     useForm<SignInData>({
       resolver: zodResolver(signInSchema),
+      defaultValues: { rememberMe: true },
     });
 
   const handleSignIn = async (formData: SignInData) => {
     await authClient.signIn.email(formData, {
       onError: ({ error }) => {
         toast.error(error.message);
-        reset({ password: "" });
+        reset({ ...formData, password: "" });
       },
       onSuccess: () => {
         toast.success("Signed in");
