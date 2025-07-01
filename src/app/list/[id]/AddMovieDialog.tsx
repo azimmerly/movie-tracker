@@ -54,7 +54,7 @@ export const AddMovieDialog = ({
       <Button
         onClick={() => setIsDialogOpen(true)}
         icon={PlusCircleIcon}
-        className="w-full sm:w-fit"
+        className="w-full min-w-max sm:w-fit"
       >
         Add movie
       </Button>

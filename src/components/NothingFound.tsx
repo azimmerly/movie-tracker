@@ -3,7 +3,11 @@ import Image from "next/image";
 import ticketImage from "@/assets/ticket.png";
 import { Typography } from "@/components/ui/Typography";
 
-export const NoListsMessage = () => (
+type NothingFoundProps = {
+  text: string;
+};
+
+export const NothingFound = ({ text }: NothingFoundProps) => (
   <div className="mt-28 text-center">
     <Image
       priority
@@ -13,7 +17,7 @@ export const NoListsMessage = () => (
       className="mx-auto size-20"
     />
     <Typography.Body muted className="font-medium">
-      No movie lists here… for now.
+      {text}
     </Typography.Body>
   </div>
 );

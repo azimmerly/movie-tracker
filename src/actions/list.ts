@@ -8,8 +8,9 @@ import { cleanupUnreferencedMovieInfo, revalidatePaths } from "@/actions/utils";
 import { db } from "@/lib/db";
 import { movie, movieList, user } from "@/lib/db/schema";
 import type { AddListData, MovieList, UpdateListData } from "@/types";
+import { sortMovies } from "@/utils/movies";
 
-const getOrderBy = (sort?: string) => {
+const getMovieListOrderBy = (sort?: string) => {
   switch (sort) {
     case "date":
       return desc(movieList.createdAt);
@@ -109,7 +110,7 @@ export const getAllMovieLists = async (search?: string, sort?: string) => {
       .leftJoin(movie, eq(movieList.id, movie.listId))
       .innerJoin(user, eq(movieList.userId, user.id))
       .groupBy(movieList.id, user.id)
-      .orderBy(getOrderBy(sort));
+      .orderBy(getMovieListOrderBy(sort));
 
     return { success: true, data: allMovieLists };
   } catch (e) {
@@ -142,7 +143,7 @@ export const getUserMovieLists = async (
       .leftJoin(movie, eq(movieList.id, movie.listId))
       .innerJoin(user, eq(movieList.userId, user.id))
       .groupBy(movieList.id, user.id)
-      .orderBy(getOrderBy(sort));
+      .orderBy(getMovieListOrderBy(sort));
 
     return { success: true, data: userMovieLists };
   } catch (e) {
@@ -151,7 +152,7 @@ export const getUserMovieLists = async (
   }
 };
 
-export const getMovieListById = async (id: MovieList["id"]) => {
+export const getMovieListById = async (id: MovieList["id"], sort?: string) => {
   try {
     const list = await db.query.movieList.findFirst({
       where: eq(movieList.id, id),
@@ -161,12 +162,17 @@ export const getMovieListById = async (id: MovieList["id"]) => {
           columns: { id: true, name: true, image: true },
         },
         movies: {
-          orderBy: movie.createdAt,
           with: { movieInfo: true },
         },
       },
     });
-    return { success: true, data: list };
+
+    if (!list) {
+      return { success: true, data: undefined };
+    }
+
+    const sortedMovies = sortMovies(list.movies, sort);
+    return { success: true, data: { ...list, movies: sortedMovies } };
   } catch (e) {
     console.error(e);
     return { success: false, message: "Something went wrong" };

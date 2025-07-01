@@ -4,16 +4,15 @@ import { CalendarDaysIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 import Link from "next/link";
 
-import ticketImage from "@/assets/ticket.png";
+import { NothingFound } from "@/components/NothingFound";
 import { Chip } from "@/components/ui/Chip";
-import { Select } from "@/components/ui/Select";
 import { Typography } from "@/components/ui/Typography";
 import type { Movie, MovieWithInfo } from "@/types";
 import { getMovieImage } from "@/utils/getMovieImage";
-import { useSortMovies } from "@/utils/useSortMovies";
 import { AddMovieDialog } from "./AddMovieDialog";
 import { MovieActions } from "./MovieActions";
 import { MovieOptions } from "./MovieOptions";
+import { MovieSortSelect } from "./MovieSortSelect";
 
 type MoviesListProps = {
   owner: boolean;
@@ -23,8 +22,6 @@ type MoviesListProps = {
 
 export const MovieList = ({ movies, owner, listId }: MoviesListProps) => {
   const listMovieIds = new Set(movies.map(({ movieInfo }) => movieInfo.id));
-  const { sortBy, setSortBy, sortOptions, sortedMovies } =
-    useSortMovies(movies);
 
   return (
     <div className="mt-6">
@@ -32,31 +29,16 @@ export const MovieList = ({ movies, owner, listId }: MoviesListProps) => {
         {owner && (
           <AddMovieDialog listId={listId} listMovieIds={listMovieIds} />
         )}
-        <Select
-          label="Sort by"
-          options={sortOptions}
-          selected={sortBy}
-          setSelected={setSortBy}
-          className="w-full self-start sm:w-40"
-        />
+        <div className="flex w-full items-end justify-end gap-2">
+          <MovieSortSelect />
+        </div>
       </div>
       <div className="mt-8">
-        {!sortedMovies.length ? (
-          <div className="mt-28 text-center">
-            <Image
-              priority
-              draggable={false}
-              src={ticketImage}
-              alt="movie ticket"
-              className="animation-iterate-1 mx-auto size-20"
-            />
-            <Typography.Body muted className="font-medium">
-              This list is still waiting for some movies to be added...
-            </Typography.Body>
-          </div>
+        {!movies.length ? (
+          <NothingFound text="No movies here… yet." />
         ) : (
           <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-            {sortedMovies.map(
+            {movies.map(
               ({ id, listId, movieInfo, favorite, rating }, index) => (
                 <li key={id} className="flex justify-between py-3">
                   <div className="flex gap-3">

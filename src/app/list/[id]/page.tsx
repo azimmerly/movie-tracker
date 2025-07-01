@@ -13,17 +13,19 @@ import { MovieList } from "./MovieList";
 
 type ListPageProps = {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ sort?: string }>;
 };
 
-const getCachedMovieListById = async (id: string) => {
+const getCachedMovieListById = async (id: string, sort?: string) => {
   "use cache";
-  return await getMovieListById(id);
+  return await getMovieListById(id, sort);
 };
 
-const ListPage = async ({ params }: ListPageProps) => {
+const ListPage = async ({ params, searchParams }: ListPageProps) => {
   const { id } = await params;
+  const { sort } = await searchParams;
   const session = await getSession();
-  const { data: list, success } = await getCachedMovieListById(id);
+  const { data: list, success } = await getCachedMovieListById(id, sort);
 
   if (!success) {
     return <ErrorMessage />;
@@ -61,12 +63,12 @@ const ListPage = async ({ params }: ListPageProps) => {
           {isPrivate ? (
             <>
               <EyeSlashIcon strokeWidth={2} className="size-4" />
-              Visible only to you
+              Private list
             </>
           ) : (
             <>
               <EyeIcon strokeWidth={2} className="size-4" />
-              Visible to everyone
+              Public list
             </>
           )}
         </Typography.Small>

@@ -7,12 +7,13 @@ import { Select, type SelectOption } from "@/components/ui/Select";
 import { useQueryString } from "@/utils/useQueryString";
 
 const sortOptions = [
-  { value: "date", label: "Date created" },
-  { value: "title", label: "List title" },
-  { value: "count", label: "Movie count" },
+  { value: "date", label: "Date added" },
+  { value: "rating", label: "Rating" },
+  { value: "title", label: "Movie title" },
+  { value: "year", label: "Release year" },
 ];
 
-export const ListSortSelect = () => {
+export const MovieSortSelect = () => {
   const searchParams = useSearchParams();
   const { setQueryParam } = useQueryString();
   const initialSort =

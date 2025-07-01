@@ -5,9 +5,9 @@ import { getUserMovieLists } from "@/actions/list";
 import { AddListDialog } from "@/components/AddListDialog";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { ListCard } from "@/components/ListCard";
-import { ListSearchInput } from "@/components/ListSearchInput";
 import { ListSortSelect } from "@/components/ListSortSelect";
-import { NoListsMessage } from "@/components/NoListsMessage";
+import { NothingFound } from "@/components/NothingFound";
+import { SearchParamInput } from "@/components/SearchParamInput";
 import { Typography } from "@/components/ui/Typography";
 
 type MyListsProps = {
@@ -47,7 +47,7 @@ const MyLists = async ({ searchParams }: MyListsProps) => {
       <div className="flex flex-col-reverse items-end justify-between gap-3 sm:flex-row">
         <AddListDialog session={session?.session} />
         <div className="flex w-full items-end justify-end gap-2">
-          <ListSearchInput />
+          <SearchParamInput placeholder="List title" />
           <ListSortSelect />
         </div>
       </div>
@@ -62,7 +62,7 @@ const MyLists = async ({ searchParams }: MyListsProps) => {
         {lists?.length ? (
           lists.map((list) => <ListCard {...list} key={list.id} />)
         ) : (
-          <NoListsMessage />
+          <NothingFound text="No movie lists here… yet." />
         )}
       </div>
     </div>

@@ -9,14 +9,18 @@ import { Typography } from "@/components/ui/Typography";
 import { useDebouncedCallback } from "@/utils/useDebouncedCallback";
 import { useQueryString } from "@/utils/useQueryString";
 
-export const ListSearchInput = () => {
+type SearchParamInputProps = {
+  placeholder: string;
+};
+
+export const SearchParamInput = ({ placeholder }: SearchParamInputProps) => {
   const searchParams = useSearchParams();
   const { setQueryParam, clearQueryParam } = useQueryString();
   const [search, setSearch] = useState(searchParams.get("search") ?? "");
 
   const debouncedUpdateQueryString = useDebouncedCallback((value: string) => {
     setQueryParam("search", value);
-  }, 600);
+  }, 500);
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -40,7 +44,7 @@ export const ListSearchInput = () => {
           value={search}
           onChange={handleSearch}
           autoComplete="off"
-          placeholder="List title"
+          placeholder={placeholder}
           className="col-start-1 row-start-1 rounded-md border-none bg-white px-8 py-1.5 text-sm text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-blue-600 focus:ring-inset dark:bg-white/10 dark:text-white dark:ring-white/10 dark:focus:ring-blue-500"
         />
         <MagnifyingGlassIcon
