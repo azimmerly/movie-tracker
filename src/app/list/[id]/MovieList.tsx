@@ -3,11 +3,14 @@
 import { CalendarDaysIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 import { NothingFound } from "@/components/NothingFound";
+import { SearchParamInput } from "@/components/SearchParamInput";
+import { SearchResultMessage } from "@/components/SearchResultMessage";
 import { Chip } from "@/components/ui/Chip";
 import { Typography } from "@/components/ui/Typography";
-import type { Movie, MovieWithInfo } from "@/types";
+import type { Movie, MovieInfo } from "@/types";
 import { getMovieImage } from "@/utils/getMovieImage";
 import { AddMovieDialog } from "./AddMovieDialog";
 import { MovieActions } from "./MovieActions";
@@ -16,11 +19,20 @@ import { MovieSortSelect } from "./MovieSortSelect";
 
 type MoviesListProps = {
   owner: boolean;
-  movies: MovieWithInfo[];
+  movies: {
+    id: Movie["id"];
+    rating: Movie["rating"];
+    createdAt: Movie["createdAt"];
+    favorite: Movie["favorite"];
+    listId: Movie["listId"];
+    movieInfo: MovieInfo;
+  }[];
   listId: Movie["listId"];
 };
 
 export const MovieList = ({ movies, owner, listId }: MoviesListProps) => {
+  const searchParams = useSearchParams();
+  const search = searchParams.get("search");
   const listMovieIds = new Set(movies.map(({ movieInfo }) => movieInfo.id));
 
   return (
@@ -30,9 +42,13 @@ export const MovieList = ({ movies, owner, listId }: MoviesListProps) => {
           <AddMovieDialog listId={listId} listMovieIds={listMovieIds} />
         )}
         <div className="flex w-full items-end justify-end gap-2">
+          <SearchParamInput placeholder="Movie title" />
           <MovieSortSelect />
         </div>
       </div>
+
+      {search && <SearchResultMessage className="mt-12" searchTerm={search} />}
+
       <div className="mt-8">
         {!movies.length ? (
           <NothingFound text="No movies here… yet." />

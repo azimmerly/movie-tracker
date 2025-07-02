@@ -9,7 +9,7 @@ import { ErrorMessage } from "@/components/ErrorMessage";
 import { Chip } from "@/components/ui/Chip";
 import { Typography } from "@/components/ui/Typography";
 import { IMDB_MOVIE_URL } from "@/consts";
-import { MovieInfoWithRating } from "@/types";
+import type { MovieInfo } from "@/types";
 import { formatRuntime } from "@/utils/formatRuntime";
 import { getMovieImage } from "@/utils/getMovieImage";
 
@@ -25,7 +25,7 @@ const getCachedMovieInfo = async (id: number) => {
 const MoviePage = async ({ params }: MoviePageProps) => {
   const { id } = await params;
   const { data, success } = await getCachedMovieInfo(id);
-  const movie = data as MovieInfoWithRating;
+  const movie = data as MovieInfo & { avgRating: string | null };
 
   if (!success) {
     return <ErrorMessage />;

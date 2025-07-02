@@ -15,6 +15,7 @@ const buttonVariants = tv({
       destructive: "bg-red-600 text-white hover:bg-red-500",
     },
     size: {
+      xs: "text-xs font-medium rounded-md px-1.5 py-0.5 gap-0.5",
       sm: "text-xs font-medium rounded-md px-2 py-1 gap-1",
       md: "text-sm font-semibold rounded-md px-3 py-2 gap-1.5",
       lg: "text-base font-semibold rounded-md px-4 py-3 gap-1.5",
@@ -33,6 +34,7 @@ const buttonVariants = tv({
 const iconVariants = tv({
   variants: {
     size: {
+      xs: "size-3",
       sm: "size-3.5",
       md: "size-4",
       lg: "size-5",

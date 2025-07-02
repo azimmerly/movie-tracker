@@ -13,19 +13,27 @@ import { MovieList } from "./MovieList";
 
 type ListPageProps = {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ sort?: string }>;
+  searchParams: Promise<{ search?: string; sort?: string }>;
 };
 
-const getCachedMovieListById = async (id: string, sort?: string) => {
+const getCachedMovieListById = async (
+  id: string,
+  search?: string,
+  sort?: string,
+) => {
   "use cache";
-  return await getMovieListById(id, sort);
+  return await getMovieListById(id, search, sort);
 };
 
 const ListPage = async ({ params, searchParams }: ListPageProps) => {
   const { id } = await params;
-  const { sort } = await searchParams;
+  const { search, sort } = await searchParams;
   const session = await getSession();
-  const { data: list, success } = await getCachedMovieListById(id, sort);
+  const { data: list, success } = await getCachedMovieListById(
+    id,
+    search,
+    sort,
+  );
 
   if (!success) {
     return <ErrorMessage />;

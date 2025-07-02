@@ -3,7 +3,7 @@
 import { Field, Input, Label } from "@headlessui/react";
 import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/16/solid";
 import { useSearchParams } from "next/navigation";
-import { type ChangeEvent, useState } from "react";
+import { type ChangeEvent, useEffect, useState } from "react";
 
 import { Typography } from "@/components/ui/Typography";
 import { useDebouncedCallback } from "@/utils/useDebouncedCallback";
@@ -17,6 +17,11 @@ export const SearchParamInput = ({ placeholder }: SearchParamInputProps) => {
   const searchParams = useSearchParams();
   const { setQueryParam, clearQueryParam } = useQueryString();
   const [search, setSearch] = useState(searchParams.get("search") ?? "");
+
+  useEffect(() => {
+    const param = searchParams.get("search") ?? "";
+    setSearch(param);
+  }, [searchParams]);
 
   const debouncedUpdateQueryString = useDebouncedCallback((value: string) => {
     setQueryParam("search", value);

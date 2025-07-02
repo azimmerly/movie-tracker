@@ -6,9 +6,8 @@ import { and, asc, count, desc, eq, ilike, sql } from "drizzle-orm";
 import { getSession } from "@/actions/auth";
 import { cleanupUnreferencedMovieInfo, revalidatePaths } from "@/actions/utils";
 import { db } from "@/lib/db";
-import { movie, movieList, user } from "@/lib/db/schema";
+import { movie, movieInfo, movieList, user } from "@/lib/db/schema";
 import type { AddListData, MovieList, UpdateListData } from "@/types";
-import { sortMovies } from "@/utils/movies";
 
 const getMovieListOrderBy = (sort?: string) => {
   switch (sort) {
@@ -20,6 +19,21 @@ const getMovieListOrderBy = (sort?: string) => {
       return desc(sql`movie_count`);
     default:
       return desc(movieList.createdAt);
+  }
+};
+
+const getMovieOrderBy = (sort?: string) => {
+  switch (sort) {
+    case "date":
+      return desc(movie.createdAt);
+    case "rating":
+      return desc(movie.rating);
+    case "title":
+      return asc(movieInfo.title);
+    case "year":
+      return desc(movieInfo.year);
+    default:
+      return desc(movie.createdAt);
   }
 };
 
@@ -152,7 +166,11 @@ export const getUserMovieLists = async (
   }
 };
 
-export const getMovieListById = async (id: MovieList["id"], sort?: string) => {
+export const getMovieListById = async (
+  id: MovieList["id"],
+  search?: string,
+  sort?: string,
+) => {
   try {
     const list = await db.query.movieList.findFirst({
       where: eq(movieList.id, id),
@@ -161,9 +179,6 @@ export const getMovieListById = async (id: MovieList["id"], sort?: string) => {
         user: {
           columns: { id: true, name: true, image: true },
         },
-        movies: {
-          with: { movieInfo: true },
-        },
       },
     });
 
@@ -171,8 +186,25 @@ export const getMovieListById = async (id: MovieList["id"], sort?: string) => {
       return { success: true, data: undefined };
     }
 
-    const sortedMovies = sortMovies(list.movies, sort);
-    return { success: true, data: { ...list, movies: sortedMovies } };
+    const whereClause = search
+      ? and(eq(movie.listId, id), ilike(movieInfo.title, `%${search}%`))
+      : eq(movie.listId, id);
+
+    const movies = await db
+      .select({
+        id: movie.id,
+        rating: movie.rating,
+        createdAt: movie.createdAt,
+        favorite: movie.favorite,
+        listId: movie.listId,
+        movieInfo: movieInfo,
+      })
+      .from(movie)
+      .innerJoin(movieInfo, eq(movieInfo.id, movie.movieInfoId))
+      .where(whereClause)
+      .orderBy(getMovieOrderBy(sort));
+
+    return { success: true, data: { ...list, movies } };
   } catch (e) {
     console.error(e);
     return { success: false, message: "Something went wrong" };

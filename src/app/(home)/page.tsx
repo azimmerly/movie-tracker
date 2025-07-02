@@ -6,6 +6,7 @@ import { ListCard } from "@/components/ListCard";
 import { ListSortSelect } from "@/components/ListSortSelect";
 import { NothingFound } from "@/components/NothingFound";
 import { SearchParamInput } from "@/components/SearchParamInput";
+import { SearchResultMessage } from "@/components/SearchResultMessage";
 import { Typography } from "@/components/ui/Typography";
 
 type HomeProps = {
@@ -37,11 +38,7 @@ const Home = async ({ searchParams }: HomeProps) => {
         </div>
       </div>
 
-      {search && (
-        <Typography.Small className="mt-4 -mb-4 text-center" muted>
-          Showing results for <strong>{`"${search}"`}</strong>
-        </Typography.Small>
-      )}
+      {search && <SearchResultMessage searchTerm={search} />}
 
       <div className="flex flex-col gap-2.5">
         {lists?.length ? (

@@ -31,6 +31,4 @@ export type DeleteMovieData = z.infer<typeof deleteMovieSchema>;
 // db schema types
 export type Movie = InferSelectModel<typeof movie>;
 export type MovieInfo = InferSelectModel<typeof movieInfo>;
-export type MovieInfoWithRating = MovieInfo & { avgRating: string | null };
-export type MovieWithInfo = Movie & { movieInfo: MovieInfo };
 export type MovieList = InferSelectModel<typeof movieList>;
