@@ -25,8 +25,8 @@ export const ListCard = ({
   private: isPrivate,
 }: ListCardProps) => (
   <Link href={`/list/${id}`}>
-    <Card className="relative transition will-change-transform backface-hidden hover:scale-[1.005] hover:shadow-md">
-      <Typography.Large className="mb-1 leading-5 font-bold sm:mb-4">
+    <Card className="relative transform-gpu transition will-change-transform backface-hidden hover:scale-[1.005] hover:shadow-md">
+      <Typography.Large className="mb-1 leading-5 font-bold sm:mb-3">
         {title}
       </Typography.Large>
       <div className="top-2.5 right-2.5 mt-2 mb-4 flex flex-row gap-1 sm:absolute sm:mt-0 sm:flex-row-reverse">

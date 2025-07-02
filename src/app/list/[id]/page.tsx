@@ -61,7 +61,9 @@ const ListPage = async ({ params, searchParams }: ListPageProps) => {
       <div className="flex flex-col gap-0.5">
         <Typography.Small className="flex items-center gap-1.5 font-medium">
           <Avatar userImage={user.image} size="sm" />
-          {user.name}
+          <Typography.Link href={`/user/${user.id}`}>
+            {user.name}
+          </Typography.Link>
         </Typography.Small>
         <Typography.Small className="flex items-center gap-1.5" muted>
           <CalendarDaysIcon className="size-4" />

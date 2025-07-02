@@ -13,7 +13,7 @@ const typographyVariants = tv({
       body: "text-base leading-7",
       small: "text-sm block",
       tiny: "text-xs block",
-      link: "font-semibold outline-hidden focus-visible:underline",
+      link: "font-semibold outline-hidden focus-visible:underline underline-offset-2",
     },
     muted: {
       true: "text-gray-500 dark:text-gray-400",

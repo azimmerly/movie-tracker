@@ -25,7 +25,7 @@ export const SearchResultMessage = ({
   return (
     <div
       className={twMerge(
-        "mt-4 -mb-4 flex items-center justify-center gap-2",
+        "mt-2 -mb-4 flex items-center justify-center gap-2",
         className,
       )}
     >
