@@ -25,7 +25,7 @@ export const SearchResultMessage = ({
   return (
     <div
       className={twMerge(
-        "mt-2 -mb-4 flex items-center justify-center gap-2",
+        "mt-2 -mb-2 flex flex-col items-center justify-center gap-2 sm:flex-row",
         className,
       )}
     >
@@ -35,7 +35,7 @@ export const SearchResultMessage = ({
       <Button
         size="xs"
         variant="secondary"
-        className="rounded-full bg-gray-50 text-gray-600 hover:bg-gray-100"
+        className="rounded-full text-gray-600 dark:text-gray-200"
         icon={XCircleIcon}
         onClick={handleClick}
       >

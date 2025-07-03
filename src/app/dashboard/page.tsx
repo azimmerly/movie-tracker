@@ -43,7 +43,7 @@ const MyLists = async ({ searchParams }: MyListsProps) => {
   }
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-8">
       <Typography.H1>My movie lists</Typography.H1>
       <div className="flex flex-col-reverse items-end justify-between gap-3 sm:flex-row">
         <AddListDialog session={session?.session} />

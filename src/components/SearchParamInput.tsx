@@ -15,7 +15,7 @@ type SearchParamInputProps = {
 
 export const SearchParamInput = ({ placeholder }: SearchParamInputProps) => {
   const searchParams = useSearchParams();
-  const { setQueryParam, clearQueryParam } = useQueryString();
+  const { setQueryParams, clearQueryParam } = useQueryString();
   const [search, setSearch] = useState(searchParams.get("search") ?? "");
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export const SearchParamInput = ({ placeholder }: SearchParamInputProps) => {
   }, [searchParams]);
 
   const debouncedUpdateQueryString = useDebouncedCallback((value: string) => {
-    setQueryParam("search", value);
+    setQueryParams({ search: value, page: null });
   }, 500);
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {

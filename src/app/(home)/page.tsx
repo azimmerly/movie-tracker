@@ -5,30 +5,44 @@ import { ErrorMessage } from "@/components/ErrorMessage";
 import { ListCard } from "@/components/ListCard";
 import { ListSortSelect } from "@/components/ListSortSelect";
 import { NothingFound } from "@/components/NothingFound";
+import { Pagination } from "@/components/Pagination";
 import { SearchParamInput } from "@/components/SearchParamInput";
 import { SearchResultMessage } from "@/components/SearchResultMessage";
 import { Typography } from "@/components/ui/Typography";
+import { LIST_PAGE_SIZE } from "@/consts";
 
 type HomeProps = {
-  searchParams: Promise<{ search?: string; sort?: string }>;
+  searchParams: Promise<{ search?: string; sort?: string; page?: string }>;
 };
 
-const getCachedAllMovieLists = async (search?: string, sort?: string) => {
+const getCachedAllMovieLists = async (
+  pageSize: number,
+  search?: string,
+  sort?: string,
+  offset?: number,
+) => {
   "use cache";
-  return await getAllMovieLists(search, sort);
+  return await getAllMovieLists(pageSize, search, sort, offset);
 };
 
 const Home = async ({ searchParams }: HomeProps) => {
-  const { search, sort } = await searchParams;
+  const { search, sort, page = "1" } = await searchParams;
+  const currentPage = parseInt(page);
+  const offset = LIST_PAGE_SIZE * (currentPage - 1);
+
   const session = await getSession();
-  const { data: lists, success } = await getCachedAllMovieLists(search, sort);
+  const {
+    data: lists,
+    totalCount,
+    success,
+  } = await getCachedAllMovieLists(LIST_PAGE_SIZE, search, sort, offset);
 
   if (!success || !lists) {
     return <ErrorMessage />;
   }
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-8">
       <Typography.H1>All movie lists</Typography.H1>
       <div className="flex flex-col-reverse items-end justify-between gap-3 sm:flex-row">
         <AddListDialog session={session?.session} />
@@ -47,6 +61,15 @@ const Home = async ({ searchParams }: HomeProps) => {
           <NothingFound text="No movie lists here… yet." />
         )}
       </div>
+
+      {totalCount > LIST_PAGE_SIZE && (
+        <Pagination
+          totalCount={totalCount}
+          currentPage={currentPage}
+          pageSize={LIST_PAGE_SIZE}
+          itemLabel="movie lists"
+        />
+      )}
     </div>
   );
 };

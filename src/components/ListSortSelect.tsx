@@ -14,7 +14,7 @@ const sortOptions = [
 
 export const ListSortSelect = () => {
   const searchParams = useSearchParams();
-  const { setQueryParam } = useQueryString();
+  const { setQueryParams } = useQueryString();
   const initialSort =
     sortOptions.find(({ value }) => value === searchParams.get("sort")) ??
     sortOptions[0];
@@ -25,7 +25,7 @@ export const ListSortSelect = () => {
       return;
     }
     setSortBy(option);
-    setQueryParam("sort", option.value);
+    setQueryParams({ sort: option.value });
   };
 
   return (

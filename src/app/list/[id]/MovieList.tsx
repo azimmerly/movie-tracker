@@ -47,7 +47,7 @@ export const MovieList = ({ movies, owner, listId }: MoviesListProps) => {
         </div>
       </div>
 
-      {search && <SearchResultMessage className="mt-12" searchTerm={search} />}
+      {search && <SearchResultMessage className="mt-10" searchTerm={search} />}
 
       <div className="mt-8">
         {!movies.length ? (

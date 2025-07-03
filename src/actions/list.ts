@@ -105,7 +105,12 @@ export const deleteMovieList = async (id: MovieList["id"]) => {
   }
 };
 
-export const getAllMovieLists = async (search?: string, sort?: string) => {
+export const getAllMovieLists = async (
+  pageSize: number,
+  search?: string,
+  sort?: string,
+  offset?: number,
+) => {
   try {
     const whereClause = search
       ? and(eq(movieList.private, false), ilike(movieList.title, `%${search}%`))
@@ -124,9 +129,16 @@ export const getAllMovieLists = async (search?: string, sort?: string) => {
       .leftJoin(movie, eq(movieList.id, movie.listId))
       .innerJoin(user, eq(movieList.userId, user.id))
       .groupBy(movieList.id, user.id)
-      .orderBy(getMovieListOrderBy(sort));
+      .orderBy(getMovieListOrderBy(sort))
+      .limit(pageSize)
+      .offset(offset ?? 0);
 
-    return { success: true, data: allMovieLists };
+    const [{ totalCount }] = await db
+      .select({ totalCount: count() })
+      .from(movieList)
+      .where(whereClause);
+
+    return { success: true, data: allMovieLists, totalCount };
   } catch (e) {
     console.error(e);
     return { success: false, message: "Something went wrong" };

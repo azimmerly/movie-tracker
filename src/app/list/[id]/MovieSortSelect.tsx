@@ -15,7 +15,7 @@ const sortOptions = [
 
 export const MovieSortSelect = () => {
   const searchParams = useSearchParams();
-  const { setQueryParam } = useQueryString();
+  const { setQueryParams } = useQueryString();
   const initialSort =
     sortOptions.find(({ value }) => value === searchParams.get("sort")) ??
     sortOptions[0];
@@ -26,7 +26,7 @@ export const MovieSortSelect = () => {
       return;
     }
     setSortBy(option);
-    setQueryParam("sort", option.value);
+    setQueryParams({ sort: option.value });
   };
 
   return (
