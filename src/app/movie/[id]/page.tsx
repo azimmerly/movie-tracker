@@ -10,6 +10,7 @@ import { Chip } from "@/components/ui/Chip";
 import { Typography } from "@/components/ui/Typography";
 import { IMDB_MOVIE_URL } from "@/consts";
 import type { MovieInfo } from "@/types";
+import { formatDate } from "@/utils/formatDate";
 import { formatRuntime } from "@/utils/formatRuntime";
 import { getMovieImage } from "@/utils/getMovieImage";
 
@@ -80,10 +81,10 @@ const MoviePage = async ({ params }: MoviePageProps) => {
               {formatRuntime(movie.runtime)}
             </Typography.Small>
           )}
-          {movie.year && (
+          {movie.releaseDate && (
             <Typography.Small muted className="flex items-center gap-1">
               <CalendarDaysIcon className="size-4" />
-              {movie.year}
+              {formatDate(movie.releaseDate)}
             </Typography.Small>
           )}
           {movie.imdbId && (

@@ -15,6 +15,6 @@ export const cleanupUnreferencedMovieInfo = async () => {
   await db.delete(movieInfo).where(notExists(movieReference));
 };
 
-export const revalidatePaths = async (paths: `/${string}`[]) => {
+export const revalidatePaths = async (paths: string[]) => {
   paths.forEach((path) => revalidatePath(path));
 };

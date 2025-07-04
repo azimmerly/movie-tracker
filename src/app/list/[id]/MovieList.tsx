@@ -11,6 +11,7 @@ import { SearchResultMessage } from "@/components/SearchResultMessage";
 import { Chip } from "@/components/ui/Chip";
 import { Typography } from "@/components/ui/Typography";
 import type { Movie, MovieInfo } from "@/types";
+import { formatDate } from "@/utils/formatDate";
 import { getMovieImage } from "@/utils/getMovieImage";
 import { AddMovieDialog } from "./AddMovieDialog";
 import { MovieActions } from "./MovieActions";
@@ -79,7 +80,7 @@ export const MovieList = ({ movies, owner, listId }: MoviesListProps) => {
                           className="flex items-center gap-0.5"
                         >
                           <CalendarDaysIcon className="size-3.5" />
-                          {movieInfo.year}
+                          {formatDate(movieInfo.releaseDate)}
                         </Typography.Tiny>
                       </span>
                       <div className="mt-1 flex flex-wrap gap-1">

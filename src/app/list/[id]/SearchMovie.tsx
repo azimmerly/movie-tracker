@@ -9,13 +9,14 @@ import { Button } from "@/components/ui/Button";
 import { Chip } from "@/components/ui/Chip";
 import { Typography } from "@/components/ui/Typography";
 import type { MovieInfo, MovieList } from "@/types";
+import { formatDate } from "@/utils/formatDate";
 import { getMovieImage } from "@/utils/getMovieImage";
 
 type SearchMovieProps = {
   id: MovieInfo["id"];
   title: MovieInfo["title"];
-  year: MovieInfo["year"] | string;
-  imagePath: MovieInfo["imagePath"] | null;
+  releaseDate: MovieInfo["releaseDate"];
+  imagePath: MovieInfo["imagePath"];
   listId: MovieList["id"];
   listMovieIds: Set<MovieInfo["id"]>;
 };
@@ -23,7 +24,7 @@ type SearchMovieProps = {
 export const SearchMovie = ({
   id,
   title,
-  year,
+  releaseDate,
   imagePath,
   listId,
   listMovieIds,
@@ -56,7 +57,7 @@ export const SearchMovie = ({
           <Typography.Small className="font-semibold">{title}</Typography.Small>
           <Typography.Tiny className="flex items-start gap-0.5" muted>
             <CalendarDaysIcon className="size-3.5" />
-            {year}
+            {formatDate(releaseDate)}
           </Typography.Tiny>
           {listMovieIds.has(id) ? (
             <Chip

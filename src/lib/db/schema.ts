@@ -1,6 +1,7 @@
 import { relations } from "drizzle-orm";
 import {
   boolean,
+  date,
   integer,
   pgTable,
   text,
@@ -112,7 +113,7 @@ export const movieInfo = pgTable("movie_info", {
   description: text(),
   tagline: text(),
   runtime: integer(),
-  year: integer().notNull(),
+  releaseDate: date().notNull(),
   genres: text().array().notNull(),
   createdAt: timestamp().defaultNow().notNull(),
   updatedAt: timestamp()

@@ -89,7 +89,12 @@ export const addMovie = async (data: AddMovieData) => {
       .values({ userId: session.user.id, movieInfoId: movieData!.id, listId })
       .returning({ id: movie.id });
 
-    revalidatePaths(["/", "/dashboard", `/list/${listId}`]);
+    await revalidatePaths([
+      "/",
+      "/dashboard",
+      `/list/${listId}`,
+      `/user/${session.user.id}`,
+    ]);
     return { success: true, data: newMovie };
   } catch (e) {
     console.error(e);
@@ -122,7 +127,12 @@ export const deleteMovie = async (data: DeleteMovieData) => {
     }
 
     await cleanupUnreferencedMovieInfo();
-    revalidatePaths(["/", "/dashboard", `/list/${listId}`]);
+    await revalidatePaths([
+      "/",
+      "/dashboard",
+      `/list/${listId}`,
+      `/user/${session.user.id}`,
+    ]);
     return { success: true, data: deletedMovie };
   } catch (e) {
     console.error(e);
@@ -154,7 +164,10 @@ export const updateMovie = async (data: UpdateMovieData) => {
     if (!updatedMovie) {
       throw new Error("Movie not found or unauthorized");
     }
-    revalidatePaths([`/list/${listId}`, `/movie/${updatedMovie.movieInfoId}`]);
+    await revalidatePaths([
+      `/list/${listId}`,
+      `/movie/${updatedMovie.movieInfoId}`,
+    ]);
     return { success: true, data: updatedMovie };
   } catch (e) {
     console.error(e);

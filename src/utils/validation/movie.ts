@@ -35,22 +35,19 @@ export const movieSearchResponseSchema = z
   })
   .transform(({ results }) => {
     const today = new Date().toISOString().split("T")[0];
-    return results
-      .filter((movie) => {
-        return (
-          !!movie.release_date &&
-          !!movie.poster_path &&
-          movie.genre_ids.length > 0 &&
-          movie.release_date <= today
-        );
-      })
-      .slice(0, 15)
-      .map((movie) => ({
-        id: movie.id,
-        title: movie.title,
-        year: movie.release_date.substring(0, 4),
-        imagePath: movie.poster_path,
-      }));
+    const filteredMovies = results.filter(
+      (movie) =>
+        movie.release_date &&
+        movie.poster_path &&
+        movie.genre_ids.length > 0 &&
+        movie.release_date <= today,
+    );
+    return filteredMovies.slice(0, 15).map((movie) => ({
+      id: movie.id,
+      title: movie.title,
+      releaseDate: movie.release_date,
+      imagePath: movie.poster_path!,
+    }));
   });
 
 export const movieDetailsResponseSchema = z
@@ -68,11 +65,11 @@ export const movieDetailsResponseSchema = z
   .transform((data) => ({
     id: data.id,
     title: data.title,
-    imdbId: data.imdb_id || null,
-    description: data.overview || null,
-    tagline: data.tagline || null,
-    runtime: data.runtime || null,
+    imdbId: data.imdb_id ?? null,
+    description: data.overview ?? null,
+    tagline: data.tagline ?? null,
+    runtime: data.runtime ?? null,
     imagePath: data.poster_path,
-    year: parseInt(data.release_date.substring(0, 4)),
+    releaseDate: data.release_date,
     genres: data.genres.map(({ name }) => name),
   }));

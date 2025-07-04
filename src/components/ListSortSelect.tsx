@@ -7,7 +7,7 @@ import { Select, type SelectOption } from "@/components/ui/Select";
 import { useQueryString } from "@/utils/useQueryString";
 
 const sortOptions = [
-  { value: "date", label: "Date created" },
+  { value: "created", label: "Date created" },
   { value: "title", label: "List title" },
   { value: "count", label: "Movie count" },
 ];

@@ -1,7 +1,9 @@
 import { TrashIcon } from "@heroicons/react/20/solid";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import type { User } from "better-auth";
 import { toast } from "sonner";
 
+import { getUserMovieListIds } from "@/actions/list";
 import { revalidatePaths } from "@/actions/utils";
 import { Button } from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
@@ -11,22 +13,38 @@ import { authClient } from "@/lib/authClient";
 type DeleteAccountDialogProps = {
   open: boolean;
   onClose: () => void;
+  userId: User["id"];
 };
 
 export const DeleteAccountDialog = ({
   open,
   onClose,
+  userId,
 }: DeleteAccountDialogProps) => {
   const handleDeleteAccount = async () => {
     onClose();
+    const { data: userListIds, success } = await getUserMovieListIds(userId);
+
+    const pathsToRevalidate = [
+      "/",
+      "/dashboard",
+      "/account",
+      `/user/${userId}`,
+    ];
+
+    if (success && userListIds?.length) {
+      const listPaths = userListIds.map((id) => `/list/${id}`);
+      pathsToRevalidate.push(...listPaths);
+    }
+
     await authClient.deleteUser({
       fetchOptions: {
         onError: ({ error }) => {
           toast.error(error.message);
         },
-        onSuccess: () => {
+        onSuccess: async () => {
           toast.warning("Account deleted");
-          revalidatePaths(["/", "/dashboard", "/account"]);
+          await revalidatePaths(pathsToRevalidate);
         },
       },
     });

@@ -44,14 +44,16 @@ const Account = async () => {
             className="flex items-center gap-1 self-center sm:self-start"
           >
             <CalendarDaysIcon className="size-4" />
-            Joined {formatDate(user.createdAt)}
+            <span className="font-medium">Joined: </span>
+            {formatDate(user.createdAt)}
           </Typography.Small>
           <Typography.Small
             muted
             className="flex items-center gap-1 self-center sm:self-start"
           >
             <CalendarDaysIcon className="size-4" />
-            Updated {formatDate(user.updatedAt)}
+            <span className="font-medium">Updated: </span>
+            {formatDate(user.updatedAt)}
           </Typography.Small>
         </div>
       </Card>

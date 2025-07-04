@@ -11,7 +11,7 @@ import type { AddListData, MovieList, UpdateListData } from "@/types";
 
 const getMovieListOrderBy = (sort?: string) => {
   switch (sort) {
-    case "date":
+    case "created":
       return desc(movieList.createdAt);
     case "title":
       return asc(movieList.title);
@@ -24,14 +24,14 @@ const getMovieListOrderBy = (sort?: string) => {
 
 const getMovieOrderBy = (sort?: string) => {
   switch (sort) {
-    case "date":
+    case "added":
       return desc(movie.createdAt);
     case "rating":
       return desc(movie.rating);
     case "title":
       return asc(movieInfo.title);
-    case "year":
-      return desc(movieInfo.year);
+    case "released":
+      return desc(movieInfo.releaseDate);
     default:
       return desc(movie.createdAt);
   }
@@ -48,7 +48,7 @@ export const addMovieList = async (data: AddListData) => {
       .insert(movieList)
       .values({ ...data, userId: session.user.id })
       .returning({ id: movieList.id });
-    revalidatePaths(["/", "/dashboard"]);
+    await revalidatePaths(["/", "/dashboard", `/user/${session.user.id}`]);
     return { success: true, data: newList };
   } catch (e) {
     console.error(e);
@@ -72,7 +72,12 @@ export const updateMovieList = async ({ id, ...rest }: UpdateListData) => {
     if (!updatedList) {
       throw new Error("Movie list not found or unauthorized");
     }
-    revalidatePaths(["/", "/dashboard", `/list/${id}`]);
+    await revalidatePaths([
+      "/",
+      "/dashboard",
+      `/list/${id}`,
+      `/user/${session.user.id}`,
+    ]);
     return { success: true, data: updatedList };
   } catch (e) {
     console.error(e);
@@ -97,7 +102,7 @@ export const deleteMovieList = async (id: MovieList["id"]) => {
     }
 
     await cleanupUnreferencedMovieInfo();
-    revalidatePaths(["/", "/dashboard"]);
+    await revalidatePaths(["/", "/dashboard", `/user/${session.user.id}`]);
     return { success: true, data: deletedList };
   } catch (e) {
     console.error(e);
@@ -172,6 +177,20 @@ export const getUserMovieLists = async (
       .orderBy(getMovieListOrderBy(sort));
 
     return { success: true, data: userMovieLists };
+  } catch (e) {
+    console.error(e);
+    return { success: false, message: "Something went wrong" };
+  }
+};
+
+export const getUserMovieListIds = async (userId: User["id"]) => {
+  try {
+    const userMovieListIds = await db
+      .select({ id: movieList.id })
+      .from(movieList)
+      .where(eq(movieList.userId, userId));
+
+    return { success: true, data: userMovieListIds.map(({ id }) => id) };
   } catch (e) {
     console.error(e);
     return { success: false, message: "Something went wrong" };
