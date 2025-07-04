@@ -27,9 +27,9 @@ export const movieSearchResponseSchema = z
       z.object({
         id: z.number(),
         title: z.string(),
-        release_date: z.string(),
+        release_date: z.string().optional(),
         poster_path: z.string().nullable(),
-        genre_ids: z.array(z.number()),
+        genre_ids: z.array(z.number()).optional(),
       }),
     ),
   })
@@ -39,13 +39,14 @@ export const movieSearchResponseSchema = z
       (movie) =>
         movie.release_date &&
         movie.poster_path &&
+        movie.genre_ids &&
         movie.genre_ids.length > 0 &&
         movie.release_date <= today,
     );
     return filteredMovies.slice(0, 15).map((movie) => ({
       id: movie.id,
       title: movie.title,
-      releaseDate: movie.release_date,
+      releaseDate: movie.release_date!,
       imagePath: movie.poster_path!,
     }));
   });

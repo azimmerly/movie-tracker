@@ -225,7 +225,7 @@ export const NavClient = ({ user, navLinks }: NavClientProps) => {
                         onClick();
                         setMobileMenuOpen(false);
                       }}
-                      className="-mx-3 box-content flex w-full cursor-pointer items-center gap-2 rounded-md px-3 py-2 hover:bg-gray-100 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden dark:hover:bg-gray-800"
+                      className="flex w-full cursor-pointer items-center gap-2 rounded-md px-3 py-2 hover:bg-gray-100 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden dark:hover:bg-gray-800"
                     >
                       <Icon className="size-5" />
                       {label}
