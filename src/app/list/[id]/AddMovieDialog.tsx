@@ -112,7 +112,7 @@ export const AddMovieDialog = ({
           </div>
         </form>
         {movies && (
-          <div className="scrollbar-hide mt-4 max-h-[360px] overflow-auto pb-4">
+          <div className="scrollbar-hide mt-4 max-h-96 overflow-auto pb-4">
             <div className="my-1 flex flex-col gap-2 px-1">
               {!movies.length ? (
                 <Typography.Small

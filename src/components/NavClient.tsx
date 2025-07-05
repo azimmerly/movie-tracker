@@ -178,7 +178,7 @@ export const NavClient = ({ user, navLinks }: NavClientProps) => {
             </div>
           </div>
           <div className="box-content divide-y divide-gray-200 dark:divide-gray-700">
-            <div className="space-y-1.5 py-6 font-medium">
+            <div className="space-y-1.5 py-4 font-medium">
               {navLinks.map(({ label, href }, index) => (
                 <Link
                   key={index}
@@ -191,7 +191,7 @@ export const NavClient = ({ user, navLinks }: NavClientProps) => {
                 </Link>
               ))}
             </div>
-            <div className="py-5">
+            <div className="py-4">
               {!user ? (
                 <div className="flex flex-col gap-3">
                   <Button

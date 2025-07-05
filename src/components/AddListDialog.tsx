@@ -94,7 +94,7 @@ export const AddListDialog = ({ session }: AddListDialogProps) => {
                 label="Private (only visible to you)"
                 checked={field.value}
                 onChange={field.onChange}
-                className="mt-1.5 text-gray-600 dark:text-gray-300"
+                className="mt-0.5 font-medium text-gray-600 dark:text-gray-300"
               />
             )}
           />
