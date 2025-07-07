@@ -37,7 +37,7 @@ const MoviePage = async ({ params }: MoviePageProps) => {
   }
 
   return (
-    <div className="flex flex-col items-center gap-7 sm:mt-16">
+    <div className="flex flex-col items-center gap-8 sm:mt-18">
       <Image
         priority
         width={240}
@@ -48,7 +48,9 @@ const MoviePage = async ({ params }: MoviePageProps) => {
         className="h-[240px] w-40 rounded-md shadow sm:h-[360px] sm:w-60"
       />
       <div className="flex flex-col items-center gap-2">
-        <Typography.H2>{movie.title}</Typography.H2>
+        <Typography.H2 className="max-w-2xl text-center">
+          {movie.title}
+        </Typography.H2>
         {movie.tagline && (
           <Typography.Small
             muted
@@ -64,7 +66,7 @@ const MoviePage = async ({ params }: MoviePageProps) => {
             user rating
           </Typography.Small>
         )}
-        <div className="flex flex-wrap gap-1">
+        <div className="flex flex-wrap justify-center gap-1">
           {movie.genres.slice(0, 3).map((genre) => (
             <Chip
               key={genre}
@@ -75,7 +77,7 @@ const MoviePage = async ({ params }: MoviePageProps) => {
           ))}
         </div>
         <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
-          {movie.runtime && (
+          {!!movie.runtime && (
             <Typography.Small muted className="flex items-center gap-1">
               <ClockIcon className="size-4" strokeWidth={2} />
               {formatRuntime(movie.runtime)}

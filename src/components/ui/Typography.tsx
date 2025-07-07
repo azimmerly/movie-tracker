@@ -7,7 +7,7 @@ const typographyVariants = tv({
   variants: {
     type: {
       h1: "text-3xl font-extrabold tracking-tight sm:text-4xl",
-      h2: "text-2xl font-bold tracking-tight sm:text-3xl",
+      h2: "text-2xl font-extrabold tracking-tight sm:text-3xl",
       h3: "text-xl font-bold tracking-tight sm:text-2xl",
       large: "text-lg font-semibold",
       body: "text-base leading-7",

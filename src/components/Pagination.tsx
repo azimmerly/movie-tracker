@@ -35,15 +35,13 @@ export const Pagination = ({
   return (
     <nav
       aria-label="Pagination"
-      className="flex items-center justify-between border-t border-gray-200 px-4 py-3 sm:px-6 dark:border-gray-600"
+      className="flex items-center justify-between border-t border-gray-200 px-4 py-3 dark:border-gray-700"
     >
-      <div className="hidden sm:block">
-        <Typography.Small muted>
-          Showing <span className="font-medium">{startItem}</span> to
-          <span className="font-medium"> {endItem} </span> of
-          <span className="font-medium"> {totalCount}</span> {itemLabel}
-        </Typography.Small>
-      </div>
+      <Typography.Small muted className="hidden sm:block">
+        Showing <span className="font-semibold">{startItem}</span> to
+        <span className="font-semibold"> {endItem} </span> of
+        <span className="font-semibold"> {totalCount}</span> {itemLabel}
+      </Typography.Small>
       <div className="flex flex-1 justify-between gap-3 sm:justify-end">
         <Button
           variant="secondary"
