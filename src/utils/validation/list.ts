@@ -3,8 +3,8 @@ import { z } from "zod";
 const titleSchema = z
   .string()
   .trim()
-  .min(1, { message: "Required" })
-  .max(30, { message: "Max 30 characters" });
+  .min(1, { error: "Required" })
+  .max(30, { error: "Max 30 characters" });
 
 export const addListSchema = z.object({
   title: titleSchema,

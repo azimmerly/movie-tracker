@@ -18,7 +18,7 @@ export const updateMovieSchema = z.object({
 });
 
 export const movieSearchSchema = z.object({
-  title: z.string().trim().min(1, { message: "Required" }),
+  title: z.string().trim().min(1, { error: "Required" }),
 });
 
 export const movieSearchResponseSchema = z
