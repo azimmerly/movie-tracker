@@ -12,6 +12,9 @@ export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
   }),
+  cookieCache: {
+    enabled: true,
+  },
   user: {
     changeEmail: {
       enabled: true,
