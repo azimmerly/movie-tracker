@@ -1,6 +1,6 @@
 "use client";
 
-import { UserCircleIcon } from "@heroicons/react/16/solid";
+import { UserPlusIcon } from "@heroicons/react/16/solid";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -72,11 +72,11 @@ export const SignUpForm = () => {
         <Button
           type="submit"
           className="mt-3 w-full"
-          icon={UserCircleIcon}
+          icon={UserPlusIcon}
           disabled={formState.isSubmitting}
           busy={formState.isSubmitting}
         >
-          Sign up
+          Create account
         </Button>
         <hr className="my-0.5 text-gray-200 sm:my-1 dark:text-gray-800" />
         <SocialAuthButton provider="github" className="w-full" />
