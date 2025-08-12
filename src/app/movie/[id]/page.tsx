@@ -59,13 +59,6 @@ const MoviePage = async ({ params }: MoviePageProps) => {
         )}
       </div>
       <div className="flex flex-col items-center gap-3">
-        {movie.avgRating && (
-          <Typography.Small className="flex items-center gap-1">
-            <StarIcon className="mb-px size-4.5 fill-amber-400 dark:fill-amber-500" />
-            <strong className="font-semibold">{movie.avgRating}</strong> average
-            user rating
-          </Typography.Small>
-        )}
         <div className="flex flex-wrap justify-center gap-1">
           {movie.genres.slice(0, 3).map((genre) => (
             <Chip
@@ -101,6 +94,13 @@ const MoviePage = async ({ params }: MoviePageProps) => {
             </Typography.Link>
           )}
         </div>
+        {movie.avgRating && (
+          <Typography.Small className="flex items-center gap-1">
+            <StarIcon className="mb-px size-4.5 fill-amber-400 dark:fill-amber-500" />
+            <strong className="font-semibold">{movie.avgRating}</strong> average
+            user rating
+          </Typography.Small>
+        )}
       </div>
       {movie.description && (
         <Typography.Small className="max-w-xl border-l-2 border-blue-500/60 px-2 text-justify">
