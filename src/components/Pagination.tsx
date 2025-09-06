@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/16/solid";
 import { useMemo } from "react";
 
 import { Button } from "@/components/ui/Button";
@@ -35,16 +36,18 @@ export const Pagination = ({
   return (
     <nav
       aria-label="Pagination"
-      className="flex items-center justify-between border-t border-gray-200 px-3 py-3 dark:border-gray-700"
+      className="flex flex-col-reverse items-center border-gray-200 sm:flex-row sm:justify-between sm:border-t sm:py-3 dark:border-gray-700"
     >
-      <Typography.Small muted className="hidden sm:block">
+      <Typography.Small muted className="mt-2 sm:mt-0">
         Showing <span className="font-semibold">{startItem}</span> to
         <span className="font-semibold"> {endItem} </span> of
         <span className="font-semibold"> {totalCount}</span> {itemLabel}
       </Typography.Small>
-      <div className="flex flex-1 justify-between gap-2 sm:justify-end">
+      <div className="flex w-full flex-1 gap-2 sm:justify-end">
         <Button
           variant="secondary"
+          className="w-1/2 sm:w-fit"
+          icon={ArrowLeftIcon}
           disabled={currentPage <= 1}
           onClick={() => setPage(currentPage - 1)}
         >
@@ -52,6 +55,8 @@ export const Pagination = ({
         </Button>
         <Button
           variant="secondary"
+          className="w-1/2 sm:w-fit"
+          icon={ArrowRightIcon}
           disabled={currentPage >= totalPages}
           onClick={() => setPage(currentPage + 1)}
         >
