@@ -10,7 +10,7 @@ const buttonVariants = tv({
     variant: {
       primary: "bg-blue-600 text-white hover:bg-blue-500",
       secondary:
-        "bg-white text-gray-700 hover:bg-gray-50 ring-1 ring-inset ring-gray-200 dark:text-white dark:bg-white/10 dark:hover:bg-white/20 dark:ring-transparent",
+        "bg-white text-gray-700 hover:bg-gray-50 ring-1 ring-inset ring-gray-200 dark:text-white dark:bg-white/10 dark:hover:bg-white/15 dark:ring-transparent",
       destructive: "bg-red-600 text-white hover:bg-red-500",
     },
     size: {
@@ -20,7 +20,7 @@ const buttonVariants = tv({
       lg: "text-base font-semibold rounded-md px-4 py-3 gap-1.5",
     },
     disabled: {
-      true: "opacity-60 hover:bg-unset",
+      true: "opacity-60 hover:bg-unset dark:hover:bg-unset",
       false: "cursor-pointer",
     },
   },

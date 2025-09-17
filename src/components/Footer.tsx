@@ -4,7 +4,7 @@ import { APP_NAME } from "@/consts";
 const currentYear = new Date().getFullYear();
 
 export const Footer = () => (
-  <footer className="w-screen px-2 pt-8 pb-2 text-center">
+  <footer className="w-screen px-2 pt-6 pb-2 text-center">
     <Typography.Tiny muted>
       &copy; {currentYear} {APP_NAME}
     </Typography.Tiny>

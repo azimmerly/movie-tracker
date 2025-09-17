@@ -10,7 +10,7 @@ const chipVariants = tv({
       primary: "bg-blue-400/15 text-blue-600 dark:text-blue-400",
       secondary: "bg-gray-400/15 text-gray-600 dark:text-gray-400",
       success: "bg-green-400/15 text-green-600 dark:text-green-400",
-      warning: "bg-red-400/15 text-red-600 dark:text-red-400",
+      warning: "bg-red-400/15 text-red-700 dark:text-red-300",
     },
   },
   defaultVariants: {
