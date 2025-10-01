@@ -190,3 +190,19 @@ export const getMovieInfo = async (id: MovieInfo["id"]) => {
     return { success: false, message: "Something went wrong" };
   }
 };
+
+export const getAllMovieInfoIds = async () => {
+  try {
+    const movies = await db.query.movieInfo.findMany({
+      columns: { id: true },
+    });
+
+    return {
+      success: true,
+      data: movies.map(({ id }) => ({ id: id.toString() })),
+    };
+  } catch (e) {
+    console.error(e);
+    return { success: false, message: "Something went wrong" };
+  }
+};

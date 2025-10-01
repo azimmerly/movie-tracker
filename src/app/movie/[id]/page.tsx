@@ -4,7 +4,7 @@ import { ClockIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
-import { getMovieInfo } from "@/actions/movie";
+import { getAllMovieInfoIds, getMovieInfo } from "@/actions/movie";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { Chip } from "@/components/ui/Chip";
 import { Typography } from "@/components/ui/Typography";
@@ -15,6 +15,16 @@ import { getMovieImage } from "@/utils/getMovieImage";
 
 type MoviePageProps = {
   params: Promise<{ id: number }>;
+};
+
+export const generateStaticParams = async () => {
+  const { data, success } = await getAllMovieInfoIds();
+
+  if (!success) {
+    return [];
+  }
+
+  return data ?? [];
 };
 
 const getCachedMovieInfo = async (id: number) => {
