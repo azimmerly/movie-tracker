@@ -1,4 +1,4 @@
-import { ArrowTopRightOnSquareIcon, StarIcon } from "@heroicons/react/16/solid";
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/16/solid";
 import { CalendarDaysIcon } from "@heroicons/react/20/solid";
 import { ClockIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
@@ -9,7 +9,6 @@ import { ErrorMessage } from "@/components/ErrorMessage";
 import { Chip } from "@/components/ui/Chip";
 import { Typography } from "@/components/ui/Typography";
 import { IMDB_MOVIE_URL } from "@/consts";
-import type { MovieInfo } from "@/types";
 import { formatDate } from "@/utils/formatDate";
 import { formatRuntime } from "@/utils/formatRuntime";
 import { getMovieImage } from "@/utils/getMovieImage";
@@ -25,8 +24,7 @@ const getCachedMovieInfo = async (id: number) => {
 
 const MoviePage = async ({ params }: MoviePageProps) => {
   const { id } = await params;
-  const { data, success } = await getCachedMovieInfo(id);
-  const movie = data as MovieInfo & { avgRating: string | null };
+  const { data: movie, success } = await getCachedMovieInfo(id);
 
   if (!success) {
     return <ErrorMessage />;
@@ -94,13 +92,6 @@ const MoviePage = async ({ params }: MoviePageProps) => {
             </Typography.Link>
           )}
         </div>
-        {movie.avgRating && (
-          <Typography.Small className="flex items-center gap-1">
-            <StarIcon className="mb-px size-4.5 fill-amber-400 dark:fill-amber-500" />
-            <strong className="font-semibold">{movie.avgRating}</strong> average
-            user rating
-          </Typography.Small>
-        )}
       </div>
       {movie.description && (
         <Typography.Small className="max-w-xl border-l-2 border-blue-500/60 px-2 text-justify">

@@ -1,7 +1,7 @@
 "use server";
 
 import { createFetch } from "@better-fetch/fetch";
-import { and, avg, eq, ne } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 import { getSession } from "@/actions/auth";
 import { cleanupUnreferencedMovieInfo, revalidatePaths } from "@/actions/utils";
@@ -181,18 +181,9 @@ export const getMovieInfo = async (id: MovieInfo["id"]) => {
       where: eq(movieInfo.id, id),
     });
 
-    const { avgRating } = await db
-      .select({ avgRating: avg(movie.rating) })
-      .from(movie)
-      .where(and(eq(movie.movieInfoId, id), ne(movie.rating, 0)))
-      .then(([data]) => data);
-
     return {
       success: true,
-      data: {
-        ...movieData,
-        avgRating: avgRating ? parseFloat(avgRating).toFixed(1) : null,
-      },
+      data: movieData,
     };
   } catch (e) {
     console.error(e);
