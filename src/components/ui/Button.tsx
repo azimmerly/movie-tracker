@@ -8,7 +8,8 @@ const buttonVariants = tv({
   base: "shadow-xs focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 flex items-center justify-center w-fit h-fit",
   variants: {
     variant: {
-      primary: "bg-blue-600 text-white hover:bg-blue-500",
+      primary:
+        "bg-gradient-to-br from-blue-600 to-indigo-600 text-white hover:brightness-125",
       secondary:
         "bg-white text-gray-700 hover:bg-gray-50 ring-1 ring-inset ring-gray-200 dark:text-white dark:bg-white/10 dark:hover:bg-white/15 dark:ring-transparent",
       destructive: "bg-red-600 text-white hover:bg-red-500",
