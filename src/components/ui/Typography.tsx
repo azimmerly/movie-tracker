@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 import { tv, type VariantProps } from "tailwind-variants";
 
 const typographyVariants = tv({
-  base: "antialiased text-pretty break-words",
+  base: "text-pretty wrap-break-word antialiased",
   variants: {
     type: {
       h1: "text-3xl font-extrabold tracking-tight sm:text-4xl",
