@@ -132,7 +132,7 @@ export const AddMovieDialog = ({
                     />
                   ))}
                   {movies.length > 3 && (
-                    <div className="from-offwhite via-offwhite pointer-events-none absolute right-0 bottom-0 left-0 h-16 bg-gradient-to-t to-transparent dark:from-gray-800 dark:via-gray-800" />
+                    <div className="from-offwhite via-offwhite pointer-events-none absolute right-0 bottom-0 left-0 h-16 bg-linear-to-t to-transparent dark:from-gray-800 dark:via-gray-800" />
                   )}
                 </ul>
               )}

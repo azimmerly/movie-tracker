@@ -4,7 +4,7 @@ import { Checkbox, Field, Label } from "@headlessui/react";
 import { StarIcon } from "@heroicons/react/16/solid";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, Watch } from "react-hook-form";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 
@@ -28,7 +28,7 @@ export const MovieActions = ({
   rating,
   favorite,
 }: MovieActionsProps) => {
-  const { formState, setValue, getValues, watch, handleSubmit } =
+  const { control, formState, setValue, getValues, handleSubmit } =
     useForm<UpdateMovieData>({
       defaultValues: { favorite, rating, listId, movieId },
       resolver: zodResolver(updateMovieSchema),
@@ -38,6 +38,9 @@ export const MovieActions = ({
     field: "rating" | "favorite",
     value: Movie["rating"] | Movie["favorite"],
   ) => {
+    if (formState.isSubmitting) {
+      return;
+    }
     if (!owner) {
       toast.info("You can only modify your own lists");
       return;
@@ -51,61 +54,65 @@ export const MovieActions = ({
     })();
   };
 
-  const currentRating = watch("rating");
-  const currentFavorite = watch("favorite");
+  const renderStars = (rating: number) => {
+    return Array.from({ length: 5 }, (_, index) => {
+      const starNum = index + 1;
+      return (
+        <StarIcon
+          role="button"
+          key={starNum}
+          className={twMerge(
+            "-mx-px size-5",
+            owner ? "cursor-pointer" : "cursor-default",
+            rating >= starNum
+              ? "fill-amber-400 dark:fill-amber-500"
+              : "fill-gray-300 dark:fill-gray-600",
+          )}
+          onClick={() => {
+            handleUpdate("rating", rating === starNum ? 0 : starNum);
+          }}
+        />
+      );
+    });
+  };
 
   return (
     <form className="mt-2 flex flex-col gap-1">
       <Field className="flex">
-        {Array.from({ length: 5 }).map((_, index) => {
-          const starNum = index + 1;
-          return (
-            <StarIcon
-              role="button"
-              key={starNum}
-              className={twMerge(
-                "-mx-px size-5",
-                owner ? "cursor-pointer" : "cursor-default",
-                currentRating >= starNum
-                  ? "fill-amber-400 dark:fill-amber-500"
-                  : "fill-gray-300 dark:fill-gray-600",
-              )}
-              onClick={() => {
-                if (formState.isSubmitting) {
-                  return;
-                }
-                if (currentRating === starNum) {
-                  handleUpdate("rating", 0);
-                } else if (currentRating !== starNum) {
-                  handleUpdate("rating", starNum);
-                }
-              }}
-            />
-          );
-        })}
+        <Watch
+          names={["rating"]}
+          control={control}
+          render={([rating]: [number]) => renderStars(rating)}
+        />
       </Field>
       <Field className="w-fit">
-        <Checkbox
-          tabIndex={-1}
-          disabled={formState.isSubmitting}
-          checked={currentFavorite}
-          onChange={(e) => handleUpdate("favorite", e)}
-          className={twMerge(
-            "flex items-center gap-0.5 rounded-sm focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden",
-            owner ? "cursor-pointer" : "cursor-default",
+        <Watch
+          names={["favorite"]}
+          control={control}
+          render={([favorite]: [boolean]) => (
+            <Checkbox
+              tabIndex={-1}
+              disabled={formState.isSubmitting}
+              checked={favorite}
+              onChange={(e) => handleUpdate("favorite", e)}
+              className={twMerge(
+                "flex items-center gap-0.5 rounded-sm focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden",
+                owner ? "cursor-pointer" : "cursor-default",
+              )}
+            >
+              <HeartIcon
+                strokeWidth={2}
+                className={twMerge(
+                  "size-5 text-rose-400 dark:text-rose-500",
+                  favorite && "fill-rose-400 dark:fill-rose-500",
+                )}
+              />
+              <Label as={Typography.Tiny} className="font-medium" muted>
+                Favorite
+              </Label>
+            </Checkbox>
           )}
-        >
-          <HeartIcon
-            strokeWidth={2}
-            className={twMerge(
-              "size-5 text-rose-400 dark:text-rose-500",
-              currentFavorite && "fill-rose-400 dark:fill-rose-500",
-            )}
-          />
-          <Label as={Typography.Tiny} className="font-medium" muted>
-            Favorite
-          </Label>
-        </Checkbox>
+        />
       </Field>
     </form>
   );
