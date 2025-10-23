@@ -48,7 +48,7 @@ export const addMovieList = async (data: AddListData) => {
       .insert(movieList)
       .values({ ...data, userId: session.user.id })
       .returning({ id: movieList.id });
-    await revalidatePaths(["/", "/dashboard", `/user/${session.user.id}`]);
+    await revalidatePaths(["/", "/dashboard"]);
     return { success: true, data: newList };
   } catch (e) {
     console.error(e);
@@ -72,12 +72,7 @@ export const updateMovieList = async ({ id, ...rest }: UpdateListData) => {
     if (!updatedList) {
       throw new Error("Movie list not found or unauthorized");
     }
-    await revalidatePaths([
-      "/",
-      "/dashboard",
-      `/list/${id}`,
-      `/user/${session.user.id}`,
-    ]);
+    await revalidatePaths([`/list/${id}`]);
     return { success: true, data: updatedList };
   } catch (e) {
     console.error(e);
@@ -102,7 +97,7 @@ export const deleteMovieList = async (id: MovieList["id"]) => {
     }
 
     await cleanupUnreferencedMovieInfo();
-    await revalidatePaths(["/", "/dashboard", `/user/${session.user.id}`]);
+    await revalidatePaths(["/", "/dashboard"]);
     return { success: true, data: deletedList };
   } catch (e) {
     console.error(e);
@@ -177,20 +172,6 @@ export const getUserMovieLists = async (
       .orderBy(getMovieListOrderBy(sort));
 
     return { success: true, data: userMovieLists };
-  } catch (e) {
-    console.error(e);
-    return { success: false, message: "Something went wrong" };
-  }
-};
-
-export const getUserMovieListIds = async (userId: User["id"]) => {
-  try {
-    const userMovieListIds = await db
-      .select({ id: movieList.id })
-      .from(movieList)
-      .where(eq(movieList.userId, userId));
-
-    return { success: true, data: userMovieListIds.map(({ id }) => id) };
   } catch (e) {
     console.error(e);
     return { success: false, message: "Something went wrong" };

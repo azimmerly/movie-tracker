@@ -16,24 +16,11 @@ type ListPageProps = {
   searchParams: Promise<{ search?: string; sort?: string }>;
 };
 
-const getCachedMovieListById = async (
-  id: string,
-  search?: string,
-  sort?: string,
-) => {
-  "use cache";
-  return await getMovieListById(id, search, sort);
-};
-
 const ListPage = async ({ params, searchParams }: ListPageProps) => {
   const { id } = await params;
   const { search, sort } = await searchParams;
   const session = await getSession();
-  const { data: list, success } = await getCachedMovieListById(
-    id,
-    search,
-    sort,
-  );
+  const { data: list, success } = await getMovieListById(id, search, sort);
 
   if (!success) {
     return <ErrorMessage />;

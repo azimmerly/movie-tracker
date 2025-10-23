@@ -42,7 +42,6 @@ export const OptionsDropdown = ({ user }: OptionsDropdownProps) => {
         onClose={() => setIsUpdateDialogOpen(false)}
       />
       <DeleteAccountDialog
-        userId={user.id}
         open={isDeleteDialogOpen}
         onClose={() => setIsDeleteDialogOpen(false)}
       />

@@ -27,14 +27,9 @@ export const generateStaticParams = async () => {
   return data ?? [];
 };
 
-const getCachedMovieInfo = async (id: number) => {
-  "use cache";
-  return await getMovieInfo(id);
-};
-
 const MoviePage = async ({ params }: MoviePageProps) => {
   const { id } = await params;
-  const { data: movie, success } = await getCachedMovieInfo(id);
+  const { data: movie, success } = await getMovieInfo(id);
 
   if (!success) {
     return <ErrorMessage />;

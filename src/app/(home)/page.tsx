@@ -15,16 +15,6 @@ type HomeProps = {
   searchParams: Promise<{ search?: string; sort?: string; page?: string }>;
 };
 
-const getCachedAllMovieLists = async (
-  pageSize: number,
-  search?: string,
-  sort?: string,
-  offset?: number,
-) => {
-  "use cache";
-  return await getAllMovieLists(pageSize, search, sort, offset);
-};
-
 const Home = async ({ searchParams }: HomeProps) => {
   const { search, sort, page = "1" } = await searchParams;
   const currentPage = parseInt(page);
@@ -35,7 +25,7 @@ const Home = async ({ searchParams }: HomeProps) => {
     data: lists,
     totalCount,
     success,
-  } = await getCachedAllMovieLists(LIST_PAGE_SIZE, search, sort, offset);
+  } = await getAllMovieLists(LIST_PAGE_SIZE, search, sort, offset);
 
   if (!success || !lists) {
     return <ErrorMessage />;

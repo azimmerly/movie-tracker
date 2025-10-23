@@ -5,7 +5,6 @@ import type { User } from "better-auth";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { getUserMovieListIds } from "@/actions/list";
 import { revalidatePaths } from "@/actions/utils";
 import { Button } from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
@@ -24,7 +23,7 @@ type UpdateAccountDialogProps = {
 export const UpdateAccountDialog = ({
   open,
   onClose,
-  user: { id, name, email, emailVerified },
+  user: { name, email, emailVerified },
 }: UpdateAccountDialogProps) => {
   const { register, reset, handleSubmit, formState } = useForm<UpdateUserData>({
     defaultValues: { name, email },
@@ -70,15 +69,7 @@ export const UpdateAccountDialog = ({
 
     onClose();
     await Promise.all(updatePromises);
-    const pathsToRevalidate = ["/", "/dashboard", "/account", `/user/${id}`];
-
-    const { data: userListIds, success } = await getUserMovieListIds(id);
-    if (success && userListIds?.length) {
-      const listPaths = userListIds.map((id) => `/list/${id}`);
-      pathsToRevalidate.push(...listPaths);
-    }
-
-    await revalidatePaths(pathsToRevalidate);
+    await revalidatePaths(["/account"]);
   };
 
   return (

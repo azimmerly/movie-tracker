@@ -15,15 +15,6 @@ type MyListsProps = {
   searchParams: Promise<{ search?: string; sort?: string }>;
 };
 
-const getCachedUserMovieLists = async (
-  userId: string,
-  search?: string,
-  sort?: string,
-) => {
-  "use cache";
-  return await getUserMovieLists(userId, search, sort);
-};
-
 const MyLists = async ({ searchParams }: MyListsProps) => {
   const { search, sort } = await searchParams;
   const session = await getSession();
@@ -32,7 +23,7 @@ const MyLists = async ({ searchParams }: MyListsProps) => {
     redirect("/sign-in");
   }
 
-  const { data: lists, success } = await getCachedUserMovieLists(
+  const { data: lists, success } = await getUserMovieLists(
     session.user.id,
     search,
     sort,

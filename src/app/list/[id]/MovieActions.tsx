@@ -28,7 +28,7 @@ export const MovieActions = ({
   rating,
   favorite,
 }: MovieActionsProps) => {
-  const { formState, setValue, getValues, watch, handleSubmit } =
+  const { formState, setValue, getValues, handleSubmit } =
     useForm<UpdateMovieData>({
       defaultValues: { favorite, rating, listId, movieId },
       resolver: zodResolver(updateMovieSchema),
@@ -51,8 +51,8 @@ export const MovieActions = ({
     })();
   };
 
-  const currentRating = watch("rating");
-  const currentFavorite = watch("favorite");
+  const currentRating = getValues("rating");
+  const currentFavorite = getValues("favorite");
 
   return (
     <form className="mt-2 flex flex-col gap-1">

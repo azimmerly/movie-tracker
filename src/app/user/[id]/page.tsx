@@ -16,20 +16,6 @@ type MyListsProps = {
   searchParams: Promise<{ search?: string; sort?: string }>;
 };
 
-const getCachedUserById = async (id: string) => {
-  "use cache";
-  return await getUserById(id);
-};
-
-const getCachedUserMovieLists = async (
-  userId: string,
-  search?: string,
-  sort?: string,
-) => {
-  "use cache";
-  return await getUserMovieLists(userId, search, sort);
-};
-
 const UserLists = async ({ searchParams, params }: MyListsProps) => {
   const { id } = await params;
   const { search, sort } = await searchParams;
@@ -39,16 +25,12 @@ const UserLists = async ({ searchParams, params }: MyListsProps) => {
     redirect("/dashboard");
   }
 
-  const { data: user, success: userSuccess } = await getCachedUserById(id);
+  const { data: user, success: userSuccess } = await getUserById(id);
   if (!user || !userSuccess) {
     notFound();
   }
 
-  const { data: lists, success } = await getCachedUserMovieLists(
-    id,
-    search,
-    sort,
-  );
+  const { data: lists, success } = await getUserMovieLists(id, search, sort);
   if (!success) {
     return <ErrorMessage />;
   }
