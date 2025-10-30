@@ -19,11 +19,9 @@ type MoviePageProps = {
 
 export const generateStaticParams = async () => {
   const { data, success } = await getAllMovieInfoIds();
-
   if (!success) {
     return [];
   }
-
   return data ?? [];
 };
 
