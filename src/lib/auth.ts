@@ -1,5 +1,5 @@
-import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { betterAuth } from "better-auth/minimal";
 
 import { cleanupUnreferencedMovieInfo } from "@/actions/utils";
 import { APP_NAME } from "@/consts";
