@@ -51,7 +51,7 @@ export const SearchMovie = ({
           alt={title}
           draggable={false}
           src={getMovieImage(imagePath, "sm")}
-          className="h-[84px] w-14 rounded shadow"
+          className="h-21 w-14 rounded shadow"
         />
         <div className="flex flex-col gap-1">
           <Typography.Small className="font-semibold">{title}</Typography.Small>

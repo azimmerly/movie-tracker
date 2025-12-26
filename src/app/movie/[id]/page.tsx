@@ -46,7 +46,7 @@ const MoviePage = async ({ params }: MoviePageProps) => {
         alt={movie.title}
         draggable={false}
         src={getMovieImage(movie.imagePath, "lg")}
-        className="h-75 w-50 rounded-lg shadow sm:h-[360px] sm:w-60"
+        className="h-75 w-50 rounded-lg shadow sm:h-90 sm:w-60"
       />
       <div className="flex flex-col items-center gap-2">
         <Typography.H2 className="max-w-2xl text-center">

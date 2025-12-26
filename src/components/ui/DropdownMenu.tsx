@@ -45,7 +45,7 @@ export const DropdownMenu = ({
     className={twMerge("relative inline-block text-left", className)}
   >
     {iconButton ? (
-      <MenuButton className="flex cursor-pointer rounded-full hover:brightness-[98%] focus-visible:outline-2 focus-visible:outline-blue-500 dark:hover:brightness-105">
+      <MenuButton className="flex cursor-pointer rounded-full hover:brightness-98 focus-visible:outline-2 focus-visible:outline-blue-500 dark:hover:brightness-105">
         {iconButton}
       </MenuButton>
     ) : (
@@ -82,7 +82,7 @@ export const DropdownMenu = ({
                 onClick={onClick}
                 className="flex w-full items-center rounded-sm py-2 pr-6 pl-2 text-sm data-focus:bg-gray-50 dark:data-focus:bg-gray-700"
               >
-                <Icon aria-hidden="true" className="mr-2 size-[18px]" />
+                <Icon aria-hidden="true" className="mr-2 size-4.5" />
                 {label}
               </Button>
             </MenuItem>

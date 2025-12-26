@@ -31,7 +31,7 @@ export const Dialog = ({ className, children, ...props }: DialogProps) => (
           <>
             <CloseButton className="absolute top-4 right-4 hidden cursor-pointer rounded-sm text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-blue-500 focus:outline-hidden sm:block">
               <span className="sr-only">Close</span>
-              <XMarkIcon aria-hidden="true" className="size-[22px]" />
+              <XMarkIcon aria-hidden="true" className="size-5.5" />
             </CloseButton>
             {children}
           </>
