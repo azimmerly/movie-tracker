@@ -50,7 +50,7 @@ export const SearchParamInput = ({ placeholder }: SearchParamInputProps) => {
           onChange={handleSearch}
           autoComplete="off"
           placeholder={placeholder}
-          className="col-start-1 row-start-1 rounded-md border-none bg-white px-8 py-1.5 text-sm text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-blue-600 focus:ring-inset dark:bg-white/10 dark:text-white dark:ring-white/10 dark:focus:ring-blue-500"
+          className="col-start-1 row-start-1 rounded-md border-none bg-white px-8 py-1.5 text-sm text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-blue-600 focus:ring-inset dark:bg-gray-800/70 dark:text-white dark:ring-gray-700/70 dark:focus:ring-blue-500"
         />
         <MagnifyingGlassIcon
           aria-hidden="true"

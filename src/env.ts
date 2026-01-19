@@ -12,9 +12,7 @@ const parsedEnv = envSchema.safeParse(process.env);
 
 if (!parsedEnv.success) {
   const envVars = parsedEnv.error.issues.map(({ path }) => path[0]).join(", ");
-  const error = new Error(`Missing environment variables: ${envVars}`);
-  error.stack = "";
-  throw error;
+  throw new Error(`Missing environment variables: ${envVars}`);
 }
 
 export const env = parsedEnv.data;

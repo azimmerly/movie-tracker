@@ -40,16 +40,16 @@ export const MovieActions = ({
     if (!owner) {
       toast.info("You can only modify your own lists");
       return;
-    }
-    if (formState.isSubmitting) {
+    } else if (formState.isSubmitting) {
       return;
     }
 
     const prevValue = getValues(field);
+    setValue(field, value, { shouldDirty: true, shouldValidate: false });
+
     const revertUpdate = () => {
       setValue(field, prevValue, { shouldDirty: false, shouldValidate: false });
     };
-    setValue(field, value, { shouldDirty: true, shouldValidate: false });
 
     try {
       const res = await updateMovie(getValues());
@@ -91,7 +91,7 @@ export const MovieActions = ({
       checked={favorite}
       onChange={(e) => handleUpdate("favorite", e)}
       className={twMerge(
-        "flex items-center gap-0.5 rounded-sm focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden",
+        "flex items-center gap-0.5",
         owner ? "cursor-pointer" : "cursor-default",
       )}
     >
@@ -111,18 +111,10 @@ export const MovieActions = ({
   return (
     <Fieldset className="mt-2 flex flex-col gap-1">
       <Field className="flex">
-        <Watch
-          names={["rating"]}
-          control={control}
-          render={([rating]) => renderStars(rating)}
-        />
+        <Watch name={"rating"} control={control} render={renderStars} />
       </Field>
       <Field className="w-fit">
-        <Watch
-          names={["favorite"]}
-          control={control}
-          render={([favorite]) => renderCheckbox(favorite)}
-        />
+        <Watch name={"favorite"} control={control} render={renderCheckbox} />
       </Field>
     </Fieldset>
   );

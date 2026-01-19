@@ -41,7 +41,7 @@ export const Select = ({
       </Label>
     )}
     <div className="relative">
-      <ListboxButton className="relative w-full rounded-md bg-white py-1.5 pr-10 pl-3 text-left shadow-xs ring-1 ring-gray-200 ring-inset focus:ring-2 focus:ring-blue-600 focus:outline-hidden sm:text-sm/6 dark:bg-gray-800 dark:ring-gray-700/70">
+      <ListboxButton className="relative w-full rounded-md bg-white py-1.5 pr-10 pl-3 text-left shadow-xs ring-1 ring-gray-200 ring-inset focus:ring-2 focus:ring-blue-600 focus:outline-hidden sm:text-sm/6 dark:bg-gray-800/70 dark:ring-gray-700/70">
         <Typography.Small className="block truncate">
           {selected.label}
         </Typography.Small>

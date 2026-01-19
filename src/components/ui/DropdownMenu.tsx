@@ -52,7 +52,7 @@ export const DropdownMenu = ({
       <MenuButton className="group cursor-pointer justify-center rounded-md focus:outline-2 focus:outline-blue-500">
         <span
           className={twMerge(
-            "gap-1 rounded-md bg-white px-3 py-2 shadow-xs ring-1 ring-gray-200/70 ring-inset hover:bg-gray-50 dark:bg-gray-800 dark:ring-gray-700/70 dark:hover:bg-gray-700",
+            "gap-1 rounded-md bg-white px-3 py-2 shadow-xs ring-1 ring-gray-200/70 ring-inset hover:bg-gray-50 dark:bg-gray-800/70 dark:ring-gray-700/70 dark:hover:bg-gray-700",
             ellipsisOnMobile ? "hidden sm:flex" : "flex",
           )}
         >

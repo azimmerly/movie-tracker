@@ -17,7 +17,7 @@ const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => (
     <head>
       <title>{APP_NAME}</title>
     </head>
-    <body className="bg-offwhite text-gray-900 dark:bg-gray-900 dark:text-white">
+    <body className="bg-offwhite text-gray-900 dark:bg-gray-900/70 dark:text-white">
       <div className="flex min-h-screen flex-col items-center antialiased">
         <Providers>
           <NavServer />

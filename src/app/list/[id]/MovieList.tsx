@@ -79,7 +79,7 @@ export const MovieList = ({ movies, owner, listId }: MoviesListProps) => {
                           muted
                           className="flex items-center gap-0.5"
                         >
-                          <CalendarDaysIcon className="size-3.5" />
+                          <CalendarDaysIcon className="mb-px size-3.5" />
                           {formatDate(movieInfo.releaseDate)}
                         </Typography.Tiny>
                       </span>
