@@ -75,7 +75,7 @@ export const NavClient = ({ user, navLinks }: NavClientProps) => {
               draggable={false}
               src={logoImage}
               alt="logo"
-              className="size-7"
+              className="size-6.5 sm:size-7"
             />
             <Typography.Large
               className={twMerge(
@@ -155,7 +155,7 @@ export const NavClient = ({ user, navLinks }: NavClientProps) => {
                 draggable={false}
                 src={logoImage}
                 alt="logo"
-                className="size-7"
+                className="size-6.5 sm:size-7"
               />
               <Typography.Large
                 className={twMerge(

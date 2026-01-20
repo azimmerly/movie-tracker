@@ -22,7 +22,7 @@ export const ThemeToggle = ({ className }: { className?: ClassNameValue }) => {
   return (
     <Switch
       className={twMerge(
-        "group inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors ease-in-out focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden data-checked:bg-blue-600",
+        "group inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200/70 transition-colors ease-in-out focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden data-checked:bg-blue-600",
         className,
       )}
       onChange={toggleTheme}

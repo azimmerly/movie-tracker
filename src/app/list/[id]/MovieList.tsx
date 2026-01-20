@@ -42,7 +42,7 @@ export const MovieList = ({ movies, owner, listId }: MoviesListProps) => {
         {owner && (
           <AddMovieDialog listId={listId} listMovieIds={listMovieIds} />
         )}
-        <div className="flex w-full items-end justify-end gap-2">
+        <div className="flex w-full flex-col items-end justify-end gap-2 sm:flex-row">
           <SearchParamInput placeholder="Movie title" />
           <MovieSortSelect />
         </div>

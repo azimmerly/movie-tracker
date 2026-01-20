@@ -38,7 +38,7 @@ const UserLists = async ({ searchParams, params }: MyListsProps) => {
   return (
     <div className="flex flex-col gap-8">
       <Typography.H1>Movie lists: {user.name}</Typography.H1>
-      <div className="flex w-full items-end justify-end gap-2">
+      <div className="flex w-full flex-col items-end justify-end gap-2 sm:flex-row">
         <SearchParamInput placeholder="List title" />
         <ListSortSelect />
       </div>

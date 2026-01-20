@@ -13,7 +13,7 @@ import { Typography } from "@/components/ui/Typography";
 export type SelectOption = { value: string; label: string };
 
 type SelectProps = {
-  label?: string;
+  label: string;
   icon?: React.ElementType;
   options: SelectOption[];
   selected: SelectOption;
@@ -35,11 +35,9 @@ export const Select = ({
     onChange={setSelected}
     className={twMerge("flex flex-col gap-0.5", className)}
   >
-    {label && (
-      <Label>
-        <Typography.Tiny muted>{label}</Typography.Tiny>
-      </Label>
-    )}
+    <Label className="hidden sm:block">
+      <Typography.Tiny muted>{label}</Typography.Tiny>
+    </Label>
     <div className="relative">
       <ListboxButton className="relative w-full rounded-md bg-white py-1.5 pr-10 pl-3 text-left shadow-xs ring-1 ring-gray-200 ring-inset focus:ring-2 focus:ring-blue-600 focus:outline-hidden sm:text-sm/6 dark:bg-gray-800/70 dark:ring-gray-700/70">
         <Typography.Small className="block truncate">
