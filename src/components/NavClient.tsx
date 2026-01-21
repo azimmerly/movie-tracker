@@ -65,7 +65,7 @@ export const NavClient = ({ user, navLinks }: NavClientProps) => {
 
   return (
     <>
-      <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between p-3 sm:px-6">
+      <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between p-4 sm:px-6">
         <div className="flex items-center gap-16">
           <Link
             href="/"
@@ -144,7 +144,7 @@ export const NavClient = ({ user, navLinks }: NavClientProps) => {
         onClose={setMobileMenuOpen}
         className="lg:hidden"
       >
-        <DialogPanel className="bg-offwhite fixed inset-y-0 right-0 z-10 w-full overflow-y-auto px-3 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10 dark:bg-gray-900 dark:sm:ring-white/10">
+        <DialogPanel className="bg-offwhite fixed inset-y-0 right-0 z-10 w-full overflow-y-auto px-4 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10 dark:bg-gray-900 dark:sm:ring-white/10">
           <div className="flex h-20 items-center justify-between">
             <Link
               href="/"

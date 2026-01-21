@@ -35,7 +35,7 @@ export const InputField = ({
       id={id}
       {...inputProps}
       autoComplete={autoComplete ?? "off"}
-      className="block w-full rounded-md border-0 bg-white py-1.5 text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-blue-600 focus:ring-inset sm:text-sm sm:leading-6 dark:bg-white/10 dark:text-white dark:ring-white/10 dark:focus:ring-blue-500"
+      className="block w-full rounded-md border-0 bg-white py-1.5 text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-blue-600 focus:ring-inset sm:text-sm sm:leading-6 dark:bg-gray-800/70 dark:text-white dark:ring-gray-700/70 dark:focus:ring-blue-500"
     />
   </Field>
 );

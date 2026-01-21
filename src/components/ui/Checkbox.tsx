@@ -19,7 +19,7 @@ export const Checkbox = ({
     <HeadlessCheckbox
       checked={checked}
       onChange={onChange}
-      className="flex size-5 items-center justify-center rounded-sm border border-gray-300 bg-white focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden data-checked:bg-blue-600 dark:border-gray-600 dark:bg-gray-800"
+      className="flex size-5 items-center justify-center rounded-sm border border-gray-300 bg-white focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden data-checked:bg-blue-600 dark:border-gray-700/70 dark:bg-gray-800"
     >
       {checked && <CheckIcon className="size-4 fill-white" />}
     </HeadlessCheckbox>
