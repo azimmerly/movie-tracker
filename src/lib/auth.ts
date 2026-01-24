@@ -1,7 +1,6 @@
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { betterAuth } from "better-auth/minimal";
 
-import { cleanupUnreferencedMovieInfo } from "@/actions/utils";
 import { APP_NAME } from "@/consts";
 import { env } from "@/env";
 import { db } from "@/lib/db";
@@ -21,9 +20,6 @@ export const auth = betterAuth({
     },
     deleteUser: {
       enabled: true,
-      afterDelete: async () => {
-        await cleanupUnreferencedMovieInfo();
-      },
     },
   },
   emailAndPassword: {

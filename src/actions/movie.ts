@@ -4,7 +4,7 @@ import { createFetch } from "@better-fetch/fetch";
 import { and, eq } from "drizzle-orm";
 
 import { getSession } from "@/actions/auth";
-import { cleanupUnreferencedMovieInfo, revalidatePaths } from "@/actions/utils";
+import { revalidatePaths } from "@/actions/utils";
 import { MOVIE_DB_API_URL } from "@/consts";
 import { env } from "@/env";
 import { db } from "@/lib/db";
@@ -121,7 +121,6 @@ export const deleteMovie = async (data: DeleteMovieData) => {
       throw new Error("Movie not found or unauthorized");
     }
 
-    await cleanupUnreferencedMovieInfo();
     await revalidatePaths(["/", "/dashboard", `/list/${listId}`]);
     return { success: true, data: deletedMovie };
   } catch (e) {

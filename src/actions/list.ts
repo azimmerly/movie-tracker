@@ -4,7 +4,7 @@ import type { User } from "better-auth";
 import { and, asc, count, desc, eq, ilike, sql } from "drizzle-orm";
 
 import { getSession } from "@/actions/auth";
-import { cleanupUnreferencedMovieInfo, revalidatePaths } from "@/actions/utils";
+import { revalidatePaths } from "@/actions/utils";
 import { db } from "@/lib/db";
 import { movie, movieInfo, movieList, user } from "@/lib/db/schema";
 import type { AddListData, MovieList, UpdateListData } from "@/types";
@@ -96,7 +96,6 @@ export const deleteMovieList = async (id: MovieList["id"]) => {
       throw new Error("Movie list not found or unauthorized");
     }
 
-    await cleanupUnreferencedMovieInfo();
     await revalidatePaths(["/", "/dashboard"]);
     return { success: true, data: deletedList };
   } catch (e) {
