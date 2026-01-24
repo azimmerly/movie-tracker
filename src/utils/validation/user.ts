@@ -29,5 +29,4 @@ export const signUpSchema = z
 
 export const updateUserSchema = z.object({
   name: nameSchema,
-  email: emailSchema,
 });

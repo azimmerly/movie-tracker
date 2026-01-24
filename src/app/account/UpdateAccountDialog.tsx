@@ -23,10 +23,10 @@ type UpdateAccountDialogProps = {
 export const UpdateAccountDialog = ({
   open,
   onClose,
-  user: { name, email, emailVerified },
+  user: { name },
 }: UpdateAccountDialogProps) => {
   const { register, reset, handleSubmit, formState } = useForm<UpdateUserData>({
-    defaultValues: { name, email },
+    defaultValues: { name },
     resolver: zodResolver(updateUserSchema),
   });
 
@@ -35,40 +35,19 @@ export const UpdateAccountDialog = ({
       return;
     }
 
-    const updatePromises: Promise<unknown>[] = [];
-    if (formState.dirtyFields.name) {
-      updatePromises.push(
-        authClient.updateUser(
-          { name: formData.name },
-          {
-            onError: ({ error }) => {
-              toast.error(error.message);
-            },
-            onSuccess: () => {
-              toast.success("Updated name");
-            },
-          },
-        ),
-      );
-    }
-    if (!emailVerified && formState.dirtyFields.email) {
-      updatePromises.push(
-        authClient.changeEmail(
-          { newEmail: formData.email },
-          {
-            onError: ({ error }) => {
-              toast.error(error.message);
-            },
-            onSuccess: () => {
-              toast.success("Updated email");
-            },
-          },
-        ),
-      );
-    }
+    await authClient.updateUser(
+      { name: formData.name },
+      {
+        onError: ({ error }) => {
+          toast.error(error.message);
+        },
+        onSuccess: () => {
+          toast.success("Updated name");
+        },
+      },
+    );
 
     onClose();
-    await Promise.all(updatePromises);
     await revalidatePaths(["/account"]);
   };
 
@@ -76,7 +55,7 @@ export const UpdateAccountDialog = ({
     <Dialog
       open={open}
       onClose={onClose}
-      onTransitionEnd={() => reset({ name, email })}
+      onTransitionEnd={() => reset({ name })}
     >
       <div className="mb-3 flex flex-col items-center gap-3 sm:mb-5 sm:flex-row">
         <div className="mx-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10 dark:bg-gray-700">
@@ -101,16 +80,6 @@ export const UpdateAccountDialog = ({
           {...register("name")}
           errorMessage={formState.errors?.name?.message}
         />
-        {!emailVerified && (
-          <InputField
-            autoFocus
-            id="email"
-            type="text"
-            label="Email"
-            {...register("email")}
-            errorMessage={formState.errors?.email?.message}
-          />
-        )}
         <div className="mt-2 flex flex-col gap-2 sm:flex-row-reverse">
           <Button
             type="submit"
