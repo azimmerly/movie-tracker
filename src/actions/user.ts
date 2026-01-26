@@ -8,7 +8,7 @@ export const getUserById = async (id: string) => {
   try {
     const userData = await db.query.user.findFirst({
       where: eq(user.id, id),
-      columns: { id: true, name: true, image: true },
+      columns: { id: true, name: true, image: true, createdAt: true },
     });
 
     return { success: true, data: userData };

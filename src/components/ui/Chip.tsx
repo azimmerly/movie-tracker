@@ -4,7 +4,7 @@ import { Typography } from "@/components/ui/Typography";
 import { tv, type VariantProps } from "tailwind-variants";
 
 const chipVariants = tv({
-  base: "inline-flex w-fit items-center rounded-md px-2 py-1 font-medium",
+  base: "inline-flex w-fit items-center rounded px-2 py-1 font-medium",
   variants: {
     variant: {
       primary: "bg-blue-400/15 text-blue-600 dark:text-blue-400",

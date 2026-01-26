@@ -8,6 +8,7 @@ import { ErrorMessage } from "@/components/ErrorMessage";
 import { Avatar } from "@/components/ui/Avatar";
 import { Typography } from "@/components/ui/Typography";
 import { formatDate } from "@/utils/formatDate";
+import { formatUserId } from "@/utils/formatUserId";
 import { ListOptions } from "./ListOptions";
 import { MovieList } from "./MovieList";
 
@@ -48,8 +49,14 @@ const ListPage = async ({ params, searchParams }: ListPageProps) => {
       <div className="flex flex-col gap-0.5">
         <Typography.Small className="flex items-center gap-1.5 font-medium">
           <Avatar userImage={user.image} size="sm" />
-          <Typography.Link href={owner ? "/dashboard" : `/user/${user.id}`}>
-            {user.name}
+          <Typography.Link
+            className="flex gap-1"
+            href={owner ? "/dashboard" : `/user/${user.id}`}
+          >
+            <span>{user.name}</span>
+            <span className="font-normal opacity-75">
+              {formatUserId(user.id)}
+            </span>
           </Typography.Link>
         </Typography.Small>
         <Typography.Small className="flex items-center gap-1.5" muted>

@@ -21,7 +21,7 @@ const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => (
       <div className="flex min-h-screen flex-col items-center antialiased">
         <Providers>
           <NavServer />
-          <main className="flex w-screen max-w-6xl grow flex-col px-4 py-8 sm:px-6 sm:py-16">
+          <main className="flex w-screen max-w-6xl grow flex-col px-3.5 py-8 sm:px-6 sm:py-16">
             {children}
           </main>
           <Footer />

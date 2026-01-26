@@ -27,7 +27,7 @@ export const InputField = ({
           icon={ExclamationTriangleIcon}
           text={errorMessage}
           variant="warning"
-          className="px-1.5 py-px"
+          className="px-1.5 py-px font-normal"
         />
       )}
     </div>
