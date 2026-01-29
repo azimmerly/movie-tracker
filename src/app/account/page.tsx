@@ -26,7 +26,7 @@ const Account = async () => {
       </div>
       <Card className="py-6">
         <div className="flex flex-col items-center gap-4 sm:flex-row">
-          <Avatar size="lg" userImage={user.image} />
+          <Avatar size="xl" userImage={user.image} />
           <div className="flex w-full flex-col gap-0.5 text-center sm:text-left">
             <div className="flex justify-center gap-1.5 sm:justify-start">
               <Typography.Large>{user.name}</Typography.Large>

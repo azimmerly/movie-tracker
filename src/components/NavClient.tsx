@@ -132,7 +132,7 @@ export const NavClient = ({ user, navLinks }: NavClientProps) => {
               </div>
             ) : (
               <DropdownMenu
-                iconButton={<Avatar size="md" userImage={user.image} />}
+                iconButton={<Avatar size="lg" userImage={user.image} />}
                 options={accountOptions}
               />
             )}

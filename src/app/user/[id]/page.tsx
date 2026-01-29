@@ -44,11 +44,13 @@ const UserLists = async ({ searchParams, params }: MyListsProps) => {
       <Typography.H1>Movie lists</Typography.H1>
       <div className="flex flex-col gap-0.5">
         <div className="flex items-center gap-1.5">
-          <Avatar userImage={user.image} size="sm" />
-          <Typography.Small className="-mr-0.5 font-medium">
-            {user.name}
-          </Typography.Small>
-          <Typography.Small muted>{formatUserId(user.id)}</Typography.Small>
+          <Avatar userImage={user.image} size="md" />
+          <div className="flex gap-1">
+            <Typography.Large>{user.name}</Typography.Large>
+            <Typography.Large muted className="font-normal">
+              {formatUserId(user.id)}
+            </Typography.Large>
+          </div>
         </div>
         <Typography.Small className="flex items-center gap-1.5" muted>
           <CalendarDaysIcon className="size-4" />

@@ -4,13 +4,14 @@ import { type ClassNameValue, twMerge } from "tailwind-merge";
 import { tv, type VariantProps } from "tailwind-variants";
 
 const avatarVariants = tv({
-  base: "inline-block overflow-hidden rounded-full shadow-xs bg-gray-200 dark:bg-gray-600 shrink-0",
+  base: "inline-block overflow-hidden rounded-full shadow-xs shrink-0",
   variants: {
     size: {
       xs: "size-3.5",
       sm: "size-4",
-      md: "size-10",
-      lg: "size-14",
+      md: "size-5.25",
+      lg: "size-9",
+      xl: "size-14",
     },
   },
 });
@@ -31,7 +32,10 @@ export const Avatar = ({ userImage, size, className }: AvatarProps) => (
         draggable={false}
       />
     ) : (
-      <svg viewBox="0 0 24 24" className="size-full fill-gray-400">
+      <svg
+        viewBox="0 0 24 24"
+        className="size-full bg-gray-200 fill-gray-400 dark:bg-gray-600"
+      >
         <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
       </svg>
     )}
