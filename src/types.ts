@@ -1,7 +1,7 @@
 import type { InferSelectModel } from "drizzle-orm";
 import { z } from "zod";
 
-import { movie, movieInfo, movieList } from "@/lib/db/schema";
+import { listMovie, movie, movieList, userMovie } from "@/lib/db/schema";
 import { addListSchema, updateListSchema } from "@/utils/validation/list";
 import {
   addMovieSchema,
@@ -30,5 +30,6 @@ export type DeleteMovieData = z.infer<typeof deleteMovieSchema>;
 
 // db schema types
 export type Movie = InferSelectModel<typeof movie>;
-export type MovieInfo = InferSelectModel<typeof movieInfo>;
+export type UserMovie = InferSelectModel<typeof userMovie>;
+export type ListMovie = InferSelectModel<typeof listMovie>;
 export type MovieList = InferSelectModel<typeof movieList>;

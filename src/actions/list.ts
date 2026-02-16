@@ -6,7 +6,7 @@ import { and, asc, count, desc, eq, ilike, sql } from "drizzle-orm";
 import { getSession } from "@/actions/auth";
 import { revalidatePaths } from "@/actions/utils";
 import { db } from "@/lib/db";
-import { movie, movieInfo, movieList, user } from "@/lib/db/schema";
+import { listMovie, movie, movieList, user, userMovie } from "@/lib/db/schema";
 import type { AddListData, MovieList, UpdateListData } from "@/types";
 
 const getMovieListOrderBy = (sort?: string) => {
@@ -25,15 +25,15 @@ const getMovieListOrderBy = (sort?: string) => {
 const getMovieOrderBy = (sort?: string) => {
   switch (sort) {
     case "added":
-      return desc(movie.createdAt);
+      return desc(listMovie.createdAt);
     case "rating":
-      return desc(movie.rating);
+      return desc(userMovie.rating);
     case "title":
-      return asc(movieInfo.title);
+      return asc(movie.title);
     case "released":
-      return desc(movieInfo.releaseDate);
+      return desc(movie.releaseDate);
     default:
-      return desc(movie.createdAt);
+      return desc(listMovie.createdAt);
   }
 };
 
@@ -120,12 +120,12 @@ export const getAllMovieLists = async (
         id: movieList.id,
         title: movieList.title,
         createdAt: movieList.createdAt,
-        movieCount: count(movie.id).as("movie_count"),
+        movieCount: count(listMovie.id).as("movie_count"),
         user: { name: user.name, image: user.image },
       })
       .from(movieList)
       .where(whereClause)
-      .leftJoin(movie, eq(movieList.id, movie.listId))
+      .leftJoin(listMovie, eq(movieList.id, listMovie.listId))
       .innerJoin(user, eq(movieList.userId, user.id))
       .groupBy(movieList.id, user.id)
       .orderBy(getMovieListOrderBy(sort))
@@ -160,12 +160,12 @@ export const getUserMovieLists = async (
         title: movieList.title,
         createdAt: movieList.createdAt,
         private: movieList.private,
-        movieCount: count(movie.id).as("movie_count"),
+        movieCount: count(listMovie.id).as("movie_count"),
         user: { name: user.name, image: user.image },
       })
       .from(movieList)
       .where(whereClause)
-      .leftJoin(movie, eq(movieList.id, movie.listId))
+      .leftJoin(listMovie, eq(movieList.id, listMovie.listId))
       .innerJoin(user, eq(movieList.userId, user.id))
       .groupBy(movieList.id, user.id)
       .orderBy(getMovieListOrderBy(sort));
@@ -198,20 +198,28 @@ export const getMovieListById = async (
     }
 
     const whereClause = search
-      ? and(eq(movie.listId, id), ilike(movieInfo.title, `%${search}%`))
-      : eq(movie.listId, id);
+      ? and(eq(listMovie.listId, id), ilike(movie.title, `%${search}%`))
+      : eq(listMovie.listId, id);
 
     const movies = await db
       .select({
-        id: movie.id,
-        rating: movie.rating,
-        createdAt: movie.createdAt,
-        favorite: movie.favorite,
-        listId: movie.listId,
-        movieInfo: movieInfo,
+        id: listMovie.id,
+        createdAt: listMovie.createdAt,
+        rating: sql<number>`coalesce(${userMovie.rating}, 0)`.as("rating"),
+        favorite: sql<boolean>`coalesce(${userMovie.favorite}, false)`.as(
+          "favorite",
+        ),
+        movie: movie,
       })
-      .from(movie)
-      .innerJoin(movieInfo, eq(movieInfo.id, movie.movieInfoId))
+      .from(listMovie)
+      .innerJoin(movie, eq(movie.id, listMovie.movieId))
+      .leftJoin(
+        userMovie,
+        and(
+          eq(userMovie.movieId, movie.id),
+          eq(userMovie.userId, list.user.id),
+        ),
+      )
       .where(whereClause)
       .orderBy(getMovieOrderBy(sort));
 

@@ -16,7 +16,7 @@ import { Dialog } from "@/components/ui/Dialog";
 import { InputField } from "@/components/ui/InputField";
 import { Typography } from "@/components/ui/Typography";
 import type {
-  MovieInfo,
+  Movie,
   MovieList,
   MovieSearchData,
   MovieSearchResponseData,
@@ -26,7 +26,7 @@ import { SearchMovie } from "./SearchMovie";
 
 type AddMovieDialogProps = {
   listId: MovieList["id"];
-  listMovieIds: Set<MovieInfo["id"]>;
+  listMovieIds: Set<Movie["id"]>;
 };
 
 export const AddMovieDialog = ({

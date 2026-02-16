@@ -7,12 +7,12 @@ export const addMovieSchema = z.object({
 
 export const deleteMovieSchema = z.object({
   listId: z.string(),
-  movieId: z.string(),
+  movieId: z.number(),
 });
 
 export const updateMovieSchema = z.object({
   listId: z.string(),
-  movieId: z.string(),
+  movieId: z.number(),
   rating: z.number().min(0).max(5),
   favorite: z.boolean(),
 });
@@ -47,7 +47,7 @@ export const movieSearchResponseSchema = z
       id: movie.id,
       title: movie.title,
       releaseDate: movie.release_date!,
-      imagePath: movie.poster_path!,
+      posterPath: movie.poster_path!,
     }));
   });
 
@@ -67,10 +67,10 @@ export const movieDetailsResponseSchema = z
     id: data.id,
     title: data.title,
     imdbId: data.imdb_id ?? null,
-    description: data.overview ?? null,
+    overview: data.overview ?? null,
     tagline: data.tagline ?? null,
     runtime: data.runtime ?? null,
-    imagePath: data.poster_path,
+    posterPath: data.poster_path,
     releaseDate: data.release_date,
     genres: data.genres.map(({ name }) => name),
   }));

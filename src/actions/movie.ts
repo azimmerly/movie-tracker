@@ -8,11 +8,11 @@ import { revalidatePaths } from "@/actions/utils";
 import { MOVIE_DB_API_URL } from "@/consts";
 import { env } from "@/env";
 import { db } from "@/lib/db";
-import { movie, movieInfo } from "@/lib/db/schema";
+import { listMovie, movie, movieList, userMovie } from "@/lib/db/schema";
 import type {
   AddMovieData,
   DeleteMovieData,
-  MovieInfo,
+  Movie,
   MovieSearchData,
   UpdateMovieData,
 } from "@/types";
@@ -57,16 +57,16 @@ export const addMovie = async (data: AddMovieData) => {
   try {
     const { listId, movieId } = addMovieSchema.parse(data);
 
-    const existingMovie = await db.query.movie.findFirst({
-      where: and(eq(movie.listId, listId), eq(movie.movieInfoId, movieId)),
+    const existingListMovie = await db.query.listMovie.findFirst({
+      where: and(eq(listMovie.listId, listId), eq(listMovie.movieId, movieId)),
     });
 
-    if (existingMovie) {
+    if (existingListMovie) {
       throw new Error("Duplicate movie");
     }
 
-    let movieData = await db.query.movieInfo.findFirst({
-      where: eq(movieInfo.id, movieId),
+    let movieData = await db.query.movie.findFirst({
+      where: eq(movie.id, movieId),
     });
 
     if (!movieData) {
@@ -78,19 +78,24 @@ export const addMovie = async (data: AddMovieData) => {
         throw new Error("Error fetching movie data");
       }
       movieData = await db
-        .insert(movieInfo)
+        .insert(movie)
         .values(fetchedMovieData)
         .returning()
         .then(([data]) => data);
     }
 
-    const [newMovie] = await db
-      .insert(movie)
-      .values({ userId: session.user.id, movieInfoId: movieData!.id, listId })
-      .returning({ id: movie.id });
+    const [newListMovie] = await db
+      .insert(listMovie)
+      .values({ listId, movieId: movieData!.id })
+      .returning({ id: listMovie.id });
+
+    await db
+      .insert(userMovie)
+      .values({ userId: session.user.id, movieId: movieData!.id })
+      .onConflictDoNothing();
 
     await revalidatePaths(["/", "/dashboard", `/list/${listId}`]);
-    return { success: true, data: newMovie };
+    return { success: true, data: newListMovie };
   } catch (e) {
     console.error(e);
     return { success: false, message: "Something went wrong" };
@@ -106,23 +111,28 @@ export const deleteMovie = async (data: DeleteMovieData) => {
   try {
     const { listId, movieId } = deleteMovieSchema.parse(data);
 
-    const [deletedMovie] = await db
-      .delete(movie)
-      .where(
-        and(
-          eq(movie.id, movieId),
-          eq(movie.listId, listId),
-          eq(movie.userId, session.user.id),
-        ),
-      )
-      .returning({ id: movie.id });
+    const list = await db.query.movieList.findFirst({
+      where: and(
+        eq(movieList.id, listId),
+        eq(movieList.userId, session.user.id),
+      ),
+    });
 
-    if (!deletedMovie) {
-      throw new Error("Movie not found or unauthorized");
+    if (!list) {
+      throw new Error("List not found or unauthorized");
+    }
+
+    const [deletedListMovie] = await db
+      .delete(listMovie)
+      .where(and(eq(listMovie.listId, listId), eq(listMovie.movieId, movieId)))
+      .returning({ id: listMovie.id });
+
+    if (!deletedListMovie) {
+      throw new Error("Movie not found in list");
     }
 
     await revalidatePaths(["/", "/dashboard", `/list/${listId}`]);
-    return { success: true, data: deletedMovie };
+    return { success: true, data: deletedListMovie };
   } catch (e) {
     console.error(e);
     return { success: false, message: "Something went wrong" };
@@ -138,33 +148,31 @@ export const updateMovie = async (data: UpdateMovieData) => {
   try {
     const { listId, movieId, favorite, rating } = updateMovieSchema.parse(data);
 
-    const [updatedMovie] = await db
-      .update(movie)
-      .set({ favorite, rating })
-      .where(
-        and(
-          eq(movie.id, movieId),
-          eq(movie.listId, listId),
-          eq(movie.userId, session.user.id),
-        ),
-      )
-      .returning({ id: movie.id, movieInfoId: movie.movieInfoId });
+    const [updatedUserMovie] = await db
+      .insert(userMovie)
+      .values({ userId: session.user.id, movieId, favorite, rating })
+      .onConflictDoUpdate({
+        target: [userMovie.userId, userMovie.movieId],
+        set: { favorite, rating },
+      })
+      .returning({ id: userMovie.id, movieId: userMovie.movieId });
 
-    if (!updatedMovie) {
-      throw new Error("Movie not found or unauthorized");
+    if (!updatedUserMovie) {
+      throw new Error("Failed to update movie");
     }
+
     await revalidatePaths([`/list/${listId}`]);
-    return { success: true, data: updatedMovie };
+    return { success: true, data: updatedUserMovie };
   } catch (e) {
     console.error(e);
     return { success: false, message: "Something went wrong" };
   }
 };
 
-export const getMovieInfo = async (id: MovieInfo["id"]) => {
+export const getMovie = async (id: Movie["id"]) => {
   try {
-    const movieData = await db.query.movieInfo.findFirst({
-      where: eq(movieInfo.id, id),
+    const movieData = await db.query.movie.findFirst({
+      where: eq(movie.id, id),
     });
 
     return {
@@ -177,9 +185,9 @@ export const getMovieInfo = async (id: MovieInfo["id"]) => {
   }
 };
 
-export const getAllMovieInfoIds = async () => {
+export const getAllMovieIds = async () => {
   try {
-    const movies = await db.query.movieInfo.findMany({
+    const movies = await db.query.movie.findMany({
       columns: { id: true },
     });
 

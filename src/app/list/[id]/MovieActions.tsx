@@ -10,15 +10,15 @@ import { twMerge } from "tailwind-merge";
 
 import { updateMovie } from "@/actions/movie";
 import { Typography } from "@/components/ui/Typography";
-import type { Movie, UpdateMovieData } from "@/types";
+import type { Movie, MovieList, UpdateMovieData, UserMovie } from "@/types";
 import { updateMovieSchema } from "@/utils/validation/movie";
 
 type MovieActionsProps = {
   owner: boolean;
   movieId: Movie["id"];
-  listId: Movie["listId"];
-  rating: Movie["rating"];
-  favorite: Movie["favorite"];
+  listId: MovieList["id"];
+  rating: UserMovie["rating"];
+  favorite: UserMovie["favorite"];
 };
 
 export const MovieActions = ({
@@ -35,7 +35,7 @@ export const MovieActions = ({
 
   const handleUpdate = async (
     field: "rating" | "favorite",
-    value: Movie["rating"] | Movie["favorite"],
+    value: UserMovie["rating"] | UserMovie["favorite"],
   ) => {
     if (!owner) {
       toast.info("You can only modify your own lists");

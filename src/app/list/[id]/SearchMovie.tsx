@@ -8,30 +8,30 @@ import { addMovie } from "@/actions/movie";
 import { Button } from "@/components/ui/Button";
 import { Chip } from "@/components/ui/Chip";
 import { Typography } from "@/components/ui/Typography";
-import type { MovieInfo, MovieList } from "@/types";
+import type { Movie, MovieList } from "@/types";
 import { formatDate } from "@/utils/formatDate";
 import { getMovieImage } from "@/utils/getMovieImage";
 
 type SearchMovieProps = {
-  id: MovieInfo["id"];
-  title: MovieInfo["title"];
-  releaseDate: MovieInfo["releaseDate"];
-  imagePath: MovieInfo["imagePath"];
+  id: Movie["id"];
+  title: Movie["title"];
+  releaseDate: Movie["releaseDate"];
+  posterPath: Movie["posterPath"];
   listId: MovieList["id"];
-  listMovieIds: Set<MovieInfo["id"]>;
+  listMovieIds: Set<Movie["id"]>;
 };
 
 export const SearchMovie = ({
   id,
   title,
   releaseDate,
-  imagePath,
+  posterPath,
   listId,
   listMovieIds,
 }: SearchMovieProps) => {
   const [isBusy, setIsBusy] = useState(false);
 
-  const handleAddMovie = async (movieId: MovieInfo["id"]) => {
+  const handleAddMovie = async (movieId: Movie["id"]) => {
     setIsBusy(true);
     const res = await addMovie({ listId, movieId });
     setIsBusy(false);
@@ -50,7 +50,7 @@ export const SearchMovie = ({
           height={84}
           alt={title}
           draggable={false}
-          src={getMovieImage(imagePath, "sm")}
+          src={getMovieImage(posterPath, "sm")}
           className="h-21 w-14 rounded shadow"
         />
         <div className="flex flex-col gap-1">

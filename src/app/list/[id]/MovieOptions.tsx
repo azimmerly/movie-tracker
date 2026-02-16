@@ -5,27 +5,27 @@ import { toast } from "sonner";
 
 import { deleteMovie } from "@/actions/movie";
 import { DropdownMenu } from "@/components/ui/DropdownMenu";
-import type { Movie, MovieInfo } from "@/types";
+import type { Movie, MovieList } from "@/types";
 
 type MovieOptionsProps = {
   owner: boolean;
   movieId: Movie["id"];
-  listId: Movie["listId"];
-  movieInfo: MovieInfo;
+  listId: MovieList["id"];
+  movie: Movie;
 };
 
 export const MovieOptions = ({
   owner,
   movieId,
   listId,
-  movieInfo,
+  movie,
 }: MovieOptionsProps) => {
   const menuOptions = [
     {
       label: "Movie details",
       icon: InformationCircleIcon,
       onClick: () => {
-        redirect(`/movie/${movieInfo.id}`, RedirectType.push);
+        redirect(`/movie/${movie.id}`, RedirectType.push);
       },
     },
     {

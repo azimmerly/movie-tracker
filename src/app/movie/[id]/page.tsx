@@ -4,7 +4,7 @@ import { ClockIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
-import { getAllMovieInfoIds, getMovieInfo } from "@/actions/movie";
+import { getAllMovieIds, getMovie } from "@/actions/movie";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { Chip } from "@/components/ui/Chip";
 import { Typography } from "@/components/ui/Typography";
@@ -18,7 +18,7 @@ type MoviePageProps = {
 };
 
 export const generateStaticParams = async () => {
-  const { data, success } = await getAllMovieInfoIds();
+  const { data, success } = await getAllMovieIds();
   if (!success) {
     return [];
   }
@@ -27,7 +27,7 @@ export const generateStaticParams = async () => {
 
 const MoviePage = async ({ params }: MoviePageProps) => {
   const { id } = await params;
-  const { data: movie, success } = await getMovieInfo(id);
+  const { data: movie, success } = await getMovie(id);
 
   if (!success) {
     return <ErrorMessage />;
@@ -45,7 +45,7 @@ const MoviePage = async ({ params }: MoviePageProps) => {
         height={360}
         alt={movie.title}
         draggable={false}
-        src={getMovieImage(movie.imagePath, "lg")}
+        src={getMovieImage(movie.posterPath, "lg")}
         className="h-75 w-50 rounded-lg shadow sm:h-90 sm:w-60"
       />
       <div className="flex flex-col items-center gap-2">
@@ -96,9 +96,9 @@ const MoviePage = async ({ params }: MoviePageProps) => {
           )}
         </div>
       </div>
-      {movie.description && (
-        <Typography.Small className="max-w-xl border-l-2 border-blue-500/60 px-2 text-justify">
-          {movie.description}
+      {movie.overview && (
+        <Typography.Small className="max-w-lg border-l-2 border-blue-500/60 px-2 text-justify">
+          {movie.overview}
         </Typography.Small>
       )}
     </div>
