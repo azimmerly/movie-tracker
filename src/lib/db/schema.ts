@@ -119,6 +119,8 @@ export const movie = pgTable(
     runtime: integer(),
     releaseDate: date().notNull(),
     genres: text().array().notNull(),
+    cast: text().array().notNull(),
+    directors: text().array().notNull(),
     createdAt: timestamp().defaultNow().notNull(),
     updatedAt: timestamp()
       .defaultNow()

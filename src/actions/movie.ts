@@ -37,9 +37,9 @@ const movieDbFetch = createFetch({
 
 export const searchMovies = async ({ title }: MovieSearchData) => {
   try {
-    const queryString = `query=${encodeURIComponent(title)}`;
-    const movies = await movieDbFetch(`/search/movie?${queryString}`, {
+    const movies = await movieDbFetch("/search/movie", {
       output: movieSearchResponseSchema,
+      query: { query: title },
     });
     return { success: true, data: movies };
   } catch (e) {
@@ -72,6 +72,7 @@ export const addMovie = async (data: AddMovieData) => {
     if (!movieData) {
       const fetchedMovieData = await movieDbFetch(`/movie/:id`, {
         params: { id: movieId.toString() },
+        query: { append_to_response: "credits" },
         output: movieDetailsResponseSchema,
       });
       if (!fetchedMovieData) {

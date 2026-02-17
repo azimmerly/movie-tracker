@@ -62,6 +62,10 @@ export const movieDetailsResponseSchema = z
     poster_path: z.string(),
     release_date: z.string(),
     genres: z.array(z.object({ name: z.string() })),
+    credits: z.object({
+      crew: z.array(z.object({ job: z.string(), name: z.string() })),
+      cast: z.array(z.object({ name: z.string(), order: z.number() })),
+    }),
   })
   .transform((data) => ({
     id: data.id,
@@ -72,5 +76,13 @@ export const movieDetailsResponseSchema = z
     runtime: data.runtime ?? null,
     posterPath: data.poster_path,
     releaseDate: data.release_date,
-    genres: data.genres.map(({ name }) => name),
+    genres: data.genres.slice(0, 5).map(({ name }) => name),
+    directors: data.credits.crew
+      .filter(({ job }) => job === "Director")
+      .slice(0, 10)
+      .map(({ name }) => name),
+    cast: data.credits.cast
+      .sort((a, b) => a.order - b.order)
+      .slice(0, 10)
+      .map(({ name }) => name),
   }));

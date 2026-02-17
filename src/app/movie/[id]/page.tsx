@@ -38,7 +38,7 @@ const MoviePage = async ({ params }: MoviePageProps) => {
   }
 
   return (
-    <div className="flex flex-col items-center gap-8 sm:mt-18">
+    <div className="flex flex-col items-center gap-7 sm:mt-8">
       <Image
         priority
         width={240}
@@ -48,59 +48,75 @@ const MoviePage = async ({ params }: MoviePageProps) => {
         src={getMovieImage(movie.posterPath, "lg")}
         className="h-75 w-50 rounded-lg shadow sm:h-90 sm:w-60"
       />
-      <div className="flex flex-col items-center gap-2">
+      <div className="flex flex-col items-center gap-2.5">
         <Typography.H2 className="max-w-2xl text-center">
           {movie.title}
         </Typography.H2>
         {movie.tagline && (
           <Typography.Small
             muted
-            className="max-w-md text-center"
+            className="max-w-md text-center italic"
           >{`"${movie.tagline}"`}</Typography.Small>
         )}
-      </div>
-      <div className="flex flex-col items-center gap-3">
         <div className="flex flex-wrap justify-center gap-1">
           {movie.genres.slice(0, 3).map((genre) => (
-            <Chip
-              key={genre}
-              text={genre}
-              variant="primary"
-              className="font-semibold"
-            />
+            <Chip key={genre} text={genre} variant="primary" />
           ))}
         </div>
-        <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
-          {!!movie.runtime && (
-            <Typography.Small muted className="flex items-center gap-1">
-              <ClockIcon className="size-4" strokeWidth={2} />
-              {formatRuntime(movie.runtime)}
-            </Typography.Small>
-          )}
-          {movie.releaseDate && (
-            <Typography.Small muted className="flex items-center gap-1">
-              <CalendarDaysIcon className="size-4" />
-              {formatDate(movie.releaseDate)}
-            </Typography.Small>
-          )}
-          {movie.imdbId && (
-            <Typography.Link
-              target="_blank"
-              rel="noopener noreferrer"
-              href={`${IMDB_MOVIE_URL}/${movie.imdbId}`}
-              className="flex items-center gap-1 text-sm font-medium"
-            >
-              <ArrowTopRightOnSquareIcon className="size-4" />
-              View on IMDb
-            </Typography.Link>
-          )}
-        </div>
       </div>
-      {movie.overview && (
-        <Typography.Small className="max-w-lg border-l-2 border-blue-500/60 px-2 text-justify">
-          {movie.overview}
-        </Typography.Small>
-      )}
+      <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+        {!!movie.runtime && (
+          <Typography.Small muted className="flex items-center gap-1">
+            <ClockIcon className="size-4" strokeWidth={2} />
+            {formatRuntime(movie.runtime)}
+          </Typography.Small>
+        )}
+        {movie.releaseDate && (
+          <Typography.Small muted className="flex items-center gap-1">
+            <CalendarDaysIcon className="size-4" />
+            {formatDate(movie.releaseDate)}
+          </Typography.Small>
+        )}
+        {movie.imdbId && (
+          <Typography.Link
+            target="_blank"
+            rel="noopener noreferrer"
+            href={`${IMDB_MOVIE_URL}/${movie.imdbId}`}
+            className="flex items-center gap-1 text-sm font-medium"
+          >
+            <ArrowTopRightOnSquareIcon className="size-4" />
+            IMDb
+          </Typography.Link>
+        )}
+      </div>
+      <div className="flex flex-col items-center gap-3 text-center">
+        {!!movie.directors?.length && (
+          <div className="max-w-md">
+            <Typography.Small className="font-semibold">
+              Directed by
+            </Typography.Small>
+            <Typography.Small muted>
+              {movie.directors.join(", ")}
+            </Typography.Small>
+          </div>
+        )}
+        {!!movie.cast?.length && (
+          <div className="max-w-md">
+            <Typography.Small className="font-semibold">Cast</Typography.Small>
+            <Typography.Small muted>{movie.cast.join(", ")}</Typography.Small>
+          </div>
+        )}
+        {!!movie.overview && (
+          <div className="max-w-lg">
+            <Typography.Small className="font-semibold">
+              Overview
+            </Typography.Small>
+            <Typography.Small muted className="text-justify leading-5.5">
+              {movie.overview}
+            </Typography.Small>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
