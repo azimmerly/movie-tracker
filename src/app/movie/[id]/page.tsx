@@ -1,5 +1,8 @@
-import { ArrowTopRightOnSquareIcon } from "@heroicons/react/16/solid";
-import { CalendarDaysIcon } from "@heroicons/react/20/solid";
+import {
+  ArrowTopRightOnSquareIcon,
+  CalendarDaysIcon,
+  LanguageIcon,
+} from "@heroicons/react/20/solid";
 import { ClockIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -10,6 +13,7 @@ import { Chip } from "@/components/ui/Chip";
 import { Typography } from "@/components/ui/Typography";
 import { IMDB_MOVIE_URL } from "@/consts";
 import { formatDate } from "@/utils/formatDate";
+import { formatLanguage } from "@/utils/formatLanguage";
 import { formatRuntime } from "@/utils/formatRuntime";
 import { getMovieImage } from "@/utils/getMovieImage";
 
@@ -64,32 +68,38 @@ const MoviePage = async ({ params }: MoviePageProps) => {
           ))}
         </div>
       </div>
-      <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+      <div className="flex max-w-xl flex-wrap items-center justify-center gap-x-4 gap-y-2">
         {!!movie.runtime && (
-          <Typography.Small muted className="flex items-center gap-1">
+          <Typography.Small muted className="flex items-center gap-0.5">
             <ClockIcon className="size-4" strokeWidth={2} />
             {formatRuntime(movie.runtime)}
           </Typography.Small>
         )}
-        {movie.releaseDate && (
-          <Typography.Small muted className="flex items-center gap-1">
+        {!!movie.releaseDate && (
+          <Typography.Small muted className="flex items-center gap-0.75">
             <CalendarDaysIcon className="size-4" />
             {formatDate(movie.releaseDate)}
           </Typography.Small>
         )}
-        {movie.imdbId && (
+        {!!movie.language && (
+          <Typography.Small muted className="flex items-center gap-0.5">
+            <LanguageIcon className="size-4" />
+            {formatLanguage(movie.language)}
+          </Typography.Small>
+        )}
+        {!!movie.imdbId && (
           <Typography.Link
             target="_blank"
             rel="noopener noreferrer"
             href={`${IMDB_MOVIE_URL}/${movie.imdbId}`}
-            className="flex items-center gap-1 text-sm font-medium"
+            className="flex items-center gap-0.75 text-sm font-medium"
           >
             <ArrowTopRightOnSquareIcon className="size-4" />
             IMDb
           </Typography.Link>
         )}
       </div>
-      <div className="flex flex-col items-center gap-3 text-center">
+      <div className="flex flex-col items-center gap-4 text-center">
         {!!movie.directors?.length && (
           <div className="max-w-md">
             <Typography.Small className="font-semibold">
@@ -107,7 +117,7 @@ const MoviePage = async ({ params }: MoviePageProps) => {
           </div>
         )}
         {!!movie.overview && (
-          <div className="max-w-lg">
+          <div className="max-w-xl">
             <Typography.Small className="font-semibold">
               Overview
             </Typography.Small>

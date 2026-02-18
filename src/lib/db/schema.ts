@@ -100,38 +100,28 @@ export const movieList = pgTable(
       .notNull()
       .$onUpdate(() => new Date()),
   },
-  (table) => [
-    index("idx_movieList_userId").on(table.userId),
-    index("idx_movieList_createdAt").on(table.createdAt),
-    index("idx_movieList_title").on(table.title),
-  ],
+  (table) => [index("idx_movieList_userId").on(table.userId)],
 );
 
-export const movie = pgTable(
-  "movie",
-  {
-    id: integer().primaryKey(),
-    title: text().notNull(),
-    posterPath: text().notNull(),
-    imdbId: text(),
-    overview: text(),
-    tagline: text(),
-    runtime: integer(),
-    releaseDate: date().notNull(),
-    genres: text().array().notNull(),
-    cast: text().array().notNull(),
-    directors: text().array().notNull(),
-    createdAt: timestamp().defaultNow().notNull(),
-    updatedAt: timestamp()
-      .defaultNow()
-      .notNull()
-      .$onUpdate(() => new Date()),
-  },
-  (table) => [
-    index("idx_movie_title").on(table.title),
-    index("idx_movie_releaseDate").on(table.releaseDate),
-  ],
-);
+export const movie = pgTable("movie", {
+  id: integer().primaryKey(),
+  title: text().notNull(),
+  posterPath: text().notNull(),
+  imdbId: text(),
+  overview: text(),
+  tagline: text(),
+  runtime: integer(),
+  releaseDate: date().notNull(),
+  language: text().notNull(),
+  genres: text().array().notNull(),
+  cast: text().array().notNull(),
+  directors: text().array().notNull(),
+  createdAt: timestamp().defaultNow().notNull(),
+  updatedAt: timestamp()
+    .defaultNow()
+    .notNull()
+    .$onUpdate(() => new Date()),
+});
 
 export const userMovie = pgTable(
   "user_movie",
@@ -153,7 +143,7 @@ export const userMovie = pgTable(
   },
   (table) => [
     unique("uq_userMovie_userId_movieId").on(table.userId, table.movieId),
-    index("idx_userMovie_rating").on(table.rating),
+    index("idx_userMovie_movieId_rating").on(table.movieId, table.rating),
   ],
 );
 
@@ -179,12 +169,9 @@ export const listMovie = pgTable(
   ],
 );
 
-export const movieListRelations = relations(movieList, ({ one, many }) => ({
-  listMovies: many(listMovie),
-  user: one(user, {
-    fields: [movieList.userId],
-    references: [user.id],
-  }),
+export const userRelations = relations(user, ({ many }) => ({
+  movieLists: many(movieList),
+  userMovies: many(userMovie),
 }));
 
 export const movieRelations = relations(movie, ({ many }) => ({
@@ -200,6 +187,14 @@ export const userMovieRelations = relations(userMovie, ({ one }) => ({
   movie: one(movie, {
     fields: [userMovie.movieId],
     references: [movie.id],
+  }),
+}));
+
+export const movieListRelations = relations(movieList, ({ one, many }) => ({
+  listMovies: many(listMovie),
+  user: one(user, {
+    fields: [movieList.userId],
+    references: [user.id],
   }),
 }));
 

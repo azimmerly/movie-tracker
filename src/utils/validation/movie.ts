@@ -61,6 +61,7 @@ export const movieDetailsResponseSchema = z
     runtime: z.number().nullable(),
     poster_path: z.string(),
     release_date: z.string(),
+    original_language: z.string(),
     genres: z.array(z.object({ name: z.string() })),
     credits: z.object({
       crew: z.array(z.object({ job: z.string(), name: z.string() })),
@@ -76,6 +77,7 @@ export const movieDetailsResponseSchema = z
     runtime: data.runtime ?? null,
     posterPath: data.poster_path,
     releaseDate: data.release_date,
+    language: data.original_language,
     genres: data.genres.slice(0, 5).map(({ name }) => name),
     directors: data.credits.crew
       .filter(({ job }) => job === "Director")
