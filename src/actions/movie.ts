@@ -70,7 +70,7 @@ export const addMovie = async (data: AddMovieData) => {
     });
 
     if (!movieData) {
-      const fetchedMovieData = await movieDbFetch(`/movie/:id`, {
+      const fetchedMovieData = await movieDbFetch("/movie/:id", {
         params: { id: movieId.toString() },
         query: { append_to_response: "credits" },
         output: movieDetailsResponseSchema,
@@ -172,9 +172,37 @@ export const updateMovie = async (data: UpdateMovieData) => {
 
 export const getMovie = async (id: Movie["id"]) => {
   try {
-    const movieData = await db.query.movie.findFirst({
+    let movieData = await db.query.movie.findFirst({
       where: eq(movie.id, id),
     });
+
+    const pendingStatuses = [
+      "Rumored",
+      "Planned",
+      "In Production",
+      "Post Production",
+    ];
+
+    if (movieData && pendingStatuses.includes(movieData.status)) {
+      const today = new Date().toISOString().split("T")[0];
+
+      if (movieData.releaseDate <= today) {
+        const fetchedMovieData = await movieDbFetch("/movie/:id", {
+          params: { id: id.toString() },
+          query: { append_to_response: "credits" },
+          output: movieDetailsResponseSchema,
+        });
+
+        if (fetchedMovieData) {
+          movieData = await db
+            .update(movie)
+            .set(fetchedMovieData)
+            .where(eq(movie.id, id))
+            .returning()
+            .then(([data]) => data);
+        }
+      }
+    }
 
     return {
       success: true,

@@ -63,6 +63,13 @@ const MoviePage = async ({ params }: MoviePageProps) => {
           >{`"${movie.tagline}"`}</Typography.Small>
         )}
         <div className="flex flex-wrap justify-center gap-1">
+          {movie.status !== "Released" && (
+            <Chip
+              variant="secondary"
+              text={movie.status}
+              icon={CalendarDaysIcon}
+            />
+          )}
           {movie.genres.slice(0, 3).map((genre) => (
             <Chip key={genre} text={genre} variant="primary" />
           ))}

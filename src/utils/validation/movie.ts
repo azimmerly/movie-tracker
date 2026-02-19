@@ -34,16 +34,11 @@ export const movieSearchResponseSchema = z
     ),
   })
   .transform(({ results }) => {
-    const today = new Date().toISOString().split("T")[0];
     const filteredMovies = results.filter(
       (movie) =>
-        movie.release_date &&
-        movie.poster_path &&
-        movie.genre_ids &&
-        movie.genre_ids.length > 0 &&
-        movie.release_date <= today,
+        movie.release_date && movie.poster_path && !!movie.genre_ids?.length,
     );
-    return filteredMovies.slice(0, 15).map((movie) => ({
+    return filteredMovies.slice(0, 20).map((movie) => ({
       id: movie.id,
       title: movie.title,
       releaseDate: movie.release_date!,
@@ -55,6 +50,14 @@ export const movieDetailsResponseSchema = z
   .object({
     id: z.number(),
     title: z.string(),
+    status: z.enum([
+      "Rumored",
+      "Planned",
+      "In Production",
+      "Post Production",
+      "Released",
+      "Canceled",
+    ]),
     imdb_id: z.string().nullable(),
     overview: z.string().nullable(),
     tagline: z.string().nullable(),
@@ -76,6 +79,7 @@ export const movieDetailsResponseSchema = z
     tagline: data.tagline ?? null,
     runtime: data.runtime ?? null,
     posterPath: data.poster_path,
+    status: data.status,
     releaseDate: data.release_date,
     language: data.original_language,
     genres: data.genres.slice(0, 5).map(({ name }) => name),

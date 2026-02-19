@@ -111,6 +111,7 @@ export const movie = pgTable("movie", {
   overview: text(),
   tagline: text(),
   runtime: integer(),
+  status: text().notNull(),
   releaseDate: date().notNull(),
   language: text().notNull(),
   genres: text().array().notNull(),
