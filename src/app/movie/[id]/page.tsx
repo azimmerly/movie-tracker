@@ -22,7 +22,7 @@ import { formatRuntime } from "@/utils/formatRuntime";
 import { getMovieImage } from "@/utils/getMovieImage";
 
 type MoviePageProps = {
-  params: Promise<{ id: number }>;
+  params: Promise<{ id: string }>;
 };
 
 export const generateStaticParams = async () => {
@@ -35,7 +35,7 @@ export const generateStaticParams = async () => {
 
 const MoviePage = async ({ params }: MoviePageProps) => {
   const { id } = await params;
-  const { data: movie, success } = await getMovie(id);
+  const { data: movie, success } = await getMovie(Number(id));
 
   if (!success) {
     return <ErrorMessage />;
