@@ -75,9 +75,11 @@ export const MovieList = ({ movies, owner, listId }: MoviesListProps) => {
                   </Link>
                   <div>
                     <span className="flex flex-wrap gap-x-2 gap-y-0.5">
-                      <Typography.Body className="text-sm font-semibold sm:text-base">
-                        {movie.title}
-                      </Typography.Body>
+                      <Link href={`/movie/${movie.id}`}>
+                        <Typography.Body className="text-sm font-semibold sm:text-base">
+                          {movie.title}
+                        </Typography.Body>
+                      </Link>
                       <Typography.Tiny
                         muted
                         className="flex items-center gap-0.5"
@@ -92,7 +94,7 @@ export const MovieList = ({ movies, owner, listId }: MoviesListProps) => {
                           key={genre}
                           text={genre}
                           variant="primary"
-                          className="px-1.5 py-0.5 font-semibold sm:px-2 sm:py-1"
+                          className="px-1.5 py-0.5 sm:px-2 sm:py-1"
                         />
                       ))}
                     </div>

@@ -1,7 +1,7 @@
 "use server";
 
 import { createFetch } from "@better-fetch/fetch";
-import { and, eq } from "drizzle-orm";
+import { and, avg, eq, gt } from "drizzle-orm";
 
 import { getSession } from "@/actions/auth";
 import { revalidatePaths } from "@/actions/utils";
@@ -172,9 +172,14 @@ export const updateMovie = async (data: UpdateMovieData) => {
 
 export const getMovie = async (id: Movie["id"]) => {
   try {
-    let movieData = await db.query.movie.findFirst({
-      where: eq(movie.id, id),
-    });
+    const [dbMovie, avgRating] = await Promise.all([
+      db.query.movie.findFirst({ where: eq(movie.id, id) }),
+      db
+        .select({ avg: avg(userMovie.rating) })
+        .from(userMovie)
+        .where(and(eq(userMovie.movieId, id), gt(userMovie.rating, 0)))
+        .then(([row]) => row?.avg),
+    ]);
 
     const pendingStatuses = [
       "Rumored",
@@ -183,6 +188,7 @@ export const getMovie = async (id: Movie["id"]) => {
       "Post Production",
     ];
 
+    let movieData = dbMovie;
     if (movieData && pendingStatuses.includes(movieData.status)) {
       const today = new Date().toISOString().split("T")[0];
 
@@ -206,7 +212,10 @@ export const getMovie = async (id: Movie["id"]) => {
 
     return {
       success: true,
-      data: movieData,
+      data: movieData && {
+        ...movieData,
+        avgRating: avgRating ? parseFloat(avgRating) : null,
+      },
     };
   } catch (e) {
     console.error(e);

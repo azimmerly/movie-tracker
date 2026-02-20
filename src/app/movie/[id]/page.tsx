@@ -1,4 +1,8 @@
 import {
+  CalendarDaysIcon as SmallCalendarDaysIcon,
+  StarIcon,
+} from "@heroicons/react/16/solid";
+import {
   ArrowTopRightOnSquareIcon,
   CalendarDaysIcon,
   LanguageIcon,
@@ -56,7 +60,7 @@ const MoviePage = async ({ params }: MoviePageProps) => {
         <Typography.H2 className="max-w-2xl text-center">
           {movie.title}
         </Typography.H2>
-        {movie.tagline && (
+        {!!movie.tagline && (
           <Typography.Small
             muted
             className="max-w-md text-center italic"
@@ -67,7 +71,7 @@ const MoviePage = async ({ params }: MoviePageProps) => {
             <Chip
               variant="secondary"
               text={movie.status}
-              icon={CalendarDaysIcon}
+              icon={SmallCalendarDaysIcon}
             />
           )}
           {movie.genres.slice(0, 3).map((genre) => (
@@ -75,38 +79,46 @@ const MoviePage = async ({ params }: MoviePageProps) => {
           ))}
         </div>
       </div>
-      <div className="flex max-w-xl flex-wrap items-center justify-center gap-x-4 gap-y-2">
-        {!!movie.runtime && (
-          <Typography.Small muted className="flex items-center gap-0.5">
-            <ClockIcon className="size-4" strokeWidth={2} />
-            {formatRuntime(movie.runtime)}
-          </Typography.Small>
-        )}
-        {!!movie.releaseDate && (
+      <div className="flex flex-col items-center gap-2">
+        <div className="flex max-w-xl flex-wrap items-center justify-center gap-x-4 gap-y-2">
+          {!!movie.runtime && (
+            <Typography.Small muted className="flex items-center gap-0.5">
+              <ClockIcon className="size-4" strokeWidth={2} />
+              {formatRuntime(movie.runtime)}
+            </Typography.Small>
+          )}
+          {!!movie.releaseDate && (
+            <Typography.Small muted className="flex items-center gap-0.75">
+              <CalendarDaysIcon className="size-4" />
+              {formatDate(movie.releaseDate)}
+            </Typography.Small>
+          )}
+          {!!movie.language && (
+            <Typography.Small muted className="flex items-center gap-0.5">
+              <LanguageIcon className="size-4" />
+              {formatLanguage(movie.language)}
+            </Typography.Small>
+          )}
+          {!!movie.imdbId && (
+            <Typography.Link
+              target="_blank"
+              rel="noopener noreferrer"
+              href={`${IMDB_MOVIE_URL}/${movie.imdbId}`}
+              className="flex items-center gap-0.75 text-sm font-medium"
+            >
+              <ArrowTopRightOnSquareIcon className="size-4" />
+              IMDb
+            </Typography.Link>
+          )}
+        </div>
+        {!!movie.avgRating && (
           <Typography.Small muted className="flex items-center gap-0.75">
-            <CalendarDaysIcon className="size-4" />
-            {formatDate(movie.releaseDate)}
+            <StarIcon className="size-4 fill-amber-400 dark:fill-amber-500" />
+            {movie.avgRating.toFixed(1)} average rating
           </Typography.Small>
-        )}
-        {!!movie.language && (
-          <Typography.Small muted className="flex items-center gap-0.5">
-            <LanguageIcon className="size-4" />
-            {formatLanguage(movie.language)}
-          </Typography.Small>
-        )}
-        {!!movie.imdbId && (
-          <Typography.Link
-            target="_blank"
-            rel="noopener noreferrer"
-            href={`${IMDB_MOVIE_URL}/${movie.imdbId}`}
-            className="flex items-center gap-0.75 text-sm font-medium"
-          >
-            <ArrowTopRightOnSquareIcon className="size-4" />
-            IMDb
-          </Typography.Link>
         )}
       </div>
-      <div className="flex flex-col items-center gap-4 text-center">
+      <div className="flex flex-col items-center gap-3 text-center">
         {!!movie.directors?.length && (
           <div className="max-w-md">
             <Typography.Small className="font-semibold">

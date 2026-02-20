@@ -47,9 +47,9 @@ const UserLists = async ({ searchParams, params }: MyListsProps) => {
           <Avatar userImage={user.image} size="md" />
           <div className="flex gap-1">
             <Typography.Large>{user.name}</Typography.Large>
-            <Typography.Large muted className="font-normal">
+            <Typography.Body muted className="font-normal">
               {formatUserId(user.id)}
-            </Typography.Large>
+            </Typography.Body>
           </div>
         </div>
         <Typography.Small className="flex items-center gap-1.5" muted>
