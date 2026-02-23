@@ -8,6 +8,7 @@ const eslintConfig = defineConfig([
   ...nextTs,
   prettier,
   globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
+  { settings: { react: { version: "19" } } },
 ]);
 
 export default eslintConfig;
