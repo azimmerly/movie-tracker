@@ -35,7 +35,7 @@ export const DeleteAccountDialog = ({
   return (
     <Dialog open={open} onClose={onClose}>
       <div className="sm:flex sm:items-start">
-        <div className="mx-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10 dark:bg-gray-700">
+        <div className="mx-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10 dark:bg-mist-800">
           <ExclamationTriangleIcon
             aria-hidden="true"
             className="size-6 text-red-600 dark:text-red-500"

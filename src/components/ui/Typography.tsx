@@ -16,8 +16,8 @@ const typographyVariants = tv({
       link: "font-semibold outline-hidden focus-visible:underline underline-offset-2",
     },
     muted: {
-      true: "text-gray-500 dark:text-gray-400",
-      false: "text-gray-900 dark:text-white",
+      true: "text-mist-500 dark:text-mist-400",
+      false: "text-mist-900 dark:text-white",
     },
   },
   compoundVariants: [
@@ -89,24 +89,24 @@ const Small = ({
   muted,
   children,
   className,
-}: React.HTMLAttributes<HTMLParagraphElement> & TypographyProps) => (
-  <small
+}: React.HTMLAttributes<HTMLSpanElement> & TypographyProps) => (
+  <span
     className={twMerge(typographyVariants({ type: "small", muted, className }))}
   >
     {children}
-  </small>
+  </span>
 );
 
 const Tiny = ({
   muted,
   children,
   className,
-}: React.HTMLAttributes<HTMLParagraphElement> & TypographyProps) => (
-  <small
+}: React.HTMLAttributes<HTMLSpanElement> & TypographyProps) => (
+  <span
     className={twMerge(typographyVariants({ type: "tiny", muted, className }))}
   >
     {children}
-  </small>
+  </span>
 );
 
 const Link = ({

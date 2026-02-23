@@ -72,14 +72,14 @@ export const SignInForm = () => {
         />
         <Button
           type="submit"
-          className="mt-3 w-full"
+          className="mt-4 w-full"
           icon={UserCircleIcon}
           disabled={formState.isSubmitting}
           busy={formState.isSubmitting}
         >
           Sign in
         </Button>
-        <hr className="my-0.5 text-gray-200 sm:my-1 dark:text-gray-800" />
+        <hr className="my-0.5 text-mist-200 sm:my-1 dark:text-mist-800" />
         <SocialAuthButton provider="github" className="w-full" />
       </form>
     </div>

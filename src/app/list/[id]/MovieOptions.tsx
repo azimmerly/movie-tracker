@@ -47,7 +47,7 @@ export const MovieOptions = ({
     <DropdownMenu
       options={menuOptions}
       iconButton={
-        <EllipsisVerticalIcon className="size-5 text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-600" />
+        <EllipsisVerticalIcon className="size-5 text-mist-400 hover:text-mist-500 dark:text-mist-500 dark:hover:text-mist-400" />
       }
     />
   );

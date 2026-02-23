@@ -39,20 +39,20 @@ export const Select = ({
       <Typography.Tiny muted>{label}</Typography.Tiny>
     </Label>
     <div className="relative">
-      <ListboxButton className="relative w-full rounded-md bg-white py-1.5 pr-10 pl-3 text-left shadow-xs ring-1 ring-gray-200 ring-inset focus:ring-2 focus:ring-blue-600 focus:outline-hidden sm:text-sm/6 dark:bg-gray-800/70 dark:ring-gray-700/70">
+      <ListboxButton className="relative w-full rounded-md bg-white py-1.5 pr-10 pl-3 text-left shadow-xs ring-1 ring-mist-200 ring-inset focus:ring-2 focus:ring-blue-600 focus:outline-hidden sm:text-sm/6 dark:bg-mist-900 dark:ring-mist-800">
         <Typography.Small className="block truncate">
           {selected.label}
         </Typography.Small>
         <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
           <Icon
             aria-hidden="true"
-            className="size-4 text-gray-400 dark:text-gray-500"
+            className="size-4 text-mist-400 dark:text-mist-400"
           />
         </span>
       </ListboxButton>
       <ListboxOptions
         transition
-        className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white p-1 shadow-lg ring-1 ring-gray-200/70 focus:outline-hidden data-leave:transition data-leave:duration-100 data-leave:ease-in data-closed:data-leave:opacity-0 sm:text-sm dark:bg-gray-800 dark:ring-gray-700/70"
+        className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white p-1 shadow-lg ring-1 ring-mist-200/70 focus:outline-hidden data-leave:transition data-leave:duration-100 data-leave:ease-in data-closed:data-leave:opacity-0 sm:text-sm dark:bg-mist-900 dark:ring-mist-800"
       >
         {options.map((option, i) => (
           <ListboxOption

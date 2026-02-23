@@ -71,11 +71,11 @@ export const MovieActions = ({
           role="button"
           key={starNum}
           className={twMerge(
-            "-mx-px size-5",
-            owner ? "cursor-pointer" : "cursor-default",
+            "-mx-px size-5 transition-opacity",
+            owner ? "cursor-pointer hover:opacity-80" : "cursor-default",
             rating >= starNum
               ? "fill-amber-400 dark:fill-amber-500"
-              : "fill-gray-300 dark:fill-gray-600",
+              : "fill-mist-300 dark:fill-mist-700",
           )}
           onClick={() => {
             handleUpdate("rating", rating === starNum ? 0 : starNum);

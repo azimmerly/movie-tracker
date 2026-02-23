@@ -71,14 +71,14 @@ export const SignUpForm = () => {
         />
         <Button
           type="submit"
-          className="mt-3 w-full"
+          className="mt-4 w-full"
           icon={UserPlusIcon}
           disabled={formState.isSubmitting}
           busy={formState.isSubmitting}
         >
           Create account
         </Button>
-        <hr className="my-0.5 text-gray-200 sm:my-1 dark:text-gray-800" />
+        <hr className="my-0.5 text-mist-200 sm:my-1 dark:text-mist-800" />
         <SocialAuthButton provider="github" className="w-full" />
       </form>
     </div>

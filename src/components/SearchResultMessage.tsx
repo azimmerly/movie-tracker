@@ -35,7 +35,7 @@ export const SearchResultMessage = ({
       <Button
         size="xs"
         variant="secondary"
-        className="rounded-full text-gray-600 dark:text-gray-200"
+        className="rounded-full text-mist-600 dark:text-mist-200"
         icon={XCircleIcon}
         onClick={handleClick}
       >

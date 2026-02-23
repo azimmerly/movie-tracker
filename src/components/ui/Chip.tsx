@@ -8,7 +8,7 @@ const chipVariants = tv({
   variants: {
     variant: {
       primary: "bg-blue-400/15 text-blue-600 dark:text-blue-400",
-      secondary: "bg-gray-400/15 text-gray-600 dark:text-gray-400",
+      secondary: "bg-mist-400/15 text-mist-600 dark:text-mist-400",
       success: "bg-green-400/15 text-green-600 dark:text-green-400",
       warning: "bg-red-400/15 text-red-700 dark:text-red-300",
     },

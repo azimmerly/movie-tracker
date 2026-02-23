@@ -5,7 +5,12 @@ import {
   DialogPanel,
   Button as HeadlessButton,
 } from "@headlessui/react";
-import { UserCircleIcon, UserPlusIcon } from "@heroicons/react/16/solid";
+import {
+  HomeIcon,
+  ListBulletIcon,
+  UserCircleIcon,
+  UserPlusIcon,
+} from "@heroicons/react/16/solid";
 import {
   ArrowRightStartOnRectangleIcon,
   Bars3Icon,
@@ -32,25 +37,23 @@ import { authClient } from "@/lib/authClient";
 
 type NavClientProps = {
   user?: User;
-  navLinks: ReadonlyArray<{ href: string; label: React.ReactNode }>;
 };
 
-export const NavClient = ({ user, navLinks }: NavClientProps) => {
+const navLinks = [
+  { href: "/", label: "Home", icon: HomeIcon },
+  { href: "/dashboard", label: "My Lists", icon: ListBulletIcon },
+] as const;
+
+export const NavClient = ({ user }: NavClientProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const navigateIfNotCurrent = (targetPath: string) => {
-    if (pathname !== targetPath) {
-      router.push(targetPath);
-    }
-  };
 
   const accountOptions = [
     {
       label: "Account",
       icon: Cog6ToothIcon,
-      onClick: () => navigateIfNotCurrent("/account"),
+      onClick: () => router.push("/account"),
     },
     {
       label: "Sign out",
@@ -66,7 +69,7 @@ export const NavClient = ({ user, navLinks }: NavClientProps) => {
   return (
     <>
       <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between p-3.5 sm:px-6">
-        <div className="flex items-center gap-16">
+        <div className="flex items-center gap-12">
           <Link
             href="/"
             className="-m-1 flex items-center gap-1.5 rounded-md p-1 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden"
@@ -86,17 +89,18 @@ export const NavClient = ({ user, navLinks }: NavClientProps) => {
               {APP_NAME}
             </Typography.Large>
           </Link>
-          <div className="hidden lg:flex lg:gap-2">
-            {navLinks.map(({ label, href }, index) => (
+          <div className="hidden lg:flex lg:gap-1.5">
+            {navLinks.map(({ label, href, icon: Icon }) => (
               <Link
-                key={index}
+                key={href}
                 href={href}
                 className={twMerge(
-                  "rounded-md px-3 py-2 text-sm font-semibold hover:bg-gray-100 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden dark:hover:bg-gray-800",
-                  pathname === href && "bg-gray-100 dark:bg-gray-800",
+                  "flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-semibold hover:bg-mist-200/60 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden dark:hover:bg-mist-800/70",
+                  pathname === href && "bg-mist-200/60 dark:bg-mist-800/70",
                 )}
                 aria-current={pathname === href ? "page" : undefined}
               >
+                <Icon className="size-4 text-blue-600/60 dark:text-blue-500/60" />
                 {label}
               </Link>
             ))}
@@ -107,7 +111,7 @@ export const NavClient = ({ user, navLinks }: NavClientProps) => {
           <div className="flex lg:hidden">
             <HeadlessButton
               onClick={() => setMobileMenuOpen(true)}
-              className="-m-1.5 rounded-md p-1.5 text-gray-500 hover:bg-gray-100 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden dark:text-gray-400 dark:hover:bg-gray-800"
+              className="-m-1.5 rounded-md p-1.5 text-mist-500 hover:bg-mist-100 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden dark:text-mist-400 dark:hover:bg-mist-800"
             >
               <span className="sr-only">Open main menu</span>
               <Bars3Icon aria-hidden="true" className="size-6" />
@@ -118,14 +122,14 @@ export const NavClient = ({ user, navLinks }: NavClientProps) => {
               <div className="flex gap-2">
                 <Button
                   icon={UserCircleIcon}
-                  onClick={() => navigateIfNotCurrent("/sign-in")}
+                  onClick={() => router.push("/sign-in")}
                 >
                   Sign in
                 </Button>
                 <Button
                   variant="secondary"
                   icon={UserPlusIcon}
-                  onClick={() => navigateIfNotCurrent("/sign-up")}
+                  onClick={() => router.push("/sign-up")}
                 >
                   Create account
                 </Button>
@@ -144,11 +148,11 @@ export const NavClient = ({ user, navLinks }: NavClientProps) => {
         onClose={setMobileMenuOpen}
         className="lg:hidden"
       >
-        <DialogPanel className="bg-offwhite fixed inset-y-0 right-0 z-10 w-full overflow-y-auto px-3.5 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10 dark:bg-gray-900 dark:sm:ring-white/10">
-          <div className="flex h-20 items-center justify-between">
+        <DialogPanel className="bg-offwhite fixed inset-y-0 right-0 z-10 w-full overflow-y-auto px-3.5 sm:max-w-sm sm:px-6 sm:ring-1 sm:ring-mist-900/10 dark:bg-mist-950 dark:sm:ring-mist-800">
+          <div className="flex h-20 items-center justify-between sm:justify-end">
             <Link
               href="/"
-              className="-m-1 flex items-center gap-1.5 rounded-md p-1 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden"
+              className="-m-1 flex items-center gap-1.5 rounded-md p-1 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden sm:hidden"
               onClick={() => setMobileMenuOpen(false)}
             >
               <Image
@@ -170,23 +174,27 @@ export const NavClient = ({ user, navLinks }: NavClientProps) => {
               <ThemeToggle className="mr-5" />
               <HeadlessButton
                 onClick={() => setMobileMenuOpen(false)}
-                className="-m-1.5 rounded-md p-1.5 text-gray-500 hover:bg-gray-100 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden dark:text-gray-400 dark:hover:bg-gray-800"
+                className="-m-1.5 rounded-md p-1.5 text-mist-500 hover:bg-mist-100 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden dark:text-mist-400 dark:hover:bg-mist-800"
               >
                 <span className="sr-only">Close menu</span>
                 <XMarkIcon aria-hidden="true" className="size-6" />
               </HeadlessButton>
             </div>
           </div>
-          <div className="box-content divide-y divide-gray-200 dark:divide-gray-700">
+          <div className="box-content divide-y divide-mist-200 dark:divide-mist-800">
             <div className="space-y-1.5 py-4 font-medium">
-              {navLinks.map(({ label, href }, index) => (
+              {navLinks.map(({ label, href, icon: Icon }) => (
                 <Link
-                  key={index}
+                  key={href}
                   href={href}
                   onClick={() => setMobileMenuOpen(false)}
                   aria-current={pathname === href ? "page" : undefined}
-                  className="block rounded-md px-3 py-2 hover:bg-gray-100 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden dark:hover:bg-gray-800"
+                  className={twMerge(
+                    "flex items-center gap-2 rounded-md px-3 py-2 hover:bg-mist-200/60 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden dark:hover:bg-mist-800/70",
+                    pathname === href && "bg-mist-200/60 dark:bg-mist-800/70",
+                  )}
                 >
+                  <Icon className="size-4 text-blue-600/60 dark:text-blue-500/60" />
                   {label}
                 </Link>
               ))}
@@ -198,7 +206,7 @@ export const NavClient = ({ user, navLinks }: NavClientProps) => {
                     icon={UserCircleIcon}
                     className="w-full"
                     onClick={() => {
-                      navigateIfNotCurrent("/sign-in");
+                      router.push("/sign-in");
                       setMobileMenuOpen(false);
                     }}
                   >
@@ -209,7 +217,7 @@ export const NavClient = ({ user, navLinks }: NavClientProps) => {
                     className="w-full"
                     variant="secondary"
                     onClick={() => {
-                      navigateIfNotCurrent("/sign-up");
+                      router.push("/sign-up");
                       setMobileMenuOpen(false);
                     }}
                   >
@@ -225,7 +233,7 @@ export const NavClient = ({ user, navLinks }: NavClientProps) => {
                         onClick();
                         setMobileMenuOpen(false);
                       }}
-                      className="flex w-full cursor-pointer items-center gap-2 rounded-md px-3 py-2 hover:bg-gray-100 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden dark:hover:bg-gray-800"
+                      className="flex w-full cursor-pointer items-center gap-2 rounded-md px-3 py-2 hover:bg-mist-200/60 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden dark:hover:bg-mist-800/70"
                     >
                       <Icon className="size-5" />
                       {label}

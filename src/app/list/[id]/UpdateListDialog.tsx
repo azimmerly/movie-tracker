@@ -48,7 +48,7 @@ export const UpdateListDialog = ({
       onTransitionEnd={() => reset({ id, title })}
     >
       <div className="mb-3 flex flex-col items-center gap-3 sm:mb-5 sm:flex-row">
-        <div className="mx-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10 dark:bg-gray-700">
+        <div className="mx-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10 dark:bg-mist-800">
           <PencilSquareIcon
             aria-hidden="true"
             className="size-5.5 text-blue-600 dark:text-blue-500"

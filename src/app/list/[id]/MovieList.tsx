@@ -58,7 +58,7 @@ export const MovieList = ({ movies, owner, listId }: MoviesListProps) => {
         {!movies.length ? (
           <NothingFound text="No movies here… yet." />
         ) : (
-          <ul className="divide-y divide-gray-200 dark:divide-gray-700">
+          <ul className="divide-y divide-mist-200 dark:divide-mist-800">
             {movies.map(({ id, movie, favorite, rating }, index) => (
               <li key={id} className="flex justify-between py-3">
                 <div className="flex gap-3">
@@ -70,7 +70,7 @@ export const MovieList = ({ movies, owner, listId }: MoviesListProps) => {
                       draggable={false}
                       priority={index < 5}
                       src={getMovieImage(movie.posterPath, "md")}
-                      className="h-auto w-16 min-w-16 rounded shadow sm:w-20 sm:min-w-20"
+                      className="h-auto w-18 min-w-18 rounded-md shadow sm:w-22 sm:min-w-22"
                     />
                   </Link>
                   <div>

@@ -50,17 +50,17 @@ export const SearchParamInput = ({ placeholder }: SearchParamInputProps) => {
           onChange={handleSearch}
           autoComplete="off"
           placeholder={placeholder}
-          className="col-start-1 row-start-1 rounded-md border-none bg-white px-8 py-1.5 text-sm text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-blue-600 focus:ring-inset dark:bg-gray-800/70 dark:text-white dark:ring-gray-700 dark:focus:ring-blue-500"
+          className="col-start-1 row-start-1 rounded-md border-none bg-white px-8 py-1.5 text-sm text-mist-900 shadow-xs ring-1 ring-mist-300 ring-inset placeholder:text-mist-400 focus:ring-2 focus:ring-blue-600 focus:ring-inset dark:bg-mist-900 dark:text-white dark:ring-mist-800"
         />
         <MagnifyingGlassIcon
           aria-hidden="true"
-          className="pointer-events-none col-start-1 row-start-1 ml-2 size-4 self-center text-gray-400"
+          className="pointer-events-none col-start-1 row-start-1 ml-2 size-4 self-center text-mist-400"
         />
         {!!search.length && (
           <button
             onClick={clearSearch}
             aria-label="Clear search"
-            className="absolute top-1/2 right-0 -translate-y-1/2 cursor-pointer rounded-md p-1.5 text-gray-400 transition hover:text-gray-500 dark:text-gray-400 dark:hover:text-gray-300"
+            className="absolute top-1/2 right-0 -translate-y-1/2 cursor-pointer rounded-md p-1.5 text-mist-400 transition hover:text-mist-500 dark:text-mist-400 dark:hover:text-mist-300"
           >
             <XMarkIcon className="size-4" />
           </button>

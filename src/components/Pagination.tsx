@@ -30,13 +30,13 @@ export const Pagination = ({
   }, [currentPage, pageSize, totalCount]);
 
   const setPage = (page: number) => {
-    setQueryParams({ page: page.toString() });
+    setQueryParams({ page: page === 1 ? null : page.toString() });
   };
 
   return (
     <nav
       aria-label="Pagination"
-      className="flex flex-col-reverse items-center border-gray-200 sm:flex-row sm:justify-between sm:border-t sm:py-3 dark:border-gray-700"
+      className="flex flex-col-reverse items-center border-mist-200 sm:flex-row sm:justify-between sm:border-t sm:py-3 dark:border-mist-800"
     >
       <Typography.Small muted className="mt-2 sm:mt-0">
         Showing <span className="font-semibold">{startItem}</span> to

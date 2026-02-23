@@ -68,7 +68,7 @@ export const AddMovieDialog = ({
         className="sm:max-w-xl"
       >
         <div className="mb-3 flex flex-col items-center gap-3 sm:mb-5 sm:flex-row">
-          <div className="mx-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10 dark:bg-gray-700">
+          <div className="mx-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10 dark:bg-mist-800">
             <FilmIcon
               aria-hidden="true"
               className="size-5.5 text-blue-600 dark:text-blue-500"
@@ -122,7 +122,7 @@ export const AddMovieDialog = ({
                   No movies found with that title...
                 </Typography.Small>
               ) : (
-                <ul className="divide-y divide-gray-200 dark:divide-gray-700">
+                <ul className="divide-y divide-mist-200 dark:divide-mist-800">
                   {movies.map((movie, index) => (
                     <SearchMovie
                       {...movie}
@@ -132,7 +132,7 @@ export const AddMovieDialog = ({
                     />
                   ))}
                   {movies.length > 3 && (
-                    <div className="from-offwhite via-offwhite pointer-events-none absolute right-0 bottom-0 left-0 h-16 bg-linear-to-t to-transparent dark:from-gray-800 dark:via-gray-800" />
+                    <div className="from-offwhite via-offwhite pointer-events-none absolute right-0 bottom-0 left-0 h-16 bg-linear-to-t to-transparent dark:from-mist-900 dark:via-mist-900" />
                   )}
                 </ul>
               )}

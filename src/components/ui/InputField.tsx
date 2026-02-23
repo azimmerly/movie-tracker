@@ -17,7 +17,7 @@ export const InputField = ({
   className,
   ...inputProps
 }: InputFieldProps) => (
-  <Field className={twMerge("flex flex-col gap-0.5", className)}>
+  <Field className={twMerge("flex flex-col gap-1", className)}>
     <div className="flex items-center gap-2">
       <Label htmlFor={id} className="text-sm font-medium">
         {label}
@@ -35,7 +35,7 @@ export const InputField = ({
       id={id}
       {...inputProps}
       autoComplete={autoComplete ?? "off"}
-      className="block w-full rounded-md border-0 bg-white py-1.5 text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-blue-600 focus:ring-inset sm:text-sm sm:leading-6 dark:bg-gray-800/70 dark:text-white dark:ring-gray-700/70 dark:focus:ring-blue-500"
+      className="block w-full rounded-md border-0 bg-white py-1.5 text-mist-900 shadow-xs ring-1 ring-mist-300 ring-inset placeholder:text-mist-400 focus:ring-2 focus:ring-blue-600 focus:ring-inset sm:text-sm sm:leading-6 dark:bg-mist-800/50 dark:text-white dark:ring-mist-700/50 dark:placeholder:text-mist-500"
     />
   </Field>
 );

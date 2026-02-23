@@ -46,7 +46,7 @@ const MoviePage = async ({ params }: MoviePageProps) => {
   }
 
   return (
-    <div className="flex flex-col items-center gap-7 sm:mt-8">
+    <div className="flex flex-col items-center gap-8">
       <Image
         priority
         width={240}
