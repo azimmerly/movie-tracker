@@ -1,19 +1,19 @@
 import { z } from "zod";
 
 export const addMovieSchema = z.object({
-  listId: z.string(),
-  movieId: z.number(),
+  listId: z.uuid(),
+  movieId: z.int().positive(),
 });
 
 export const deleteMovieSchema = z.object({
-  listId: z.string(),
-  movieId: z.number(),
+  listId: z.uuid(),
+  movieId: z.int().positive(),
 });
 
 export const updateMovieSchema = z.object({
-  listId: z.string(),
-  movieId: z.number(),
-  rating: z.number().min(0).max(5),
+  listId: z.uuid(),
+  movieId: z.int().positive(),
+  rating: z.int().min(0).max(5),
   favorite: z.boolean(),
 });
 
@@ -25,7 +25,7 @@ export const movieSearchResponseSchema = z
   .object({
     results: z.array(
       z.object({
-        id: z.number(),
+        id: z.int().positive(),
         title: z.string(),
         release_date: z.string().optional(),
         poster_path: z.string().nullable(),
@@ -48,7 +48,7 @@ export const movieSearchResponseSchema = z
 
 export const movieDetailsResponseSchema = z
   .object({
-    id: z.number(),
+    id: z.int().positive(),
     title: z.string(),
     status: z.enum([
       "Rumored",

@@ -80,7 +80,7 @@ export const DropdownMenu = ({
             <MenuItem key={label}>
               <Button
                 onClick={onClick}
-                className="flex w-full items-center rounded-sm py-2 pr-6 pl-2 text-sm data-focus:bg-mist-50 dark:data-focus:bg-mist-800"
+                className="flex w-full items-center rounded-sm py-2 pr-6 pl-2 text-sm data-focus:bg-mist-100 dark:data-focus:bg-mist-800"
               >
                 <Icon aria-hidden="true" className="mr-2 size-4.5" />
                 {label}

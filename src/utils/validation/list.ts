@@ -4,7 +4,7 @@ const titleSchema = z
   .string()
   .trim()
   .min(1, { error: "Required" })
-  .max(30, { error: "Max 30 characters" });
+  .max(50, { error: "Max 50 characters" });
 
 export const addListSchema = z.object({
   title: titleSchema,
@@ -12,7 +12,7 @@ export const addListSchema = z.object({
 });
 
 export const updateListSchema = z.object({
-  id: z.string(),
+  id: z.uuid(),
   title: titleSchema.optional(),
   private: z.boolean().optional(),
 });

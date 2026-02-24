@@ -1,12 +1,9 @@
 "use server";
 
-import { createFetch } from "@better-fetch/fetch";
 import { and, avg, eq, gt } from "drizzle-orm";
 
 import { getSession } from "@/actions/auth";
-import { revalidatePaths } from "@/actions/utils";
-import { MOVIE_DB_API_URL } from "@/consts";
-import { env } from "@/env";
+import { movieDbFetch, revalidatePaths } from "@/actions/utils";
 import { db } from "@/lib/db";
 import { listMovie, movie, movieList, userMovie } from "@/lib/db/schema";
 import type {
@@ -23,17 +20,6 @@ import {
   movieSearchResponseSchema,
   updateMovieSchema,
 } from "@/utils/validation/movie";
-
-const movieDbFetch = createFetch({
-  retry: 2,
-  throw: true,
-  baseURL: MOVIE_DB_API_URL,
-  method: "GET",
-  headers: {
-    accept: "application/json",
-    authorization: `Bearer ${env.MOVIEDB_API_KEY}`,
-  },
-});
 
 export const searchMovies = async ({ title }: MovieSearchData) => {
   try {
@@ -162,7 +148,7 @@ export const updateMovie = async (data: UpdateMovieData) => {
       throw new Error("Failed to update movie");
     }
 
-    await revalidatePaths([`/list/${listId}`]);
+    await revalidatePaths([`/list/${listId}`, `/movie/${movieId}`]);
     return { success: true, data: updatedUserMovie };
   } catch (e) {
     console.error(e);

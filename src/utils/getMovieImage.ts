@@ -6,7 +6,5 @@ const SIZE = {
   lg: "w500",
 } as const;
 
-export const getMovieImage = (
-  imagePath: string | null,
-  size: keyof typeof SIZE,
-) => `${MOVIE_DB_IMAGE_URL}/${SIZE[size]}${imagePath}`;
+export const getMovieImage = (imagePath: string, size: keyof typeof SIZE) =>
+  `${MOVIE_DB_IMAGE_URL}/${SIZE[size]}${imagePath}`;

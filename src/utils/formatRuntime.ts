@@ -11,5 +11,5 @@ export const formatRuntime = (runtime: number) => {
     result += ` ${minutes} min`;
   }
 
-  return result;
+  return result.trim();
 };

@@ -34,16 +34,6 @@ export const ListCard = ({
           {title}
         </Typography.Large>
         <div className="flex shrink-0 gap-1">
-          <Chip
-            variant="primary"
-            text={
-              <span className="flex items-center gap-1">
-                <FilmIcon className="size-3.5" />
-                {movieCount} {movieCount === 1 ? "movie" : "movies"}
-              </span>
-            }
-            className="font-medium whitespace-nowrap"
-          />
           {isPrivate && (
             <Chip
               variant="secondary"
@@ -55,6 +45,16 @@ export const ListCard = ({
               }
             />
           )}
+          <Chip
+            variant="primary"
+            text={
+              <span className="flex items-center gap-1">
+                <FilmIcon className="size-3.5" />
+                {movieCount} {movieCount === 1 ? "movie" : "movies"}
+              </span>
+            }
+            className="font-medium whitespace-nowrap"
+          />
         </div>
       </div>
       <Typography.Tiny muted className="mb-1.25 flex items-center gap-1.25">

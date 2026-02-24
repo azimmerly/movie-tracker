@@ -9,7 +9,8 @@ import { Pagination } from "@/components/Pagination";
 import { SearchParamInput } from "@/components/SearchParamInput";
 import { SearchResultMessage } from "@/components/SearchResultMessage";
 import { Typography } from "@/components/ui/Typography";
-import { LIST_PAGE_SIZE } from "@/consts";
+
+const LIST_PAGE_SIZE = 8;
 
 type HomeProps = {
   searchParams: Promise<{ search?: string; sort?: string; page?: string }>;

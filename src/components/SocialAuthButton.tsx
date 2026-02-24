@@ -27,7 +27,7 @@ export const SocialAuthButton = ({
   const handleClick = async () => {
     setIsPending(true);
     await authClient.signIn.social(
-      { provider, callbackURL: "/" },
+      { provider, callbackURL: "/dashboard" },
       {
         onError: ({ error }) => {
           setIsPending(false);
