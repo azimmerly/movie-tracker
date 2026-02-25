@@ -5,15 +5,14 @@ const envSchema = z.object({
   BETTER_AUTH_BASE_URL: z.url(),
   GITHUB_CLIENT_ID: z.string(),
   GITHUB_CLIENT_SECRET: z.string(),
-  DATABASE_URL: z.string(),
+  DATABASE_URL: z.url().startsWith("postgresql://"),
   MOVIEDB_API_KEY: z.string(),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);
 
 if (!parsedEnv.success) {
-  const envVars = parsedEnv.error.issues.map(({ path }) => path[0]).join(", ");
-  throw new Error(`Missing environment variables: ${envVars}`);
+  throw new Error(z.prettifyError(parsedEnv.error));
 }
 
 export const env = parsedEnv.data;

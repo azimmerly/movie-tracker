@@ -140,7 +140,7 @@ const MoviePage = async ({ params }: MoviePageProps) => {
             <Typography.Small className="font-semibold">
               Overview
             </Typography.Small>
-            <Typography.Small muted className="text-justify leading-5.5">
+            <Typography.Small muted className="text-justify">
               {movie.overview}
             </Typography.Small>
           </div>
