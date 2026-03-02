@@ -118,13 +118,13 @@ const MoviePage = async ({ params }: MoviePageProps) => {
           </Typography.Small>
         )}
       </div>
-      <div className="flex flex-col items-center gap-3 text-center">
+      <div className="flex flex-col items-center gap-3.5 text-center">
         {!!movie.directors?.length && (
           <div className="max-w-md">
             <Typography.Small className="font-semibold">
               Directed by
             </Typography.Small>
-            <Typography.Small muted>
+            <Typography.Small muted className="text-pretty">
               {movie.directors.join(", ")}
             </Typography.Small>
           </div>
@@ -132,7 +132,9 @@ const MoviePage = async ({ params }: MoviePageProps) => {
         {!!movie.cast?.length && (
           <div className="max-w-md">
             <Typography.Small className="font-semibold">Cast</Typography.Small>
-            <Typography.Small muted>{movie.cast.join(", ")}</Typography.Small>
+            <Typography.Small muted className="text-pretty">
+              {movie.cast.join(", ")}
+            </Typography.Small>
           </div>
         )}
         {!!movie.overview && (
@@ -140,7 +142,7 @@ const MoviePage = async ({ params }: MoviePageProps) => {
             <Typography.Small className="font-semibold">
               Overview
             </Typography.Small>
-            <Typography.Small muted className="text-justify">
+            <Typography.Small muted className="text-justify text-pretty">
               {movie.overview}
             </Typography.Small>
           </div>

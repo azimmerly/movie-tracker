@@ -34,8 +34,8 @@ const Home = async ({ searchParams }: HomeProps) => {
 
   return (
     <div className="flex flex-col gap-8">
-      <Typography.H1>All movie lists</Typography.H1>
-      <div className="flex flex-col-reverse items-end justify-between gap-3 sm:flex-row">
+      <Typography.H1>Discover movie lists</Typography.H1>
+      <div className="flex flex-col items-end justify-between gap-3 sm:flex-row">
         <AddListDialog session={session?.session} />
         <div className="flex w-full flex-col items-end justify-end gap-2 sm:flex-row">
           <SearchParamInput placeholder="List title" />
@@ -46,7 +46,7 @@ const Home = async ({ searchParams }: HomeProps) => {
       {search && <SearchResultMessage searchTerm={search} />}
 
       <div className="flex flex-col gap-2.5">
-        {lists?.length ? (
+        {!!lists?.length ? (
           lists.map((list) => <ListCard {...list} key={list.id} />)
         ) : (
           <NothingFound text="No movie lists here… yet." />

@@ -24,7 +24,7 @@ export const DeleteListDialog = ({
     const res = await deleteMovieList(id);
     if (res.success) {
       toast.success("List deleted");
-      redirect("/dashboard");
+      redirect("/dashboard/lists");
     } else {
       toast.error(res.message);
     }

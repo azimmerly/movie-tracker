@@ -1,10 +1,12 @@
-"use client";
-
+import { Squares2X2Icon } from "@heroicons/react/16/solid";
 import { CalendarDaysIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { redirect } from "next/navigation";
 
+import { getSession } from "@/actions/auth";
+import { getUserMovies } from "@/actions/movie";
+import { ErrorMessage } from "@/components/ErrorMessage";
 import { MovieActions } from "@/components/MovieActions";
 import { MovieSortSelect } from "@/components/MovieSortSelect";
 import { NothingFound } from "@/components/NothingFound";
@@ -12,55 +14,55 @@ import { SearchParamInput } from "@/components/SearchParamInput";
 import { SearchResultMessage } from "@/components/SearchResultMessage";
 import { Chip } from "@/components/ui/Chip";
 import { Typography } from "@/components/ui/Typography";
-import type {
-  ListMovie,
-  Movie,
-  MovieList as MovieListType,
-  UserMovie,
-} from "@/types";
 import { formatDate } from "@/utils/formatDate";
 import { getMovieImage } from "@/utils/getMovieImage";
-import { AddMovieDialog } from "./AddMovieDialog";
-import { MovieOptions } from "./MovieOptions";
 
-type MoviesListProps = {
-  owner: boolean;
-  movies: {
-    id: ListMovie["id"];
-    createdAt: ListMovie["createdAt"];
-    rating: UserMovie["rating"];
-    favorite: UserMovie["favorite"];
-    movie: Movie;
-  }[];
-  listId: MovieListType["id"];
+type MyMoviesProps = {
+  searchParams: Promise<{ search?: string; sort?: string }>;
 };
 
-export const MovieList = ({ movies, owner, listId }: MoviesListProps) => {
-  const searchParams = useSearchParams();
-  const search = searchParams.get("search");
-  const listMovieIds = new Set(movies.map(({ movie }) => movie.id));
+const MyMovies = async ({ searchParams }: MyMoviesProps) => {
+  const { search, sort } = await searchParams;
+  const session = await getSession();
+
+  if (!session) {
+    redirect("/sign-in");
+  }
+
+  const { data: movies, success } = await getUserMovies(
+    session.user.id,
+    search,
+    sort,
+  );
+
+  if (!success) {
+    return <ErrorMessage />;
+  }
 
   return (
-    <div className="mt-6">
-      <div className="flex flex-col-reverse items-end justify-between gap-3 sm:flex-row">
-        {owner && (
-          <AddMovieDialog listId={listId} listMovieIds={listMovieIds} />
-        )}
-        <div className="flex w-full flex-col items-end justify-end gap-2 sm:flex-row">
+    <>
+      <div className="flex flex-col items-end justify-between gap-3 sm:flex-row">
+        <div className="mb-2 flex w-full min-w-0 items-center gap-1">
+          <Squares2X2Icon className="size-4 shrink-0 text-blue-600/70 dark:text-blue-500/70" />
+          <Typography.Body muted className="truncate">
+            All movies you&apos;ve tracked
+          </Typography.Body>
+        </div>
+        <div className="flex w-full shrink-0 flex-col gap-2 sm:w-fit sm:flex-row">
           <SearchParamInput placeholder="Movie title" />
           <MovieSortSelect />
         </div>
       </div>
 
-      {search && <SearchResultMessage className="mt-10" searchTerm={search} />}
+      {search && <SearchResultMessage searchTerm={search} />}
 
-      <div className="mt-8">
-        {!movies.length ? (
-          <NothingFound text="No movies here… yet." />
+      <div>
+        {!movies?.length ? (
+          <NothingFound text="Movies added to your lists will appear here." />
         ) : (
           <ul className="divide-y divide-mist-200 dark:divide-mist-800">
             {movies.map(({ id, movie, favorite, rating }, index) => (
-              <li key={id} className="flex justify-between py-3">
+              <li key={id} className="flex py-3">
                 <div className="flex gap-3">
                   <Link href={`/movie/${movie.id}`} className="rounded">
                     <Image
@@ -99,24 +101,20 @@ export const MovieList = ({ movies, owner, listId }: MoviesListProps) => {
                       ))}
                     </div>
                     <MovieActions
-                      owner={owner}
+                      owner={true}
                       movieId={movie.id}
                       rating={rating}
                       favorite={favorite}
                     />
                   </div>
                 </div>
-                <MovieOptions
-                  owner={owner}
-                  movieId={movie.id}
-                  listId={listId}
-                  movie={movie}
-                />
               </li>
             ))}
           </ul>
         )}
       </div>
-    </div>
+    </>
   );
 };
+
+export default MyMovies;

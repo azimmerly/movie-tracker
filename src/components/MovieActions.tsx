@@ -10,13 +10,12 @@ import { twMerge } from "tailwind-merge";
 
 import { updateMovie } from "@/actions/movie";
 import { Typography } from "@/components/ui/Typography";
-import type { Movie, MovieList, UpdateMovieData, UserMovie } from "@/types";
+import type { Movie, UpdateMovieData, UserMovie } from "@/types";
 import { updateMovieSchema } from "@/utils/validation/movie";
 
 type MovieActionsProps = {
   owner: boolean;
   movieId: Movie["id"];
-  listId: MovieList["id"];
   rating: UserMovie["rating"];
   favorite: UserMovie["favorite"];
 };
@@ -24,12 +23,11 @@ type MovieActionsProps = {
 export const MovieActions = ({
   owner,
   movieId,
-  listId,
   rating,
   favorite,
 }: MovieActionsProps) => {
   const { control, formState, setValue, getValues } = useForm<UpdateMovieData>({
-    defaultValues: { favorite, rating, listId, movieId },
+    defaultValues: { favorite, rating, movieId },
     resolver: zodResolver(updateMovieSchema),
   });
 

@@ -51,7 +51,7 @@ const ListPage = async ({ params, searchParams }: ListPageProps) => {
           <Avatar userImage={user.image} size="sm" />
           <Typography.Link
             className="flex gap-1"
-            href={owner ? "/dashboard" : `/user/${user.id}`}
+            href={owner ? "/dashboard/lists" : `/user/${user.id}/lists`}
           >
             <span>{user.name}</span>
             <span className="font-normal opacity-75">

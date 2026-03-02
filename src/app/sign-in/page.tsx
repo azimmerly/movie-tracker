@@ -10,7 +10,7 @@ const SignIn = async () => {
   const session = await getSession();
 
   if (session) {
-    redirect("/dashboard");
+    redirect("/dashboard/lists");
   }
 
   return (

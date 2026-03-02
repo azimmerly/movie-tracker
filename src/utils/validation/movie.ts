@@ -11,7 +11,6 @@ export const deleteMovieSchema = z.object({
 });
 
 export const updateMovieSchema = z.object({
-  listId: z.uuid(),
   movieId: z.int().positive(),
   rating: z.int().min(0).max(5),
   favorite: z.boolean(),

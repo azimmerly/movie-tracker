@@ -6,8 +6,8 @@ import {
   Button as HeadlessButton,
 } from "@headlessui/react";
 import {
+  GlobeAltIcon,
   HomeIcon,
-  ListBulletIcon,
   UserCircleIcon,
   UserPlusIcon,
 } from "@heroicons/react/16/solid";
@@ -40,8 +40,18 @@ type NavClientProps = {
 };
 
 const navLinks = [
-  { href: "/", label: "Home", icon: HomeIcon },
-  { href: "/dashboard", label: "My Lists", icon: ListBulletIcon },
+  {
+    href: "/",
+    label: "Discover",
+    icon: GlobeAltIcon,
+    isActive: (path: string) => path === "/",
+  },
+  {
+    href: "/dashboard/lists",
+    label: "Dashboard",
+    icon: HomeIcon,
+    isActive: (path: string) => path.startsWith("/dashboard"),
+  },
 ] as const;
 
 export const NavClient = ({ user }: NavClientProps) => {
@@ -89,21 +99,25 @@ export const NavClient = ({ user }: NavClientProps) => {
               {APP_NAME}
             </Typography.Large>
           </Link>
-          <div className="hidden lg:flex lg:gap-1.5">
-            {navLinks.map(({ label, href, icon: Icon }) => (
-              <Link
-                key={href}
-                href={href}
-                className={twMerge(
-                  "flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-semibold hover:bg-mist-200/60 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden dark:hover:bg-mist-800/70",
-                  pathname === href && "bg-mist-200/60 dark:bg-mist-800/70",
-                )}
-                aria-current={pathname === href ? "page" : undefined}
-              >
-                <Icon className="size-4 text-blue-600/60 dark:text-blue-500/60" />
-                {label}
-              </Link>
-            ))}
+          <div className="hidden gap-1.5 lg:flex">
+            {navLinks.map(({ label, href, icon: Icon, isActive }) => {
+              const active = isActive(pathname);
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  aria-current={active ? "page" : undefined}
+                  className={twMerge(
+                    "flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-semibold hover:bg-mist-200/60 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden dark:hover:bg-mist-800/70",
+                    active &&
+                      "pointer-events-none bg-mist-200/60 dark:bg-mist-800/70",
+                  )}
+                >
+                  <Icon className="size-4 text-blue-600/70 dark:text-blue-500/70" />
+                  {label}
+                </Link>
+              );
+            })}
           </div>
         </div>
         <div className="flex items-center">
@@ -183,21 +197,25 @@ export const NavClient = ({ user }: NavClientProps) => {
           </div>
           <div className="box-content divide-y divide-mist-200 dark:divide-mist-800">
             <div className="space-y-1.5 py-4 font-medium">
-              {navLinks.map(({ label, href, icon: Icon }) => (
-                <Link
-                  key={href}
-                  href={href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  aria-current={pathname === href ? "page" : undefined}
-                  className={twMerge(
-                    "flex items-center gap-2 rounded-md px-3 py-2 hover:bg-mist-200/60 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden dark:hover:bg-mist-800/70",
-                    pathname === href && "bg-mist-200/60 dark:bg-mist-800/70",
-                  )}
-                >
-                  <Icon className="size-4 text-blue-600/60 dark:text-blue-500/60" />
-                  {label}
-                </Link>
-              ))}
+              {navLinks.map(({ label, href, icon: Icon, isActive }) => {
+                const active = isActive(pathname);
+                return (
+                  <Link
+                    key={href}
+                    href={href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    aria-current={active ? "page" : undefined}
+                    className={twMerge(
+                      "flex items-center gap-2 rounded-md px-3 py-2 hover:bg-mist-200/60 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden dark:hover:bg-mist-800/70",
+                      active &&
+                        "pointer-events-none bg-mist-200/60 dark:bg-mist-800/70",
+                    )}
+                  >
+                    <Icon className="size-4 text-blue-600/70 dark:text-blue-500/70" />
+                    {label}
+                  </Link>
+                );
+              })}
             </div>
             <div className="py-4">
               {!user ? (

@@ -48,7 +48,7 @@ export const addMovieList = async (data: AddListData) => {
       .insert(movieList)
       .values({ ...data, userId: session.user.id })
       .returning({ id: movieList.id });
-    await revalidatePaths(["/", "/dashboard"]);
+    await revalidatePaths(["/", "/dashboard/lists"]);
     return { success: true, data: newList };
   } catch (e) {
     console.error(e);
@@ -96,7 +96,7 @@ export const deleteMovieList = async (id: MovieList["id"]) => {
       throw new Error("Movie list not found or unauthorized");
     }
 
-    await revalidatePaths(["/", "/dashboard"]);
+    await revalidatePaths(["/", "/dashboard/lists"]);
     return { success: true, data: deletedList };
   } catch (e) {
     console.error(e);
@@ -111,9 +111,10 @@ export const getAllMovieLists = async (
   offset?: number,
 ) => {
   try {
-    const whereClause = search
-      ? and(eq(movieList.private, false), ilike(movieList.title, `%${search}%`))
-      : eq(movieList.private, false);
+    const whereClause = and(
+      eq(movieList.private, false),
+      search ? ilike(movieList.title, `%${search}%`) : undefined,
+    );
 
     const allMovieLists = await db
       .select({
@@ -148,11 +149,14 @@ export const getUserMovieLists = async (
   userId: User["id"],
   search?: string,
   sort?: string,
+  includePrivate = false,
 ) => {
   try {
-    const whereClause = search
-      ? and(eq(movieList.userId, userId), ilike(movieList.title, `%${search}%`))
-      : eq(movieList.userId, userId);
+    const whereClause = and(
+      eq(movieList.userId, userId),
+      includePrivate ? undefined : eq(movieList.private, false),
+      search ? ilike(movieList.title, `%${search}%`) : undefined,
+    );
 
     const userMovieLists = await db
       .select({

@@ -1,6 +1,6 @@
 "use server";
 
-import { and, avg, eq, gt } from "drizzle-orm";
+import { and, asc, avg, desc, eq, gt, ilike } from "drizzle-orm";
 
 import { getSession } from "@/actions/auth";
 import { movieDbFetch, revalidatePaths } from "@/actions/utils";
@@ -20,6 +20,19 @@ import {
   movieSearchResponseSchema,
   updateMovieSchema,
 } from "@/utils/validation/movie";
+
+const getUserMoviesOrderBy = (sort?: string) => {
+  switch (sort) {
+    case "rating":
+      return desc(userMovie.rating);
+    case "title":
+      return asc(movie.title);
+    case "released":
+      return desc(movie.releaseDate);
+    default:
+      return desc(userMovie.createdAt);
+  }
+};
 
 export const searchMovies = async ({ title }: MovieSearchData) => {
   try {
@@ -81,7 +94,7 @@ export const addMovie = async (data: AddMovieData) => {
       .values({ userId: session.user.id, movieId: movieData!.id })
       .onConflictDoNothing();
 
-    await revalidatePaths(["/", "/dashboard", `/list/${listId}`]);
+    await revalidatePaths(["/", "/dashboard/lists", `/list/${listId}`]);
     return { success: true, data: newListMovie };
   } catch (e) {
     console.error(e);
@@ -118,7 +131,7 @@ export const deleteMovie = async (data: DeleteMovieData) => {
       throw new Error("Movie not found in list");
     }
 
-    await revalidatePaths(["/", "/dashboard", `/list/${listId}`]);
+    await revalidatePaths(["/", "/dashboard/lists", `/list/${listId}`]);
     return { success: true, data: deletedListMovie };
   } catch (e) {
     console.error(e);
@@ -133,7 +146,7 @@ export const updateMovie = async (data: UpdateMovieData) => {
   }
 
   try {
-    const { listId, movieId, favorite, rating } = updateMovieSchema.parse(data);
+    const { movieId, favorite, rating } = updateMovieSchema.parse(data);
 
     const [updatedUserMovie] = await db
       .insert(userMovie)
@@ -148,7 +161,17 @@ export const updateMovie = async (data: UpdateMovieData) => {
       throw new Error("Failed to update movie");
     }
 
-    await revalidatePaths([`/list/${listId}`, `/movie/${movieId}`]);
+    const listsWithMovie = await db
+      .select({ listId: listMovie.listId })
+      .from(listMovie)
+      .where(eq(listMovie.movieId, movieId));
+
+    await revalidatePaths([
+      `/movie/${movieId}`,
+      "/dashboard/movies",
+      ...listsWithMovie.map(({ listId }) => `/list/${listId}`),
+    ]);
+
     return { success: true, data: updatedUserMovie };
   } catch (e) {
     console.error(e);
@@ -203,6 +226,37 @@ export const getMovie = async (id: Movie["id"]) => {
         avgRating: avgRating ? parseFloat(avgRating) : null,
       },
     };
+  } catch (e) {
+    console.error(e);
+    return { success: false, message: "Something went wrong" };
+  }
+};
+
+export const getUserMovies = async (
+  userId: string,
+  search?: string,
+  sort?: string,
+) => {
+  try {
+    const whereClause = and(
+      eq(userMovie.userId, userId),
+      search ? ilike(movie.title, `%${search}%`) : undefined,
+    );
+
+    const movies = await db
+      .select({
+        id: userMovie.id,
+        rating: userMovie.rating,
+        favorite: userMovie.favorite,
+        createdAt: userMovie.createdAt,
+        movie: movie,
+      })
+      .from(userMovie)
+      .innerJoin(movie, eq(movie.id, userMovie.movieId))
+      .where(whereClause)
+      .orderBy(getUserMoviesOrderBy(sort));
+
+    return { success: true, data: movies };
   } catch (e) {
     console.error(e);
     return { success: false, message: "Something went wrong" };
