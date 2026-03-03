@@ -12,7 +12,7 @@ export const deleteMovieSchema = z.object({
 
 export const updateMovieSchema = z.object({
   movieId: z.int().positive(),
-  rating: z.int().min(0).max(5),
+  rating: z.int().min(0).max(10),
   favorite: z.boolean(),
 });
 

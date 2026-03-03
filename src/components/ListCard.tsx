@@ -58,7 +58,7 @@ export const ListCard = ({
         </div>
       </div>
       <Typography.Tiny muted className="mb-1.25 flex items-center gap-1.25">
-        <Avatar userImage={user.image} size="xs" />
+        <Avatar userImage={user.image} className="size-3.5" />
         {user.name}
       </Typography.Tiny>
       <Typography.Tiny className="flex items-start gap-1.25" muted>

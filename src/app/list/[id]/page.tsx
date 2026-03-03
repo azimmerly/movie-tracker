@@ -48,7 +48,7 @@ const ListPage = async ({ params, searchParams }: ListPageProps) => {
       </div>
       <div className="flex flex-col gap-0.5">
         <Typography.Small className="flex items-center gap-1.5 font-medium">
-          <Avatar userImage={user.image} size="sm" />
+          <Avatar userImage={user.image} className="size-4" />
           <Typography.Link
             className="flex gap-1"
             href={owner ? "/dashboard/lists" : `/user/${user.id}/lists`}

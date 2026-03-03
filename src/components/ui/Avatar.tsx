@@ -1,28 +1,19 @@
 import type { User } from "better-auth";
 import Image from "next/image";
 import { type ClassNameValue, twMerge } from "tailwind-merge";
-import { tv, type VariantProps } from "tailwind-variants";
 
-const avatarVariants = tv({
-  base: "inline-block overflow-hidden rounded-full shadow-xs shrink-0",
-  variants: {
-    size: {
-      xs: "size-3.5",
-      sm: "size-4",
-      md: "size-5.25",
-      lg: "size-9",
-      xl: "size-14",
-    },
-  },
-});
-
-type AvatarProps = Required<VariantProps<typeof avatarVariants>> & {
+type AvatarProps = {
   userImage: User["image"];
   className?: ClassNameValue;
 };
 
-export const Avatar = ({ userImage, size, className }: AvatarProps) => (
-  <span className={twMerge(avatarVariants({ size, className }))}>
+export const Avatar = ({ userImage, className }: AvatarProps) => (
+  <span
+    className={twMerge(
+      "inline-block shrink-0 overflow-hidden rounded-full shadow-xs",
+      className,
+    )}
+  >
     {userImage ? (
       <Image
         src={userImage}

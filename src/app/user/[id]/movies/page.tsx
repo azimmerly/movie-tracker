@@ -81,7 +81,7 @@ const UserMovies = async ({ searchParams, params }: UserMoviesProps) => {
                       </Link>
                       <Typography.Tiny
                         muted
-                        className="flex items-center gap-0.5"
+                        className="flex items-center gap-0.75"
                       >
                         <CalendarDaysIcon className="mb-px size-3.5" />
                         {formatDate(movie.releaseDate)}

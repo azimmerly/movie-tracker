@@ -26,7 +26,7 @@ const UserLayout = async ({
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
-          <Avatar userImage={user.image} size="lg" />
+          <Avatar userImage={user.image} className="size-9" />
           <div className="flex items-baseline gap-1.5">
             <Typography.H2>{user.name}</Typography.H2>
             <Typography.H3 muted className="font-light">

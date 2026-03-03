@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 
 import { updateMovie } from "@/actions/movie";
+import { Tooltip } from "@/components/ui/Tooltip";
 import { Typography } from "@/components/ui/Typography";
 import type { Movie, UpdateMovieData, UserMovie } from "@/types";
 import { updateMovieSchema } from "@/utils/validation/movie";
@@ -35,10 +36,7 @@ export const MovieActions = ({
     field: "rating" | "favorite",
     value: UserMovie["rating"] | UserMovie["favorite"],
   ) => {
-    if (!owner) {
-      toast.info("You can only modify your own lists");
-      return;
-    } else if (formState.isSubmitting) {
+    if (!owner || formState.isSubmitting) {
       return;
     }
 
@@ -63,22 +61,41 @@ export const MovieActions = ({
 
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, index) => {
-      const starNum = index + 1;
+      const fullValue = (index + 1) * 2;
+      const halfValue = fullValue - 1;
+      const isFull = rating >= fullValue;
+      const isHalf = !isFull && rating >= halfValue;
+
       return (
-        <StarIcon
-          role="button"
-          key={starNum}
-          className={twMerge(
-            "-mx-px size-5 transition-opacity",
-            owner ? "cursor-pointer hover:opacity-80" : "cursor-default",
-            rating >= starNum
-              ? "fill-amber-400 dark:fill-amber-500"
-              : "fill-mist-300 dark:fill-mist-700",
+        <span key={index} className="relative -mx-px size-5.25">
+          <StarIcon className="size-5.25 fill-mist-200 dark:fill-mist-700/70" />
+          {(isFull || isHalf) && (
+            <StarIcon
+              className={twMerge(
+                "absolute inset-0 size-5.25 fill-amber-400 dark:fill-amber-500",
+                isHalf && "[clip-path:inset(0_50%_0_0)]",
+              )}
+            />
           )}
-          onClick={() => {
-            handleUpdate("rating", rating === starNum ? 0 : starNum);
-          }}
-        />
+          {owner && (
+            <>
+              <span
+                role="button"
+                className="absolute top-0 left-0 h-full w-1/2 cursor-pointer"
+                onClick={() =>
+                  handleUpdate("rating", rating === halfValue ? 0 : halfValue)
+                }
+              />
+              <span
+                role="button"
+                className="absolute top-0 right-0 h-full w-1/2 cursor-pointer"
+                onClick={() =>
+                  handleUpdate("rating", rating === fullValue ? 0 : fullValue)
+                }
+              />
+            </>
+          )}
+        </span>
       );
     });
   };
@@ -87,27 +104,27 @@ export const MovieActions = ({
     <Checkbox
       tabIndex={-1}
       checked={favorite}
-      onChange={(e) => handleUpdate("favorite", e)}
+      onChange={owner ? (e) => handleUpdate("favorite", e) : undefined}
       className={twMerge(
-        "flex items-center gap-0.5",
+        "flex items-center gap-1",
         owner ? "cursor-pointer" : "cursor-default",
       )}
     >
       <HeartIcon
         strokeWidth={2}
         className={twMerge(
-          "size-5 text-rose-400 dark:text-rose-500",
+          "size-4.75 text-rose-400 dark:text-rose-500",
           favorite && "fill-rose-400 dark:fill-rose-500",
         )}
       />
-      <Label as={Typography.Tiny} className="font-medium" muted>
+      <Label as={Typography.Tiny} muted>
         Favorite
       </Label>
     </Checkbox>
   );
 
-  return (
-    <Fieldset className="mt-2 flex flex-col gap-1">
+  const fieldset = (
+    <Fieldset className="mt-2.25 flex flex-col gap-1.25">
       <Field className="flex">
         <Watch name={"rating"} control={control} render={renderStars} />
       </Field>
@@ -115,5 +132,11 @@ export const MovieActions = ({
         <Watch name={"favorite"} control={control} render={renderCheckbox} />
       </Field>
     </Fieldset>
+  );
+
+  return owner ? (
+    fieldset
+  ) : (
+    <Tooltip label="You can only rate your own movies">{fieldset}</Tooltip>
   );
 };

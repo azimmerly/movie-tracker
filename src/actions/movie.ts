@@ -223,7 +223,7 @@ export const getMovie = async (id: Movie["id"]) => {
       success: true,
       data: movieData && {
         ...movieData,
-        avgRating: avgRating ? parseFloat(avgRating) : null,
+        avgRating: avgRating ? parseFloat(avgRating) / 2 : null,
       },
     };
   } catch (e) {
