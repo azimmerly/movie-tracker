@@ -19,8 +19,7 @@
 @layer base {
   html {
     overflow-x: hidden;
-    @media (min-width: 640px) {
-      scrollbar-gutter: stable;
-    }
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
   }
 }

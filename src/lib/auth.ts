@@ -1,4 +1,4 @@
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { drizzleAdapter } from "@better-auth/drizzle-adapter";
 import { betterAuth } from "better-auth/minimal";
 
 import { APP_NAME } from "@/consts";
@@ -12,13 +12,13 @@ export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
   }),
-  cookieCache: {
-    enabled: true,
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 60 * 5, // 5 minutes
+    },
   },
   user: {
-    changeEmail: {
-      enabled: true,
-    },
     deleteUser: {
       enabled: true,
     },
