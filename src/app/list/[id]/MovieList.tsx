@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarDaysIcon } from "@heroicons/react/20/solid";
+import { CalendarDaysIcon } from "@heroicons/react/16/solid";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -12,26 +12,19 @@ import { SearchParamInput } from "@/components/SearchParamInput";
 import { SearchResultMessage } from "@/components/SearchResultMessage";
 import { Chip } from "@/components/ui/Chip";
 import { Typography } from "@/components/ui/Typography";
-import type {
-  ListMovie,
-  Movie,
-  MovieList as MovieListType,
-  UserMovie,
-} from "@/types";
+import type { Movie, MovieList as MovieListType, UserMovie } from "@/types";
 import { formatDate } from "@/utils/formatDate";
 import { getMovieImage } from "@/utils/getMovieImage";
 import { AddMovieDialog } from "./AddMovieDialog";
 import { MovieOptions } from "./MovieOptions";
 
 type MoviesListProps = {
-  owner: boolean;
   movies: {
-    id: ListMovie["id"];
-    createdAt: ListMovie["createdAt"];
     rating: UserMovie["rating"];
     favorite: UserMovie["favorite"];
     movie: Movie;
   }[];
+  owner: boolean;
   listId: MovieListType["id"];
 };
 
@@ -59,8 +52,8 @@ export const MovieList = ({ movies, owner, listId }: MoviesListProps) => {
           <NothingFound text="No movies here… yet." />
         ) : (
           <ul className="divide-y divide-mist-200 dark:divide-mist-800">
-            {movies.map(({ id, movie, favorite, rating }, index) => (
-              <li key={id} className="flex justify-between py-3">
+            {movies.map(({ movie, favorite, rating }, index) => (
+              <li key={movie.id} className="flex justify-between py-3">
                 <div className="flex gap-3">
                   <Link href={`/movie/${movie.id}`} className="rounded">
                     <Image
@@ -70,7 +63,7 @@ export const MovieList = ({ movies, owner, listId }: MoviesListProps) => {
                       draggable={false}
                       priority={index < 5}
                       src={getMovieImage(movie.posterPath, "md")}
-                      className="h-auto w-18 min-w-18 rounded-md shadow sm:w-22 sm:min-w-22"
+                      className="h-27 w-18 min-w-18 rounded-md shadow sm:h-33 sm:w-22 sm:min-w-22"
                     />
                   </Link>
                   <div>
@@ -82,7 +75,7 @@ export const MovieList = ({ movies, owner, listId }: MoviesListProps) => {
                       </Link>
                       <Typography.Tiny
                         muted
-                        className="flex items-center gap-0.75"
+                        className="flex items-center gap-0.5"
                       >
                         <CalendarDaysIcon className="mb-px size-3.5" />
                         {formatDate(movie.releaseDate)}

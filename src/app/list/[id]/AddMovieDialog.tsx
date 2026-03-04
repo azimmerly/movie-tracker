@@ -35,6 +35,20 @@ export const AddMovieDialog = ({
 }: AddMovieDialogProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [movies, setMovies] = useState<MovieSearchResponseData>();
+  const [addedIds, setAddedIds] = useState<Set<Movie["id"]>>(listMovieIds);
+
+  const handleMovieAdded = (movieId: Movie["id"]) => {
+    setAddedIds((prev) => new Set(prev).add(movieId));
+  };
+
+  const handleMovieAddFailed = (movieId: Movie["id"]) => {
+    setAddedIds((prev) => {
+      const next = new Set(prev);
+      next.delete(movieId);
+      return next;
+    });
+  };
+
   const { register, reset, handleSubmit, formState } = useForm<MovieSearchData>(
     { resolver: zodResolver(movieSearchSchema) },
   );
@@ -64,6 +78,7 @@ export const AddMovieDialog = ({
         onTransitionEnd={() => {
           reset();
           setMovies(undefined);
+          setAddedIds(listMovieIds);
         }}
         className="sm:max-w-xl"
       >
@@ -123,12 +138,14 @@ export const AddMovieDialog = ({
                 </Typography.Small>
               ) : (
                 <ul className="divide-y divide-mist-200 dark:divide-mist-800">
-                  {movies.map((movie, index) => (
+                  {movies.map((movie) => (
                     <SearchMovie
-                      {...movie}
-                      key={index}
+                      key={movie.id}
+                      movie={movie}
                       listId={listId}
-                      listMovieIds={listMovieIds}
+                      isAdded={addedIds.has(movie.id)}
+                      onMovieAdded={handleMovieAdded}
+                      onMovieAddFailed={handleMovieAddFailed}
                     />
                   ))}
                   {movies.length > 3 && (

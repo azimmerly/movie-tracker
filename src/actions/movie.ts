@@ -266,10 +266,8 @@ export const getUserMovies = async (
 
     const movies = await db
       .select({
-        id: userMovie.id,
         rating: userMovie.rating,
         favorite: userMovie.favorite,
-        createdAt: userMovie.createdAt,
         movie: movie,
       })
       .from(userMovie)

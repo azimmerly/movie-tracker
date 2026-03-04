@@ -217,8 +217,6 @@ export const getMovieListById = async (
 
     const movies = await db
       .select({
-        id: listMovie.id,
-        createdAt: listMovie.createdAt,
         rating: sql<number>`coalesce(${userMovie.rating}, 0)`.as("rating"),
         favorite: sql<boolean>`coalesce(${userMovie.favorite}, false)`.as(
           "favorite",
