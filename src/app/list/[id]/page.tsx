@@ -1,6 +1,6 @@
 import { CalendarDaysIcon } from "@heroicons/react/20/solid";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
-import { notFound, redirect, RedirectType } from "next/navigation";
+import { notFound } from "next/navigation";
 
 import { getSession } from "@/actions/auth";
 import { getMovieListById } from "@/actions/list";
@@ -34,10 +34,6 @@ const ListPage = async ({ params, searchParams }: ListPageProps) => {
   const { user, private: isPrivate, title, createdAt, movies } = list;
   const owner = session?.user.id === user.id;
 
-  if (!owner && isPrivate) {
-    redirect("/", RedirectType.replace);
-  }
-
   return (
     <div className="flex flex-col">
       <div className="mb-6 flex items-center justify-between">
@@ -47,14 +43,14 @@ const ListPage = async ({ params, searchParams }: ListPageProps) => {
         {owner && <ListOptions id={id} title={title} isPrivate={isPrivate} />}
       </div>
       <div className="flex flex-col gap-0.5">
-        <Typography.Small className="flex items-center gap-1.5 font-medium">
-          <Avatar userImage={user.image} className="size-4" />
+        <Typography.Small className="flex items-center gap-1.75 font-medium">
+          <Avatar userImage={user.image} className="size-4.5" />
           <Typography.Link
-            className="flex gap-1"
+            className="flex gap-1.25 text-base"
             href={owner ? "/dashboard/lists" : `/user/${user.id}/lists`}
           >
             <span>{user.name}</span>
-            <span className="font-normal opacity-75">
+            <span className="font-normal opacity-80">
               {formatUserId(user.id)}
             </span>
           </Typography.Link>

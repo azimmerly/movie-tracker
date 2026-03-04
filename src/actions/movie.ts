@@ -1,6 +1,6 @@
 "use server";
 
-import { and, asc, avg, desc, eq, gt, ilike } from "drizzle-orm";
+import { and, asc, avg, desc, eq, exists, gt, ilike } from "drizzle-orm";
 
 import { getSession } from "@/actions/auth";
 import { movieDbFetch, revalidatePaths } from "@/actions/utils";
@@ -18,8 +18,16 @@ import {
   deleteMovieSchema,
   movieDetailsResponseSchema,
   movieSearchResponseSchema,
+  movieSearchSchema,
   updateMovieSchema,
 } from "@/utils/validation/movie";
+
+const PENDING_STATUSES = [
+  "Rumored",
+  "Planned",
+  "In Production",
+  "Post Production",
+];
 
 const getUserMoviesOrderBy = (sort?: string) => {
   switch (sort) {
@@ -34,11 +42,18 @@ const getUserMoviesOrderBy = (sort?: string) => {
   }
 };
 
-export const searchMovies = async ({ title }: MovieSearchData) => {
+export const searchMovies = async (data: MovieSearchData) => {
+  const session = await getSession();
+  if (!session) {
+    return { success: false, message: "Not authenticated" };
+  }
+
   try {
+    const { title } = movieSearchSchema.parse(data);
     const movies = await movieDbFetch("/search/movie", {
       output: movieSearchResponseSchema,
       query: { query: title },
+      next: { revalidate: 86400 },
     });
     return { success: true, data: movies };
   } catch (e) {
@@ -56,20 +71,14 @@ export const addMovie = async (data: AddMovieData) => {
   try {
     const { listId, movieId } = addMovieSchema.parse(data);
 
-    const existingListMovie = await db.query.listMovie.findFirst({
-      where: and(eq(listMovie.listId, listId), eq(listMovie.movieId, movieId)),
-    });
-
-    if (existingListMovie) {
-      throw new Error("Duplicate movie");
-    }
-
-    let movieData = await db.query.movie.findFirst({
+    const movieExists = await db.query.movie.findFirst({
       where: eq(movie.id, movieId),
+      columns: { id: true },
     });
 
-    if (!movieData) {
-      const fetchedMovieData = await movieDbFetch("/movie/:id", {
+    let fetchedMovieData = null;
+    if (!movieExists) {
+      fetchedMovieData = await movieDbFetch("/movie/:id", {
         params: { id: movieId.toString() },
         query: { append_to_response: "credits" },
         output: movieDetailsResponseSchema,
@@ -77,22 +86,36 @@ export const addMovie = async (data: AddMovieData) => {
       if (!fetchedMovieData) {
         throw new Error("Error fetching movie data");
       }
-      movieData = await db
-        .insert(movie)
-        .values(fetchedMovieData)
-        .returning()
-        .then(([data]) => data);
     }
 
-    const [newListMovie] = await db
-      .insert(listMovie)
-      .values({ listId, movieId: movieData!.id })
-      .returning({ id: listMovie.id });
+    const newListMovie = await db.transaction(async (tx) => {
+      const existingListMovie = await tx.query.listMovie.findFirst({
+        where: and(
+          eq(listMovie.listId, listId),
+          eq(listMovie.movieId, movieId),
+        ),
+      });
 
-    await db
-      .insert(userMovie)
-      .values({ userId: session.user.id, movieId: movieData!.id })
-      .onConflictDoNothing();
+      if (existingListMovie) {
+        throw new Error("Duplicate movie");
+      }
+
+      if (fetchedMovieData) {
+        await tx.insert(movie).values(fetchedMovieData).onConflictDoNothing();
+      }
+
+      const [inserted] = await tx
+        .insert(listMovie)
+        .values({ listId, movieId })
+        .returning({ id: listMovie.id });
+
+      await tx
+        .insert(userMovie)
+        .values({ userId: session.user.id, movieId })
+        .onConflictDoNothing();
+
+      return inserted;
+    });
 
     await revalidatePaths(["/", "/dashboard/lists", `/list/${listId}`]);
     return { success: true, data: newListMovie };
@@ -111,24 +134,29 @@ export const deleteMovie = async (data: DeleteMovieData) => {
   try {
     const { listId, movieId } = deleteMovieSchema.parse(data);
 
-    const list = await db.query.movieList.findFirst({
-      where: and(
-        eq(movieList.id, listId),
-        eq(movieList.userId, session.user.id),
-      ),
-    });
-
-    if (!list) {
-      throw new Error("List not found or unauthorized");
-    }
-
     const [deletedListMovie] = await db
       .delete(listMovie)
-      .where(and(eq(listMovie.listId, listId), eq(listMovie.movieId, movieId)))
+      .where(
+        and(
+          eq(listMovie.listId, listId),
+          eq(listMovie.movieId, movieId),
+          exists(
+            db
+              .select({ id: movieList.id })
+              .from(movieList)
+              .where(
+                and(
+                  eq(movieList.id, listId),
+                  eq(movieList.userId, session.user.id),
+                ),
+              ),
+          ),
+        ),
+      )
       .returning({ id: listMovie.id });
 
     if (!deletedListMovie) {
-      throw new Error("Movie not found in list");
+      throw new Error("List movie not found or unauthorized");
     }
 
     await revalidatePaths(["/", "/dashboard/lists", `/list/${listId}`]);
@@ -190,15 +218,8 @@ export const getMovie = async (id: Movie["id"]) => {
         .then(([row]) => row?.avg),
     ]);
 
-    const pendingStatuses = [
-      "Rumored",
-      "Planned",
-      "In Production",
-      "Post Production",
-    ];
-
     let movieData = dbMovie;
-    if (movieData && pendingStatuses.includes(movieData.status)) {
+    if (movieData && PENDING_STATUSES.includes(movieData.status)) {
       const today = new Date().toISOString().split("T")[0];
 
       if (movieData.releaseDate <= today) {
@@ -257,22 +278,6 @@ export const getUserMovies = async (
       .orderBy(getUserMoviesOrderBy(sort));
 
     return { success: true, data: movies };
-  } catch (e) {
-    console.error(e);
-    return { success: false, message: "Something went wrong" };
-  }
-};
-
-export const getAllMovieIds = async () => {
-  try {
-    const movies = await db.query.movie.findMany({
-      columns: { id: true },
-    });
-
-    return {
-      success: true,
-      data: movies.map(({ id }) => ({ id: id.toString() })),
-    };
   } catch (e) {
     console.error(e);
     return { success: false, message: "Something went wrong" };

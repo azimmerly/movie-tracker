@@ -26,7 +26,6 @@ const MyLists = async ({ searchParams }: MyListsProps) => {
     session.user.id,
     search,
     sort,
-    true,
   );
 
   if (!success) {

@@ -8,6 +8,7 @@ import { revalidatePaths } from "@/actions/utils";
 import { db } from "@/lib/db";
 import { listMovie, movie, movieList, user, userMovie } from "@/lib/db/schema";
 import type { AddListData, MovieList, UpdateListData } from "@/types";
+import { addListSchema, updateListSchema } from "@/utils/validation/list";
 
 const getMovieListOrderBy = (sort?: string) => {
   switch (sort) {
@@ -44,9 +45,10 @@ export const addMovieList = async (data: AddListData) => {
   }
 
   try {
+    const validated = addListSchema.parse(data);
     const [newList] = await db
       .insert(movieList)
-      .values({ ...data, userId: session.user.id })
+      .values({ ...validated, userId: session.user.id })
       .returning({ id: movieList.id });
     await revalidatePaths(["/", "/dashboard/lists"]);
     return { success: true, data: newList };
@@ -56,13 +58,14 @@ export const addMovieList = async (data: AddListData) => {
   }
 };
 
-export const updateMovieList = async ({ id, ...rest }: UpdateListData) => {
+export const updateMovieList = async (data: UpdateListData) => {
   const session = await getSession();
   if (!session) {
     return { success: false, message: "Not authenticated" };
   }
 
   try {
+    const { id, ...rest } = updateListSchema.parse(data);
     const [updatedList] = await db
       .update(movieList)
       .set(rest)
@@ -116,27 +119,25 @@ export const getAllMovieLists = async (
       search ? ilike(movieList.title, `%${search}%`) : undefined,
     );
 
-    const allMovieLists = await db
-      .select({
-        id: movieList.id,
-        title: movieList.title,
-        createdAt: movieList.createdAt,
-        movieCount: count(listMovie.id).as("movie_count"),
-        user: { name: user.name, image: user.image },
-      })
-      .from(movieList)
-      .where(whereClause)
-      .leftJoin(listMovie, eq(movieList.id, listMovie.listId))
-      .innerJoin(user, eq(movieList.userId, user.id))
-      .groupBy(movieList.id, user.id)
-      .orderBy(getMovieListOrderBy(sort))
-      .limit(pageSize)
-      .offset(offset ?? 0);
-
-    const [{ totalCount }] = await db
-      .select({ totalCount: count() })
-      .from(movieList)
-      .where(whereClause);
+    const [allMovieLists, [{ totalCount }]] = await Promise.all([
+      db
+        .select({
+          id: movieList.id,
+          title: movieList.title,
+          createdAt: movieList.createdAt,
+          movieCount: count(listMovie.id).as("movie_count"),
+          user: { name: user.name, image: user.image },
+        })
+        .from(movieList)
+        .where(whereClause)
+        .leftJoin(listMovie, eq(movieList.id, listMovie.listId))
+        .innerJoin(user, eq(movieList.userId, user.id))
+        .groupBy(movieList.id, user.id)
+        .orderBy(getMovieListOrderBy(sort))
+        .limit(pageSize)
+        .offset(offset ?? 0),
+      db.select({ totalCount: count() }).from(movieList).where(whereClause),
+    ]);
 
     return { success: true, data: allMovieLists, totalCount };
   } catch (e) {
@@ -149,9 +150,11 @@ export const getUserMovieLists = async (
   userId: User["id"],
   search?: string,
   sort?: string,
-  includePrivate = false,
 ) => {
   try {
+    const session = await getSession();
+    const includePrivate = session?.user.id === userId;
+
     const whereClause = and(
       eq(movieList.userId, userId),
       includePrivate ? undefined : eq(movieList.private, false),
@@ -199,6 +202,13 @@ export const getMovieListById = async (
 
     if (!list) {
       return { success: true, data: undefined };
+    }
+
+    if (list.private) {
+      const session = await getSession();
+      if (session?.user.id !== list.user.id) {
+        return { success: true, data: undefined };
+      }
     }
 
     const whereClause = search
