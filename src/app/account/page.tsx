@@ -1,13 +1,19 @@
-import { CalendarDaysIcon } from "@heroicons/react/20/solid";
+import { CalendarDaysIcon, KeyIcon } from "@heroicons/react/16/solid";
 import { redirect } from "next/navigation";
 
 import { getSession } from "@/actions/auth";
+import { getUserProvider } from "@/actions/user";
 import { Avatar } from "@/components/ui/Avatar";
 import { Card } from "@/components/ui/Card";
 import { Typography } from "@/components/ui/Typography";
 import { formatDate } from "@/utils/formatDate";
 import { formatUserId } from "@/utils/formatUserId";
 import { OptionsDropdown } from "./OptionsDropdown";
+
+const PROVIDER_LABELS = {
+  credential: "Email & Password",
+  github: "GitHub",
+} as const;
 
 const Account = async () => {
   const session = await getSession();
@@ -17,6 +23,11 @@ const Account = async () => {
   }
 
   const { user } = session;
+  const { data: providerId } = await getUserProvider();
+
+  const provider = providerId
+    ? PROVIDER_LABELS[providerId as keyof typeof PROVIDER_LABELS]
+    : null;
 
   return (
     <>
@@ -30,19 +41,19 @@ const Account = async () => {
           <div className="flex w-full flex-col gap-0.5 text-center sm:text-left">
             <div className="flex justify-center gap-1.5 sm:justify-start">
               <Typography.Large>{user.name}</Typography.Large>
-              <Typography.Large muted className="font-normal">
+              <Typography.Body muted className="font-normal">
                 {formatUserId(user.id)}
-              </Typography.Large>
+              </Typography.Body>
             </div>
             <Typography.Small muted className="truncate whitespace-nowrap">
               {user.email}
             </Typography.Small>
           </div>
         </div>
-        <div className="mt-6 flex flex-col gap-1">
+        <div className="mt-6 flex flex-col gap-1.25">
           <Typography.Small
             muted
-            className="flex items-center gap-1 self-center sm:self-start"
+            className="flex items-center gap-1.25 self-center sm:self-start"
           >
             <CalendarDaysIcon className="size-4" />
             <span className="font-medium">Joined: </span>
@@ -50,11 +61,11 @@ const Account = async () => {
           </Typography.Small>
           <Typography.Small
             muted
-            className="flex items-center gap-1 self-center sm:self-start"
+            className="flex items-center gap-1.25 self-center sm:self-start"
           >
-            <CalendarDaysIcon className="size-4" />
-            <span className="font-medium">Updated: </span>
-            {formatDate(user.updatedAt)}
+            <KeyIcon className="size-4" />
+            <span className="font-medium">Sign-in method: </span>
+            {provider}
           </Typography.Small>
         </div>
       </Card>
