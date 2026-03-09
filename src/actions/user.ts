@@ -1,10 +1,10 @@
 "use server";
 
-import { eq } from "drizzle-orm";
+import { and, count, eq, gt } from "drizzle-orm";
 
 import { getSession } from "@/actions/auth";
 import { db } from "@/lib/db";
-import { account, user } from "@/lib/db/schema";
+import { account, movieList, user, userMovie } from "@/lib/db/schema";
 
 export const getUserProvider = async () => {
   const session = await getSession();
@@ -19,6 +19,34 @@ export const getUserProvider = async () => {
     });
 
     return { success: true, data: userAccount?.providerId };
+  } catch (e) {
+    console.error(e);
+    return { success: false, message: "Something went wrong" };
+  }
+};
+
+export const getUserStats = async (userId: string) => {
+  try {
+    const [[{ totalMovies }], [{ listCount }], [{ totalRatings }]] =
+      await Promise.all([
+        db
+          .select({ totalMovies: count(userMovie.id) })
+          .from(userMovie)
+          .where(eq(userMovie.userId, userId)),
+        db
+          .select({ listCount: count(movieList.id) })
+          .from(movieList)
+          .where(eq(movieList.userId, userId)),
+        db
+          .select({ totalRatings: count(userMovie.id) })
+          .from(userMovie)
+          .where(and(eq(userMovie.userId, userId), gt(userMovie.rating, 0))),
+      ]);
+
+    return {
+      success: true,
+      data: { totalMovies, listCount, totalRatings },
+    };
   } catch (e) {
     console.error(e);
     return { success: false, message: "Something went wrong" };

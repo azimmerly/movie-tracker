@@ -1,7 +1,8 @@
 import { CalendarDaysIcon } from "@heroicons/react/20/solid";
 import { notFound } from "next/navigation";
 
-import { getUserById } from "@/actions/user";
+import { getUserById, getUserStats } from "@/actions/user";
+import { DashboardStats } from "@/components/DashboardStats";
 import { DashboardTabs } from "@/components/DashboardTabs";
 import { Avatar } from "@/components/ui/Avatar";
 import { Typography } from "@/components/ui/Typography";
@@ -16,7 +17,10 @@ const UserLayout = async ({
   params: Promise<{ id: string }>;
 }) => {
   const { id } = await params;
-  const { data: user, success } = await getUserById(id);
+  const [{ data: user, success }, { data: stats }] = await Promise.all([
+    getUserById(id),
+    getUserStats(id),
+  ]);
 
   if (!user || !success) {
     notFound();
@@ -24,22 +28,23 @@ const UserLayout = async ({
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 sm:gap-2.5">
         <div className="flex items-center gap-2">
-          <Avatar userImage={user.image} className="size-9" />
-          <div className="flex items-baseline gap-1.5">
+          <Avatar userImage={user.image} className="size-7.5 sm:size-9" />
+          <div className="flex items-end gap-1.5">
             <Typography.H2>{user.name}</Typography.H2>
-            <Typography.H3 muted className="font-light">
+            <Typography.Large muted className="font-light sm:text-[19px]">
               {formatUserId(user.id)}
-            </Typography.H3>
+            </Typography.Large>
           </div>
         </div>
         <Typography.Small className="flex items-center gap-1" muted>
-          <CalendarDaysIcon className="size-4.5" />
-          <span className="font-medium">Joined: </span>
-          {formatDate(user.createdAt)}
+          <CalendarDaysIcon className="size-4" />
+          Joined {formatDate(user.createdAt)}
         </Typography.Small>
       </div>
+      {stats && <DashboardStats stats={stats} />}
+      <hr className="border-mist-200 sm:mt-1 dark:border-mist-700" />
       <DashboardTabs basePath={`/user/${id}`} />
       {children}
     </div>
