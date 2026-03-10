@@ -44,7 +44,7 @@ const UserLayout = async ({
         </Typography.Small>
       </div>
       {stats && <DashboardStats stats={stats} />}
-      <hr className="border-mist-200 sm:mt-1 dark:border-mist-700" />
+      <hr className="border-mist-200 dark:border-mist-700" />
       <DashboardTabs basePath={`/user/${id}`} />
       {children}
     </div>

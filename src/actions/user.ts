@@ -1,6 +1,6 @@
 "use server";
 
-import { and, count, eq, gt } from "drizzle-orm";
+import { count, eq, sql } from "drizzle-orm";
 
 import { getSession } from "@/actions/auth";
 import { db } from "@/lib/db";
@@ -27,25 +27,31 @@ export const getUserProvider = async () => {
 
 export const getUserStats = async (userId: string) => {
   try {
-    const [[{ totalMovies }], [{ listCount }], [{ totalRatings }]] =
+    const [[{ totalMovies, totalRatings, totalFavorites }], [{ totalLists }]] =
       await Promise.all([
         db
-          .select({ totalMovies: count(userMovie.id) })
+          .select({
+            totalMovies: count(userMovie.id),
+            totalRatings:
+              sql<number>`count(case when ${userMovie.rating} > 0 then 1 end)`.mapWith(
+                Number,
+              ),
+            totalFavorites:
+              sql<number>`count(case when ${userMovie.favorite} = true then 1 end)`.mapWith(
+                Number,
+              ),
+          })
           .from(userMovie)
           .where(eq(userMovie.userId, userId)),
         db
-          .select({ listCount: count(movieList.id) })
+          .select({ totalLists: count(movieList.id) })
           .from(movieList)
           .where(eq(movieList.userId, userId)),
-        db
-          .select({ totalRatings: count(userMovie.id) })
-          .from(userMovie)
-          .where(and(eq(userMovie.userId, userId), gt(userMovie.rating, 0))),
       ]);
 
     return {
       success: true,
-      data: { totalMovies, listCount, totalRatings },
+      data: { totalMovies, totalLists, totalRatings, totalFavorites },
     };
   } catch (e) {
     console.error(e);

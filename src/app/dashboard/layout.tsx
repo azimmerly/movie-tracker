@@ -19,7 +19,7 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
     <div className="flex flex-col gap-8">
       <Typography.H1>My Dashboard</Typography.H1>
       {stats && <DashboardStats stats={stats} />}
-      <hr className="border-mist-200 sm:mt-1 dark:border-mist-700" />
+      <hr className="border-mist-200 dark:border-mist-700" />
       <DashboardTabs basePath="/dashboard" />
       {children}
     </div>
