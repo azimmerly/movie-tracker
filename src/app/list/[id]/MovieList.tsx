@@ -5,8 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
-import { MovieActions } from "@/components/MovieActions";
-import { MovieSortSelect } from "@/components/MovieSortSelect";
+import { MovieActions } from "@/components/movies/MovieActions";
+import { MovieSortSelect } from "@/components/movies/MovieSortSelect";
 import { NothingFound } from "@/components/NothingFound";
 import { SearchParamInput } from "@/components/SearchParamInput";
 import { SearchResultMessage } from "@/components/SearchResultMessage";

@@ -2,7 +2,7 @@ import { CalendarDaysIcon } from "@heroicons/react/16/solid";
 import Image from "next/image";
 import Link from "next/link";
 
-import { MovieActions } from "@/components/MovieActions";
+import { MovieActions } from "@/components/movies/MovieActions";
 import { NothingFound } from "@/components/NothingFound";
 import { Chip } from "@/components/ui/Chip";
 import { Typography } from "@/components/ui/Typography";

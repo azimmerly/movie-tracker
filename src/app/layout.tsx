@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
-import { Footer } from "@/components/Footer";
-import { NavServer } from "@/components/NavServer";
-import { Providers } from "@/components/Providers";
+import { Footer } from "@/components/layout/Footer";
+import { NavServer } from "@/components/layout/NavServer";
+import { Providers } from "@/components/layout/Providers";
 import { APP_NAME } from "@/consts";
 import { interFont } from "@/fonts";
 import "./globals.css";

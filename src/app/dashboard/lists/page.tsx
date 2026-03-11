@@ -2,10 +2,10 @@ import { redirect } from "next/navigation";
 
 import { getSession } from "@/actions/auth";
 import { getUserMovieLists } from "@/actions/list";
-import { AddListDialog } from "@/components/AddListDialog";
 import { ErrorMessage } from "@/components/ErrorMessage";
-import { ListCard } from "@/components/ListCard";
-import { ListSortSelect } from "@/components/ListSortSelect";
+import { AddListDialog } from "@/components/lists/AddListDialog";
+import { ListCard } from "@/components/lists/ListCard";
+import { ListSortSelect } from "@/components/lists/ListSortSelect";
 import { NothingFound } from "@/components/NothingFound";
 import { SearchParamInput } from "@/components/SearchParamInput";
 import { SearchResultMessage } from "@/components/SearchResultMessage";

@@ -1,9 +1,9 @@
 import { getSession } from "@/actions/auth";
 import { getAllMovieLists } from "@/actions/list";
-import { AddListDialog } from "@/components/AddListDialog";
 import { ErrorMessage } from "@/components/ErrorMessage";
-import { ListCard } from "@/components/ListCard";
-import { ListSortSelect } from "@/components/ListSortSelect";
+import { AddListDialog } from "@/components/lists/AddListDialog";
+import { ListCard } from "@/components/lists/ListCard";
+import { ListSortSelect } from "@/components/lists/ListSortSelect";
 import { NothingFound } from "@/components/NothingFound";
 import { Pagination } from "@/components/Pagination";
 import { SearchParamInput } from "@/components/SearchParamInput";

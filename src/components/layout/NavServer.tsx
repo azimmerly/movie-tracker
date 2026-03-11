@@ -1,5 +1,5 @@
 import { getSession } from "@/actions/auth";
-import { NavClient } from "@/components/NavClient";
+import { NavClient } from "@/components/layout/NavClient";
 
 export const NavServer = async () => {
   const session = await getSession();

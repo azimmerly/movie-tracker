@@ -4,10 +4,10 @@ import { redirect } from "next/navigation";
 import { getSession } from "@/actions/auth";
 import { getUserMovies } from "@/actions/movie";
 import { ErrorMessage } from "@/components/ErrorMessage";
-import { MovieSortSelect } from "@/components/MovieSortSelect";
+import { AllUserMovies } from "@/components/movies/AllUserMovies";
+import { MovieSortSelect } from "@/components/movies/MovieSortSelect";
 import { SearchParamInput } from "@/components/SearchParamInput";
 import { SearchResultMessage } from "@/components/SearchResultMessage";
-import { AllUserMovies } from "@/components/AllUserMovies";
 import { Typography } from "@/components/ui/Typography";
 
 type MyMoviesProps = {

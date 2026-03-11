@@ -26,7 +26,7 @@ import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 
 import logoImage from "@/assets/logo.png";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
 import { DropdownMenu } from "@/components/ui/DropdownMenu";
