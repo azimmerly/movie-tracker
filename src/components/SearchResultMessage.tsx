@@ -18,10 +18,6 @@ export const SearchResultMessage = ({
 }: SearchResultMessageProps) => {
   const { clearQueryParam } = useQueryString();
 
-  const handleClick = () => {
-    clearQueryParam("search");
-  };
-
   return (
     <div
       className={twMerge(
@@ -37,7 +33,7 @@ export const SearchResultMessage = ({
         variant="secondary"
         className="text-mist-600 dark:text-mist-200"
         icon={XCircleIcon}
-        onClick={handleClick}
+        onClick={() => clearQueryParam("search")}
       >
         Clear
       </Button>

@@ -35,25 +35,13 @@ export const ListCard = ({
         </Typography.Large>
         <div className="flex shrink-0 gap-1">
           {isPrivate && (
-            <Chip
-              variant="secondary"
-              text={
-                <span className="flex items-center gap-1">
-                  <EyeSlashIcon className="size-3.5" />
-                  Private
-                </span>
-              }
-            />
+            <Chip variant="secondary" icon={EyeSlashIcon} text="Private" />
           )}
           <Chip
             variant="primary"
-            text={
-              <span className="flex items-center gap-1">
-                <FilmIcon className="size-3.5" />
-                {movieCount} {movieCount === 1 ? "movie" : "movies"}
-              </span>
-            }
-            className="font-medium whitespace-nowrap"
+            icon={FilmIcon}
+            text={`${movieCount} ${movieCount === 1 ? "movie" : "movies"}`}
+            className="whitespace-nowrap"
           />
         </div>
       </div>

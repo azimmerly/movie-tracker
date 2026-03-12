@@ -61,13 +61,9 @@ export const SearchMovie = ({
           {isAdded ? (
             <Chip
               variant="success"
+              icon={CheckCircleIcon}
               className="pointer-events-none mt-1.5 px-2 py-1.25"
-              text={
-                <span className="flex items-center gap-1">
-                  <CheckCircleIcon className="size-3.25" />
-                  Added to list
-                </span>
-              }
+              text="Added to list"
             />
           ) : (
             <Button

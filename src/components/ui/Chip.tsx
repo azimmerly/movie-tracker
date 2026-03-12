@@ -19,7 +19,7 @@ const chipVariants = tv({
 });
 
 type ChipProps = VariantProps<typeof chipVariants> & {
-  text: React.ReactNode;
+  text: string;
   icon?: React.ElementType;
   className?: ClassNameValue;
 };
@@ -27,7 +27,7 @@ type ChipProps = VariantProps<typeof chipVariants> & {
 export const Chip = ({ text, icon: Icon, variant, className }: ChipProps) => {
   return (
     <Typography.Tiny className={twMerge(chipVariants({ variant }), className)}>
-      {Icon && <Icon className="mr-1 size-3" />}
+      {Icon && <Icon className="mr-1 size-3.5" />}
       {text}
     </Typography.Tiny>
   );

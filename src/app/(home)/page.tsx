@@ -18,15 +18,13 @@ type HomeProps = {
 
 const Home = async ({ searchParams }: HomeProps) => {
   const { search, sort, page = "1" } = await searchParams;
-  const currentPage = parseInt(page);
+  const currentPage = parseInt(page) || 1;
   const offset = LIST_PAGE_SIZE * (currentPage - 1);
 
-  const session = await getSession();
-  const {
-    data: lists,
-    totalCount,
-    success,
-  } = await getAllMovieLists(LIST_PAGE_SIZE, search, sort, offset);
+  const [session, { data: lists, totalCount, success }] = await Promise.all([
+    getSession(),
+    getAllMovieLists(LIST_PAGE_SIZE, search, sort, offset),
+  ]);
 
   if (!success || !lists) {
     return <ErrorMessage />;

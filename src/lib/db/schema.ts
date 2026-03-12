@@ -145,6 +145,7 @@ export const userMovie = pgTable(
   (table) => [
     unique("uq_userMovie_userId_movieId").on(table.userId, table.movieId),
     index("idx_userMovie_movieId_rating").on(table.movieId, table.rating),
+    index("idx_userMovie_userId_createdAt").on(table.userId, table.createdAt),
   ],
 );
 
@@ -167,6 +168,7 @@ export const listMovie = pgTable(
   (table) => [
     unique("uq_listMovie_listId_movieId").on(table.listId, table.movieId),
     index("idx_listMovie_movieId").on(table.movieId),
+    index("idx_listMovie_listId_createdAt").on(table.listId, table.createdAt),
   ],
 );
 
