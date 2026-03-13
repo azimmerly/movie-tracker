@@ -1,17 +1,20 @@
 import { z } from "zod";
 
+const listIdSchema = z.uuid();
+const movieIdSchema = z.int().positive();
+
 export const addMovieSchema = z.object({
-  listId: z.uuid(),
-  movieId: z.int().positive(),
+  listId: listIdSchema,
+  movieId: movieIdSchema,
 });
 
 export const deleteMovieSchema = z.object({
-  listId: z.uuid(),
-  movieId: z.int().positive(),
+  listId: listIdSchema,
+  movieId: movieIdSchema,
 });
 
 export const updateMovieSchema = z.object({
-  movieId: z.int().positive(),
+  movieId: movieIdSchema,
   rating: z.int().min(0).max(10),
   favorite: z.boolean(),
 });
@@ -45,18 +48,27 @@ export const movieSearchResponseSchema = z
     }));
   });
 
+const MOVIE_STATUSES = [
+  "Rumored",
+  "Planned",
+  "In Production",
+  "Post Production",
+  "Released",
+  "Canceled",
+] as const;
+
+export const PENDING_STATUSES = new Set<string>([
+  "Rumored",
+  "Planned",
+  "In Production",
+  "Post Production",
+] as const satisfies ReadonlyArray<(typeof MOVIE_STATUSES)[number]>);
+
 export const movieDetailsResponseSchema = z
   .object({
     id: z.int().positive(),
     title: z.string(),
-    status: z.enum([
-      "Rumored",
-      "Planned",
-      "In Production",
-      "Post Production",
-      "Released",
-      "Canceled",
-    ]),
+    status: z.enum(MOVIE_STATUSES),
     imdb_id: z.string().nullable(),
     overview: z.string().nullable(),
     tagline: z.string().nullable(),

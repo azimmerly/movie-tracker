@@ -1,5 +1,6 @@
 import { CalendarDaysIcon } from "@heroicons/react/20/solid";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import type { Route } from "next";
 import { notFound } from "next/navigation";
 
 import { getSession } from "@/actions/auth";
@@ -20,8 +21,10 @@ type ListPageProps = {
 const ListPage = async ({ params, searchParams }: ListPageProps) => {
   const { id } = await params;
   const { search, sort } = await searchParams;
-  const session = await getSession();
-  const { data: list, success } = await getMovieListById(id, search, sort);
+  const [session, { data: list, success }] = await Promise.all([
+    getSession(),
+    getMovieListById(id, search, sort),
+  ]);
 
   if (!success) {
     return <ErrorMessage />;
@@ -33,6 +36,7 @@ const ListPage = async ({ params, searchParams }: ListPageProps) => {
 
   const { user, private: isPrivate, title, createdAt, movies } = list;
   const owner = session?.user.id === user.id;
+  const userListsHref = owner ? "/dashboard/lists" : `/user/${user.id}/lists`;
 
   return (
     <div className="flex flex-col">
@@ -47,7 +51,7 @@ const ListPage = async ({ params, searchParams }: ListPageProps) => {
           <Avatar userImage={user.image} className="size-4.5" />
           <Typography.Link
             className="flex gap-1.25 text-base"
-            href={owner ? "/dashboard/lists" : `/user/${user.id}/lists`}
+            href={userListsHref as Route}
           >
             <span>{user.name}</span>
             <span className="font-normal opacity-80">

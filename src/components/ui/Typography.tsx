@@ -1,4 +1,4 @@
-import NextLink, { type LinkProps } from "next/link";
+import NextLink from "next/link";
 import { twMerge } from "tailwind-merge";
 import { tv, type VariantProps } from "tailwind-variants";
 
@@ -113,7 +113,7 @@ const Link = ({
   children,
   className,
   ...props
-}: React.AnchorHTMLAttributes<HTMLAnchorElement> & LinkProps) => (
+}: React.ComponentProps<typeof NextLink>) => (
   <NextLink
     {...props}
     className={twMerge(typographyVariants({ type: "link", className }))}

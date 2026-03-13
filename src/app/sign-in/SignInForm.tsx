@@ -60,7 +60,6 @@ export const SignInForm = () => {
         <Controller
           name="rememberMe"
           control={control}
-          defaultValue={true}
           render={({ field }) => (
             <Checkbox
               label="Remember me"

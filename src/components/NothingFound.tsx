@@ -10,7 +10,6 @@ type NothingFoundProps = {
 export const NothingFound = ({ text }: NothingFoundProps) => (
   <div className="mt-28 text-center sm:mt-40">
     <Image
-      priority
       draggable={false}
       src={ticketImage}
       alt="movie ticket"

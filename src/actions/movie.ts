@@ -14,6 +14,7 @@ import type {
   UpdateMovieData,
 } from "@/types";
 import {
+  PENDING_STATUSES,
   addMovieSchema,
   deleteMovieSchema,
   movieDetailsResponseSchema,
@@ -21,13 +22,6 @@ import {
   movieSearchSchema,
   updateMovieSchema,
 } from "@/utils/validation/movie";
-
-const PENDING_STATUSES = [
-  "Rumored",
-  "Planned",
-  "In Production",
-  "Post Production",
-];
 
 const getUserMoviesOrderBy = (sort?: string) => {
   switch (sort) {
@@ -89,17 +83,6 @@ export const addMovie = async (data: AddMovieData) => {
     }
 
     const newListMovie = await db.transaction(async (tx) => {
-      const existingListMovie = await tx.query.listMovie.findFirst({
-        where: and(
-          eq(listMovie.listId, listId),
-          eq(listMovie.movieId, movieId),
-        ),
-      });
-
-      if (existingListMovie) {
-        throw new Error("Duplicate movie");
-      }
-
       if (fetchedMovieData) {
         await tx.insert(movie).values(fetchedMovieData).onConflictDoNothing();
       }
@@ -107,7 +90,12 @@ export const addMovie = async (data: AddMovieData) => {
       const [inserted] = await tx
         .insert(listMovie)
         .values({ listId, movieId })
+        .onConflictDoNothing()
         .returning({ id: listMovie.id });
+
+      if (!inserted) {
+        throw new Error("Duplicate movie");
+      }
 
       await tx
         .insert(userMovie)
@@ -176,23 +164,30 @@ export const updateMovie = async (data: UpdateMovieData) => {
   try {
     const { movieId, favorite, rating } = updateMovieSchema.parse(data);
 
-    const [updatedUserMovie] = await db
-      .insert(userMovie)
-      .values({ userId: session.user.id, movieId, favorite, rating })
-      .onConflictDoUpdate({
-        target: [userMovie.userId, userMovie.movieId],
-        set: { favorite, rating },
-      })
-      .returning({ id: userMovie.id, movieId: userMovie.movieId });
+    const [[updatedUserMovie], listsWithMovie] = await Promise.all([
+      db
+        .insert(userMovie)
+        .values({ userId: session.user.id, movieId, favorite, rating })
+        .onConflictDoUpdate({
+          target: [userMovie.userId, userMovie.movieId],
+          set: { favorite, rating },
+        })
+        .returning({ id: userMovie.id, movieId: userMovie.movieId }),
+      db
+        .select({ listId: listMovie.listId })
+        .from(listMovie)
+        .innerJoin(movieList, eq(movieList.id, listMovie.listId))
+        .where(
+          and(
+            eq(listMovie.movieId, movieId),
+            eq(movieList.userId, session.user.id),
+          ),
+        ),
+    ]);
 
     if (!updatedUserMovie) {
       throw new Error("Failed to update movie");
     }
-
-    const listsWithMovie = await db
-      .select({ listId: listMovie.listId })
-      .from(listMovie)
-      .where(eq(listMovie.movieId, movieId));
 
     await revalidatePaths([
       `/movie/${movieId}`,
@@ -219,7 +214,7 @@ export const getMovie = async (id: Movie["id"]) => {
     ]);
 
     let movieData = dbMovie;
-    if (movieData && PENDING_STATUSES.includes(movieData.status)) {
+    if (movieData && PENDING_STATUSES.has(movieData.status)) {
       const today = new Date().toISOString().split("T")[0];
 
       if (movieData.releaseDate <= today) {

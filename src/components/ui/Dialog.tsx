@@ -28,13 +28,11 @@ export const Dialog = ({ className, children, ...props }: DialogProps) => (
             className,
           )}
         >
-          <>
-            <CloseButton className="absolute top-4 right-4 hidden cursor-pointer rounded-sm text-mist-400 hover:text-mist-500 focus:ring-2 focus:ring-blue-500 focus:outline-hidden sm:block dark:text-mist-500 dark:hover:text-mist-400">
-              <span className="sr-only">Close</span>
-              <XMarkIcon aria-hidden="true" className="size-5.5" />
-            </CloseButton>
-            {children}
-          </>
+          <CloseButton className="absolute top-4 right-4 hidden cursor-pointer rounded-sm text-mist-400 hover:text-mist-500 focus:ring-2 focus:ring-blue-500 focus:outline-hidden sm:block dark:text-mist-500 dark:hover:text-mist-400">
+            <span className="sr-only">Close</span>
+            <XMarkIcon aria-hidden="true" className="size-5.5" />
+          </CloseButton>
+          {children}
         </DialogPanel>
       </div>
     </div>

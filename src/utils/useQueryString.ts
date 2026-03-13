@@ -1,3 +1,4 @@
+import type { Route } from "next";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export const useQueryString = () => {
@@ -7,7 +8,8 @@ export const useQueryString = () => {
 
   const setUrlWithParams = (params: URLSearchParams) => {
     const queryString = params.toString();
-    router.replace(queryString ? `${pathname}?${queryString}` : pathname);
+    const pathWithQuery = queryString ? `${pathname}?${queryString}` : pathname;
+    router.replace(pathWithQuery as Route);
   };
 
   const setQueryParams = (newParams: Record<string, string | null>) => {

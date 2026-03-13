@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/Button";
 import { Chip } from "@/components/ui/Chip";
 import { Typography } from "@/components/ui/Typography";
 import type { Movie, MovieList, MovieSearchResponseData } from "@/types";
+import { formatDate } from "@/utils/formatDate";
 import { getMovieImage } from "@/utils/getMovieImage";
 
 type SearchMovieProps = {
@@ -40,7 +41,7 @@ export const SearchMovie = ({
   };
 
   return (
-    <li key={movie.id} className="flex justify-between py-2">
+    <li className="flex justify-between py-2">
       <div className="flex gap-3">
         <Image
           width={60}
@@ -56,7 +57,7 @@ export const SearchMovie = ({
           </Typography.Small>
           <Typography.Tiny className="flex items-center gap-0.5" muted>
             <CalendarDaysIcon className="size-3.5" />
-            {new Date(movie.releaseDate).getFullYear()}
+            {formatDate(movie.releaseDate)}
           </Typography.Tiny>
           {isAdded ? (
             <Chip

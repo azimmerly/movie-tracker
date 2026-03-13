@@ -15,7 +15,7 @@ export type SelectOption = { value: string; label: string };
 type SelectProps = {
   label: string;
   icon?: React.ElementType;
-  options: SelectOption[];
+  options: readonly SelectOption[];
   selected: SelectOption;
   setSelected: (selected: SelectOption) => void;
   className?: ClassNameValue;
