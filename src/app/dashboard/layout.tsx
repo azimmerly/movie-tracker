@@ -2,8 +2,8 @@ import { redirect } from "next/navigation";
 
 import { getSession } from "@/actions/auth";
 import { getUserStats } from "@/actions/user";
-import { DashboardStats } from "@/components/DashboardStats";
-import { DashboardTabs } from "@/components/DashboardTabs";
+import { DashboardStats } from "@/components/dashboard/DashboardStats";
+import { DashboardTabs } from "@/components/dashboard/DashboardTabs";
 import { Typography } from "@/components/ui/Typography";
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {

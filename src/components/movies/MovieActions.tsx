@@ -17,9 +17,7 @@ import { updateMovieSchema } from "@/utils/validation/movie";
 type MovieActionsProps = {
   owner: boolean;
   movieId: Movie["id"];
-  rating: UserMovie["rating"];
-  favorite: UserMovie["favorite"];
-};
+} & Pick<UserMovie, "rating" | "favorite">;
 
 export const MovieActions = ({
   owner,

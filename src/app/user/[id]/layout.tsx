@@ -2,8 +2,8 @@ import { CalendarDaysIcon } from "@heroicons/react/20/solid";
 import { notFound } from "next/navigation";
 
 import { getUserById, getUserStats } from "@/actions/user";
-import { DashboardStats } from "@/components/DashboardStats";
-import { DashboardTabs } from "@/components/DashboardTabs";
+import { DashboardStats } from "@/components/dashboard/DashboardStats";
+import { DashboardTabs } from "@/components/dashboard/DashboardTabs";
 import { Avatar } from "@/components/ui/Avatar";
 import { Typography } from "@/components/ui/Typography";
 import { formatDate } from "@/utils/formatDate";

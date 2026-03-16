@@ -1,6 +1,6 @@
 "use server";
 
-import { and, asc, avg, desc, eq, exists, gt, ilike } from "drizzle-orm";
+import { and, asc, avg, desc, eq, exists, gt, ilike, sql } from "drizzle-orm";
 
 import { getSession } from "@/actions/auth";
 import { movieDbFetch, revalidatePaths } from "@/actions/utils";
@@ -254,20 +254,52 @@ export const getUserMovies = async (
   sort?: string,
 ) => {
   try {
+    const session = await getSession();
+    const includePrivate = session?.user.id === userId;
+
     const whereClause = and(
       eq(userMovie.userId, userId),
       search ? ilike(movie.title, `%${search}%`) : undefined,
     );
+
+    const userListMovies = db
+      .select({
+        movieId: listMovie.movieId,
+        listId: movieList.id,
+        listTitle: movieList.title,
+        createdAt: listMovie.createdAt,
+      })
+      .from(listMovie)
+      .innerJoin(
+        movieList,
+        and(
+          eq(movieList.id, listMovie.listId),
+          eq(movieList.userId, userId),
+          includePrivate ? undefined : eq(movieList.private, false),
+        ),
+      )
+      .as("userListMovies");
 
     const movies = await db
       .select({
         rating: userMovie.rating,
         favorite: userMovie.favorite,
         movie: movie,
+        lists: sql<{ id: string; title: string }[]>`
+          coalesce(
+            json_agg(
+              json_build_object('id', ${userListMovies.listId}, 'title', ${userListMovies.listTitle})
+              order by ${userListMovies.createdAt} asc
+            ) filter (where ${userListMovies.listId} is not null),
+            '[]'::json
+          )
+        `.as("lists"),
       })
       .from(userMovie)
       .innerJoin(movie, eq(movie.id, userMovie.movieId))
+      .leftJoin(userListMovies, eq(userListMovies.movieId, movie.id))
       .where(whereClause)
+      .groupBy(userMovie.id, movie.id)
       .orderBy(getUserMoviesOrderBy(sort));
 
     return { success: true, data: movies };

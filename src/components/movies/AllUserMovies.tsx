@@ -1,21 +1,23 @@
-import { CalendarDaysIcon } from "@heroicons/react/16/solid";
+import { CalendarDaysIcon, ListBulletIcon } from "@heroicons/react/16/solid";
 import Image from "next/image";
 import Link from "next/link";
 
 import { MovieActions } from "@/components/movies/MovieActions";
+import { MovieListsDialog } from "@/components/movies/MovieListsDialog";
 import { NothingFound } from "@/components/NothingFound";
 import { Chip } from "@/components/ui/Chip";
 import { Typography } from "@/components/ui/Typography";
-import type { Movie, UserMovie } from "@/types";
+import type { Movie, MovieList, UserMovie } from "@/types";
 import { formatDate } from "@/utils/formatDate";
 import { getMovieImage } from "@/utils/getMovieImage";
 
+const MAX_VISIBLE_LISTS = 2;
+
 type AllUserMoviesProps = {
-  movies: {
-    rating: UserMovie["rating"];
-    favorite: UserMovie["favorite"];
+  movies: ({
     movie: Movie;
-  }[];
+    lists: Pick<MovieList, "id" | "title">[];
+  } & Pick<UserMovie, "rating" | "favorite">)[];
   owner: boolean;
   emptyText: string;
 };
@@ -31,7 +33,7 @@ export const AllUserMovies = ({
 
   return (
     <ul className="divide-y divide-mist-200 dark:divide-mist-800">
-      {movies.map(({ movie, favorite, rating }, index) => (
+      {movies.map(({ movie, favorite, rating, lists }, index) => (
         <li key={movie.id} className="flex py-3">
           <div className="flex gap-3">
             <Link href={`/movie/${movie.id}`} className="rounded">
@@ -67,6 +69,35 @@ export const AllUserMovies = ({
                   />
                 ))}
               </div>
+              {!!lists.length && (
+                <Typography.Small
+                  muted
+                  className="mt-2 -mb-1 flex flex-wrap items-center gap-x-1 gap-y-0.5"
+                >
+                  <ListBulletIcon className="size-3.5 shrink-0" />
+                  {lists.slice(0, MAX_VISIBLE_LISTS).map((list, i, arr) => (
+                    <span key={list.id} className="flex items-center">
+                      <Link
+                        href={`/list/${list.id}`}
+                        className="max-w-27 truncate hover:underline"
+                      >
+                        {list.title}
+                      </Link>
+                      {(i < arr.length - 1 ||
+                        lists.length > MAX_VISIBLE_LISTS) && (
+                        <span aria-hidden>,</span>
+                      )}
+                    </span>
+                  ))}
+                  {lists.length > MAX_VISIBLE_LISTS && (
+                    <MovieListsDialog
+                      lists={lists}
+                      movieTitle={movie.title}
+                      overflowCount={lists.length - MAX_VISIBLE_LISTS}
+                    />
+                  )}
+                </Typography.Small>
+              )}
               <MovieActions
                 owner={owner}
                 movieId={movie.id}
