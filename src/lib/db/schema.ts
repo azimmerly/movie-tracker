@@ -100,7 +100,7 @@ export const movieList = pgTable(
       .notNull()
       .$onUpdate(() => new Date()),
   },
-  (table) => [index("idx_movieList_userId").on(table.userId)],
+  (table) => [index("idx_movieList_userId_createdAt").on(table.userId, table.createdAt)],
 );
 
 export const movie = pgTable("movie", {
@@ -146,6 +146,7 @@ export const userMovie = pgTable(
     unique("uq_userMovie_userId_movieId").on(table.userId, table.movieId),
     index("idx_userMovie_movieId_rating").on(table.movieId, table.rating),
     index("idx_userMovie_userId_createdAt").on(table.userId, table.createdAt),
+    index("idx_userMovie_userId_rating").on(table.userId, table.rating),
   ],
 );
 
