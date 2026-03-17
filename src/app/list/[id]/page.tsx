@@ -13,6 +13,11 @@ import { formatUserId } from "@/utils/formatUserId";
 import { ListOptions } from "./ListOptions";
 import { MovieList } from "./MovieList";
 
+const visibilityConfig = {
+  private: { icon: EyeSlashIcon, label: "Private list" },
+  public: { icon: EyeIcon, label: "Public list" },
+} as const;
+
 type ListPageProps = {
   params: Promise<{ id: string }>;
   searchParams: Promise<{ search?: string; sort?: string }>;
@@ -34,17 +39,29 @@ const ListPage = async ({ params, searchParams }: ListPageProps) => {
     notFound();
   }
 
-  const { user, private: isPrivate, title, createdAt, movies } = list;
+  const { user, title, description, createdAt, movies } = list;
   const owner = session?.user.id === user.id;
   const userListsHref = owner ? "/dashboard/lists" : `/user/${user.id}/lists`;
+  const { icon: VisibilityIcon, label: visibilityLabel } =
+    visibilityConfig[list.private ? "private" : "public"];
 
   return (
     <div className="flex flex-col">
-      <div className="mb-6 flex items-center justify-between">
-        <Typography.H1 className="leading-8 hyphens-auto">
-          {title}
-        </Typography.H1>
-        {owner && <ListOptions id={id} title={title} isPrivate={isPrivate} />}
+      <div className="mb-6 flex items-start justify-between">
+        <div className="flex flex-col gap-4">
+          <Typography.H1 className="leading-8 hyphens-auto">
+            {title}
+          </Typography.H1>
+          {description && (
+            <Typography.Small
+              muted
+              className="max-w-2xl border-l-2 border-mist-300 pl-2 text-pretty italic dark:border-mist-600"
+            >
+              {description}
+            </Typography.Small>
+          )}
+        </div>
+        {owner && <ListOptions list={list} />}
       </div>
       <div className="flex flex-col gap-0.5">
         <Typography.Small className="flex items-center gap-1.75 font-medium">
@@ -64,17 +81,8 @@ const ListPage = async ({ params, searchParams }: ListPageProps) => {
           {formatDate(createdAt)}
         </Typography.Small>
         <Typography.Small className="flex items-center gap-1.5" muted>
-          {isPrivate ? (
-            <>
-              <EyeSlashIcon strokeWidth={2} className="size-4" />
-              Private list
-            </>
-          ) : (
-            <>
-              <EyeIcon strokeWidth={2} className="size-4" />
-              Public list
-            </>
-          )}
+          <VisibilityIcon strokeWidth={2} className="size-4" />
+          {visibilityLabel}
         </Typography.Small>
       </div>
       <MovieList listId={id} movies={movies} owner={owner} />

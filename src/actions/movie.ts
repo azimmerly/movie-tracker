@@ -105,7 +105,15 @@ export const addMovie = async (data: AddMovieData) => {
       return inserted;
     });
 
-    await revalidatePaths(["/", "/dashboard/lists", `/list/${listId}`]);
+    await revalidatePaths([
+      "/",
+      "/dashboard/lists",
+      "/dashboard/movies",
+      `/list/${listId}`,
+      `/user/${session.user.id}/lists`,
+      `/user/${session.user.id}/movies`,
+    ]);
+
     return { success: true, data: newListMovie };
   } catch (e) {
     console.error(e);
@@ -147,7 +155,13 @@ export const deleteMovie = async (data: DeleteMovieData) => {
       throw new Error("List movie not found or unauthorized");
     }
 
-    await revalidatePaths(["/", "/dashboard/lists", `/list/${listId}`]);
+    await revalidatePaths([
+      "/",
+      `/list/${listId}`,
+      "/dashboard/lists",
+      `/user/${session.user.id}/lists`,
+    ]);
+
     return { success: true, data: deletedListMovie };
   } catch (e) {
     console.error(e);
@@ -192,6 +206,7 @@ export const updateMovie = async (data: UpdateMovieData) => {
     await revalidatePaths([
       `/movie/${movieId}`,
       "/dashboard/movies",
+      `/user/${session.user.id}/movies`,
       ...listsWithMovie.map(({ listId }) => `/list/${listId}`),
     ]);
 

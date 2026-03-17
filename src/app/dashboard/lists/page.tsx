@@ -46,7 +46,14 @@ const MyLists = async ({ searchParams }: MyListsProps) => {
 
       <div className="flex flex-col gap-2.5">
         {!!lists?.length ? (
-          lists.map((list) => <ListCard {...list} key={list.id} />)
+          lists.map(({ user, movieCount, ...list }) => (
+            <ListCard
+              list={list}
+              user={user}
+              movieCount={movieCount}
+              key={list.id}
+            />
+          ))
         ) : (
           <NothingFound text="Create a list to get started." />
         )}

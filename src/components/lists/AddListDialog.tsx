@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/Button";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { Dialog } from "@/components/ui/Dialog";
 import { InputField } from "@/components/ui/InputField";
+import { TextareaField } from "@/components/ui/TextareaField";
 import { Typography } from "@/components/ui/Typography";
 import type { AddListData } from "@/types";
 import { addListSchema } from "@/utils/validation/list";
@@ -86,6 +87,13 @@ export const AddListDialog = ({ session }: AddListDialogProps) => {
             {...register("title")}
             errorMessage={formState.errors?.title?.message}
           />
+          <TextareaField
+            id="list-description"
+            label="Description"
+            placeholder="Add an optional short description"
+            {...register("description")}
+            errorMessage={formState.errors?.description?.message}
+          />
           <Controller
             name="private"
             control={control}
@@ -94,7 +102,7 @@ export const AddListDialog = ({ session }: AddListDialogProps) => {
                 label="Private (only visible to you)"
                 checked={field.value}
                 onChange={field.onChange}
-                className="mt-1 text-mist-600 dark:text-mist-300"
+                className="mt-0.5 text-mist-700 dark:text-mist-200"
               />
             )}
           />

@@ -14,25 +14,29 @@ import type { MovieList } from "@/types";
 import { formatDate } from "@/utils/formatDate";
 
 type ListCardProps = {
+  list: Omit<MovieList, "userId" | "updatedAt">;
   user: Pick<User, "name" | "image">;
   movieCount: number;
-  private?: MovieList["private"];
-} & Pick<MovieList, "id" | "title" | "createdAt">;
+};
 
 export const ListCard = ({
-  id,
-  title,
-  createdAt,
+  list: { id, title, description, createdAt, private: isPrivate },
   user,
   movieCount,
-  private: isPrivate,
 }: ListCardProps) => (
   <Link href={`/list/${id}`}>
     <Card className="transition-transform ease-out will-change-transform backface-hidden hover:-translate-y-px hover:scale-[1.005] hover:shadow-md">
       <div className="xs:flex-row xs:items-start xs:justify-between mb-3 flex flex-col gap-2">
-        <Typography.Large className="leading-5 font-bold">
-          {title}
-        </Typography.Large>
+        <div className="flex min-w-0 flex-col gap-1.5">
+          <Typography.Large className="leading-5 font-bold">
+            {title}
+          </Typography.Large>
+          {description && (
+            <Typography.Tiny muted className="truncate italic">
+              {description}
+            </Typography.Tiny>
+          )}
+        </div>
         <div className="flex shrink-0 gap-1">
           {isPrivate && (
             <Chip variant="secondary" icon={EyeSlashIcon} text="Private" />

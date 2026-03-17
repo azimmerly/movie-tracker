@@ -50,7 +50,13 @@ export const addMovieList = async (data: AddListData) => {
       .insert(movieList)
       .values({ ...validated, userId: session.user.id })
       .returning({ id: movieList.id });
-    await revalidatePaths(["/", "/dashboard/lists"]);
+
+    await revalidatePaths([
+      "/",
+      "/dashboard/lists",
+      `/user/${session.user.id}/lists`,
+    ]);
+
     return { success: true, data: newList };
   } catch (e) {
     console.error(e);
@@ -75,7 +81,14 @@ export const updateMovieList = async (data: UpdateListData) => {
     if (!updatedList) {
       throw new Error("Movie list not found or unauthorized");
     }
-    await revalidatePaths([`/list/${id}`]);
+
+    await revalidatePaths([
+      "/",
+      `/list/${id}`,
+      "/dashboard/lists",
+      `/user/${session.user.id}/lists`,
+    ]);
+
     return { success: true, data: updatedList };
   } catch (e) {
     console.error(e);
@@ -99,7 +112,12 @@ export const deleteMovieList = async (id: MovieList["id"]) => {
       throw new Error("Movie list not found or unauthorized");
     }
 
-    await revalidatePaths(["/", "/dashboard/lists"]);
+    await revalidatePaths([
+      "/",
+      "/dashboard/lists",
+      `/user/${session.user.id}/lists`,
+    ]);
+
     return { success: true, data: deletedList };
   } catch (e) {
     console.error(e);
@@ -124,7 +142,9 @@ export const getAllMovieLists = async (
         .select({
           id: movieList.id,
           title: movieList.title,
+          description: movieList.description,
           createdAt: movieList.createdAt,
+          private: movieList.private,
           movieCount: count(listMovie.id).as("movie_count"),
           user: { name: user.name, image: user.image },
         })
@@ -165,6 +185,7 @@ export const getUserMovieLists = async (
       .select({
         id: movieList.id,
         title: movieList.title,
+        description: movieList.description,
         createdAt: movieList.createdAt,
         private: movieList.private,
         movieCount: count(listMovie.id).as("movie_count"),
@@ -192,7 +213,13 @@ export const getMovieListById = async (
   try {
     const list = await db.query.movieList.findFirst({
       where: eq(movieList.id, id),
-      columns: { id: true, title: true, createdAt: true, private: true },
+      columns: {
+        id: true,
+        title: true,
+        description: true,
+        createdAt: true,
+        private: true,
+      },
       with: {
         user: {
           columns: { id: true, name: true, image: true },

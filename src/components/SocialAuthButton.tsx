@@ -15,7 +15,7 @@ const AUTH_PROVIDERS = {
 } as const;
 
 type SocialAuthButtonProps = {
-  provider: "github";
+  provider: keyof typeof AUTH_PROVIDERS;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const SocialAuthButton = ({

@@ -7,7 +7,9 @@ const envSchema = z.object({
   GITHUB_CLIENT_SECRET: z.string(),
   DATABASE_URL: z.url().startsWith("postgresql://"),
   MOVIEDB_API_KEY: z.string(),
-  NODE_ENV: z.enum(["development", "production", "test"]),
+  NODE_ENV: z
+    .enum(["development", "production", "test"])
+    .default("development"),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);

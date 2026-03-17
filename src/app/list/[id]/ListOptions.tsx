@@ -16,18 +16,17 @@ import { DeleteListDialog } from "./DeleteListDialog";
 import { UpdateListDialog } from "./UpdateListDialog";
 
 type ListOptionsProps = {
-  id: MovieList["id"];
-  title: MovieList["title"];
-  isPrivate: MovieList["private"];
+  list: Pick<MovieList, "id" | "title" | "description" | "private">;
 };
 
-export const ListOptions = ({ id, title, isPrivate }: ListOptionsProps) => {
+export const ListOptions = ({ list }: ListOptionsProps) => {
+  const { id, private: isPrivate } = list;
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
 
   const menuOptions = [
     {
-      label: "Update title",
+      label: "Edit list",
       icon: PencilSquareIcon,
       onClick: () => setIsUpdateDialogOpen(true),
     },
@@ -54,15 +53,14 @@ export const ListOptions = ({ id, title, isPrivate }: ListOptionsProps) => {
   ] as const;
 
   return (
-    <div className="pl-6">
+    <div className="shrink-0 pl-6">
       <DropdownMenu
         buttonText="List options"
         options={menuOptions}
         ellipsisOnMobile
       />
       <UpdateListDialog
-        id={id}
-        title={title}
+        list={list}
         open={isUpdateDialogOpen}
         onClose={() => setIsUpdateDialogOpen(false)}
       />
