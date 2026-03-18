@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 import { Footer } from "@/components/layout/Footer";
 import { NavServer } from "@/components/layout/NavServer";
@@ -20,7 +21,9 @@ const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => (
     <body className="bg-offwhite text-mist-900 dark:bg-mist-950 dark:text-white">
       <div className="flex min-h-screen flex-col items-center antialiased">
         <Providers>
-          <NavServer />
+          <Suspense fallback={<header className="h-20 w-screen" />}>
+            <NavServer />
+          </Suspense>
           <main className="flex w-screen max-w-6xl grow flex-col px-3.5 py-8 sm:px-6 sm:py-16">
             {children}
           </main>

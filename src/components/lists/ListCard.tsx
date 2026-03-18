@@ -32,7 +32,7 @@ export const ListCard = ({
             {title}
           </Typography.Large>
           {description && (
-            <Typography.Tiny muted className="truncate italic">
+            <Typography.Tiny muted className="truncate pe-1 italic">
               {description}
             </Typography.Tiny>
           )}

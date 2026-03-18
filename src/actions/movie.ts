@@ -1,8 +1,10 @@
 "use server";
 
 import { and, asc, avg, desc, eq, exists, gt, ilike, sql } from "drizzle-orm";
+import { revalidateTag } from "next/cache";
 
 import { getSession } from "@/actions/auth";
+import { getCachedMovieData } from "@/actions/movie.cache";
 import { movieDbFetch, revalidatePaths } from "@/actions/utils";
 import { db } from "@/lib/db";
 import { listMovie, movie, movieList, userMovie } from "@/lib/db/schema";
@@ -204,7 +206,6 @@ export const updateMovie = async (data: UpdateMovieData) => {
     }
 
     await revalidatePaths([
-      `/movie/${movieId}`,
       "/dashboard/movies",
       `/user/${session.user.id}/movies`,
       ...listsWithMovie.map(({ listId }) => `/list/${listId}`),
@@ -220,7 +221,7 @@ export const updateMovie = async (data: UpdateMovieData) => {
 export const getMovie = async (id: Movie["id"]) => {
   try {
     const [dbMovie, avgRating] = await Promise.all([
-      db.query.movie.findFirst({ where: eq(movie.id, id) }),
+      getCachedMovieData(id),
       db
         .select({ avg: avg(userMovie.rating) })
         .from(userMovie)
@@ -246,6 +247,7 @@ export const getMovie = async (id: Movie["id"]) => {
             .where(eq(movie.id, id))
             .returning()
             .then(([data]) => data);
+          revalidateTag(`movie-${id}`, "max");
         }
       }
     }
