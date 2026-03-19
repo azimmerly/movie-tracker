@@ -50,7 +50,10 @@ export const AddMovieDialog = ({
   };
 
   const { register, reset, handleSubmit, formState } = useForm<MovieSearchData>(
-    { resolver: zodResolver(movieSearchSchema) },
+    {
+      resolver: zodResolver(movieSearchSchema),
+      mode: "onChange",
+    },
   );
 
   const handleSearchMovie = async (formData: MovieSearchData) => {
@@ -112,7 +115,7 @@ export const AddMovieDialog = ({
               variant="primary"
               className="w-full sm:w-fit"
               icon={MagnifyingGlassIcon}
-              disabled={formState.isSubmitting || !formState.isDirty}
+              disabled={formState.isSubmitting || !formState.isValid}
               busy={formState.isSubmitting}
             >
               Search

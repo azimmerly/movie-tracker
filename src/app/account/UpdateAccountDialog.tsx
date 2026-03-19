@@ -28,6 +28,7 @@ export const UpdateAccountDialog = ({
   const { register, reset, handleSubmit, formState } = useForm<UpdateUserData>({
     defaultValues: { name },
     resolver: zodResolver(updateUserSchema),
+    mode: "onChange",
   });
 
   const handleUpdateAccount = async (formData: UpdateUserData) => {
@@ -86,7 +87,9 @@ export const UpdateAccountDialog = ({
             variant="primary"
             className="w-full sm:w-fit"
             icon={CheckCircleIcon}
-            disabled={formState.isSubmitting || !formState.isDirty}
+            disabled={
+              formState.isSubmitting || !formState.isDirty || !formState.isValid
+            }
             busy={formState.isSubmitting}
           >
             Update

@@ -28,6 +28,7 @@ export const AddListDialog = ({ session }: AddListDialogProps) => {
     useForm<AddListData>({
       resolver: zodResolver(addListSchema),
       defaultValues: { private: false },
+      mode: "onChange",
     });
 
   const handleAddList = async (formData: AddListData) => {
@@ -112,7 +113,7 @@ export const AddListDialog = ({ session }: AddListDialogProps) => {
               variant="primary"
               className="w-full sm:w-fit"
               icon={PlusCircleIcon}
-              disabled={formState.isSubmitting || !formState.dirtyFields.title}
+              disabled={formState.isSubmitting || !formState.isValid}
               busy={formState.isSubmitting}
             >
               Create

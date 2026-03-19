@@ -161,7 +161,9 @@ export const deleteMovie = async (data: DeleteMovieData) => {
       "/",
       `/list/${listId}`,
       "/dashboard/lists",
+      "/dashboard/movies",
       `/user/${session.user.id}/lists`,
+      `/user/${session.user.id}/movies`,
     ]);
 
     return { success: true, data: deletedListMovie };

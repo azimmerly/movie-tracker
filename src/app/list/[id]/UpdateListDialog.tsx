@@ -28,6 +28,7 @@ export const UpdateListDialog = ({
   const { register, reset, handleSubmit, formState } = useForm<UpdateListData>({
     defaultValues: { id, title, description: description ?? undefined },
     resolver: zodResolver(updateListSchema),
+    mode: "onChange",
   });
 
   const handleUpdateList = async (formData: UpdateListData) => {
@@ -87,7 +88,9 @@ export const UpdateListDialog = ({
             variant="primary"
             className="w-full sm:w-fit"
             icon={CheckCircleIcon}
-            disabled={formState.isSubmitting || !formState.isDirty}
+            disabled={
+              formState.isSubmitting || !formState.isDirty || !formState.isValid
+            }
             busy={formState.isSubmitting}
           >
             Update
