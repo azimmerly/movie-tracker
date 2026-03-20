@@ -1,6 +1,8 @@
+"use client";
+
 import { EllipsisVerticalIcon } from "@heroicons/react/16/solid";
 import { InformationCircleIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { redirect, RedirectType } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { deleteMovie } from "@/actions/movie";
@@ -20,13 +22,13 @@ export const MovieOptions = ({
   listId,
   movie,
 }: MovieOptionsProps) => {
+  const router = useRouter();
+
   const menuOptions = [
     {
       label: "Movie details",
       icon: InformationCircleIcon,
-      onClick: () => {
-        redirect(`/movie/${movie.id}`, RedirectType.push);
-      },
+      onClick: () => router.push(`/movie/${movie.id}`),
     },
     {
       hidden: !owner,

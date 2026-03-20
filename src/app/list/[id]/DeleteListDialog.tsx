@@ -1,6 +1,8 @@
+"use client";
+
 import { TrashIcon } from "@heroicons/react/20/solid";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { deleteMovieList } from "@/actions/list";
@@ -19,12 +21,14 @@ export const DeleteListDialog = ({
   open,
   onClose,
 }: DeleteListDialogProps) => {
+  const router = useRouter();
+
   const handleDeleteList = async () => {
     onClose();
     const res = await deleteMovieList(id);
     if (res.success) {
       toast.success("List deleted");
-      redirect("/dashboard/lists");
+      router.push("/dashboard/lists");
     } else {
       toast.error(res.message);
     }

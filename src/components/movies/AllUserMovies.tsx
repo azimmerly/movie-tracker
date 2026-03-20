@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { MovieActions } from "@/components/movies/MovieActions";
 import { MovieListsDialog } from "@/components/movies/MovieListsDialog";
+import { MovieOptions } from "@/components/movies/MovieOptions";
 import { NothingFound } from "@/components/NothingFound";
 import { Chip } from "@/components/ui/Chip";
 import { Typography } from "@/components/ui/Typography";
@@ -34,7 +35,7 @@ export const AllUserMovies = ({
   return (
     <ul className="divide-y divide-mist-200 dark:divide-mist-800">
       {movies.map(({ movie, favorite, rating, lists }, index) => (
-        <li key={movie.id} className="flex py-3">
+        <li key={movie.id} className="flex justify-between py-3">
           <div className="flex gap-3">
             <Link href={`/movie/${movie.id}`} className="rounded">
               <Image
@@ -106,6 +107,7 @@ export const AllUserMovies = ({
               />
             </div>
           </div>
+          <MovieOptions movieId={movie.id} />
         </li>
       ))}
     </ul>

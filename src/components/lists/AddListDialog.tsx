@@ -3,7 +3,7 @@
 import { ListBulletIcon, PlusCircleIcon } from "@heroicons/react/16/solid";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Session } from "better-auth";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -23,6 +23,7 @@ type AddListDialogProps = {
 };
 
 export const AddListDialog = ({ session }: AddListDialogProps) => {
+  const router = useRouter();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { register, reset, handleSubmit, formState, control } =
     useForm<AddListData>({
@@ -36,7 +37,7 @@ export const AddListDialog = ({ session }: AddListDialogProps) => {
     setIsDialogOpen(false);
     if (res.success) {
       toast.success("List created");
-      redirect(`/list/${res.data?.id}`);
+      router.push(`/list/${res.data?.id}`);
     } else {
       toast.error(res.message);
     }
@@ -45,7 +46,7 @@ export const AddListDialog = ({ session }: AddListDialogProps) => {
   const handleClick = () => {
     if (!session) {
       toast.info("Sign in to get started");
-      redirect("/sign-in");
+      router.push("/sign-in");
     }
     setIsDialogOpen(true);
   };
