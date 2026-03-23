@@ -51,7 +51,7 @@ export const AllUserMovies = ({
             <div>
               <span className="flex flex-wrap gap-x-2 gap-y-0.5">
                 <Link href={`/movie/${movie.id}`}>
-                  <Typography.Body className="text-sm font-semibold sm:text-base">
+                  <Typography.Body className="text-sm font-semibold hover:underline sm:text-base">
                     {movie.title}
                   </Typography.Body>
                 </Link>

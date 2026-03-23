@@ -2,7 +2,7 @@
 
 import { EllipsisVerticalIcon } from "@heroicons/react/16/solid";
 import { InformationCircleIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { deleteMovie } from "@/actions/movie";
@@ -23,6 +23,7 @@ export const MovieOptions = ({
   movie,
 }: MovieOptionsProps) => {
   const router = useRouter();
+  const pathname = usePathname();
 
   const menuOptions = [
     {
@@ -47,6 +48,7 @@ export const MovieOptions = ({
 
   return (
     <DropdownMenu
+      key={pathname}
       options={menuOptions}
       iconButton={
         <EllipsisVerticalIcon className="size-5 text-mist-400 hover:text-mist-500 dark:text-mist-500 dark:hover:text-mist-400" />

@@ -150,6 +150,7 @@ export const NavClient = ({ user }: NavClientProps) => {
               </div>
             ) : (
               <DropdownMenu
+                key={pathname}
                 iconButton={
                   <Avatar userImage={user.image} className="size-9" />
                 }
