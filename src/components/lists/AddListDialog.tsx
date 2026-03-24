@@ -47,6 +47,7 @@ export const AddListDialog = ({ session }: AddListDialogProps) => {
     if (!session) {
       toast.info("Sign in to get started");
       router.push("/sign-in");
+      return;
     }
     setIsDialogOpen(true);
   };
