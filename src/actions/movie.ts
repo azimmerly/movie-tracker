@@ -222,16 +222,8 @@ export const updateMovie = async (data: UpdateMovieData) => {
 
 export const getMovie = async (id: Movie["id"]) => {
   try {
-    const [dbMovie, avgRating] = await Promise.all([
-      getCachedMovieData(id),
-      db
-        .select({ avg: avg(userMovie.rating) })
-        .from(userMovie)
-        .where(and(eq(userMovie.movieId, id), gt(userMovie.rating, 0)))
-        .then(([row]) => row?.avg),
-    ]);
+    let movieData = await getCachedMovieData(id);
 
-    let movieData = dbMovie;
     if (movieData && PENDING_STATUSES.has(movieData.status)) {
       const today = new Date().toISOString().split("T")[0];
 
@@ -254,16 +246,24 @@ export const getMovie = async (id: Movie["id"]) => {
       }
     }
 
-    return {
-      success: true,
-      data: movieData && {
-        ...movieData,
-        avgRating: avgRating ? parseFloat(avgRating) / 2 : null,
-      },
-    };
+    return { success: true, data: movieData };
   } catch (e) {
     console.error(e);
     return { success: false, message: "Something went wrong" };
+  }
+};
+
+export const getMovieAvgRating = async (id: Movie["id"]) => {
+  try {
+    const result = await db
+      .select({ avg: avg(userMovie.rating) })
+      .from(userMovie)
+      .where(and(eq(userMovie.movieId, id), gt(userMovie.rating, 0)))
+      .then(([row]) => row?.avg);
+    return result ? parseFloat(result) / 2 : null;
+  } catch (e) {
+    console.error(e);
+    return null;
   }
 };
 

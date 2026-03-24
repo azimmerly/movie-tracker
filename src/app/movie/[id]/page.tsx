@@ -1,7 +1,4 @@
-import {
-  CalendarDaysIcon as SmallCalendarDaysIcon,
-  StarIcon,
-} from "@heroicons/react/16/solid";
+import { CalendarDaysIcon as SmallCalendarDaysIcon } from "@heroicons/react/16/solid";
 import {
   ArrowTopRightOnSquareIcon,
   CalendarDaysIcon,
@@ -10,10 +7,12 @@ import {
 import { ClockIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 import { getMovie } from "@/actions/movie";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { Chip } from "@/components/ui/Chip";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { Tooltip } from "@/components/ui/Tooltip";
 import { Typography } from "@/components/ui/Typography";
 import { IMDB_MOVIE_URL } from "@/consts";
@@ -21,6 +20,7 @@ import { formatDate } from "@/utils/formatDate";
 import { formatLanguage } from "@/utils/formatLanguage";
 import { formatRuntime } from "@/utils/formatRuntime";
 import { getMovieImage } from "@/utils/getMovieImage";
+import { MovieAvgRating } from "./MovieAvgRating";
 
 type MoviePageProps = {
   params: Promise<{ id: string }>;
@@ -109,12 +109,9 @@ const MoviePage = async ({ params }: MoviePageProps) => {
               </Tooltip>
             )}
           </div>
-          {!!movie.avgRating && (
-            <Typography.Small muted className="flex items-center gap-0.75">
-              <StarIcon className="size-4 fill-amber-400 dark:fill-amber-500" />
-              {movie.avgRating.toFixed(1)} average rating
-            </Typography.Small>
-          )}
+          <Suspense fallback={<Skeleton className="h-5 w-32" />}>
+            <MovieAvgRating movieId={movie.id} />
+          </Suspense>
           {!!movie.imdbId && (
             <Typography.Link
               target="_blank"
