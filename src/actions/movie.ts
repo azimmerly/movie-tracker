@@ -1,10 +1,13 @@
 "use server";
 
-import { and, asc, avg, desc, eq, exists, gt, ilike, sql } from "drizzle-orm";
+import { and, asc, desc, eq, exists, ilike, sql } from "drizzle-orm";
 import { revalidateTag } from "next/cache";
 
 import { getSession } from "@/actions/auth";
-import { getCachedMovieData } from "@/actions/movie.cache";
+import {
+  getCachedMovieAvgRating,
+  getCachedMovieData,
+} from "@/actions/movie.cache";
 import { movieDbFetch, revalidatePaths } from "@/actions/utils";
 import { db } from "@/lib/db";
 import { listMovie, movie, movieList, userMovie } from "@/lib/db/schema";
@@ -207,6 +210,7 @@ export const updateMovie = async (data: UpdateMovieData) => {
       throw new Error("Failed to update movie");
     }
 
+    revalidateTag(`movie-avg-rating-${movieId}`, "max");
     await revalidatePaths([
       "/dashboard/movies",
       `/user/${session.user.id}/movies`,
@@ -255,12 +259,7 @@ export const getMovie = async (id: Movie["id"]) => {
 
 export const getMovieAvgRating = async (id: Movie["id"]) => {
   try {
-    const result = await db
-      .select({ avg: avg(userMovie.rating) })
-      .from(userMovie)
-      .where(and(eq(userMovie.movieId, id), gt(userMovie.rating, 0)))
-      .then(([row]) => row?.avg);
-    return result ? parseFloat(result) / 2 : null;
+    return await getCachedMovieAvgRating(id);
   } catch (e) {
     console.error(e);
     return null;
