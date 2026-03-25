@@ -13,6 +13,10 @@ export const deleteMovieSchema = z.object({
   movieId: movieIdSchema,
 });
 
+export const deleteUserMovieSchema = z.object({
+  movieId: movieIdSchema,
+});
+
 export const updateMovieSchema = z.object({
   movieId: movieIdSchema,
   rating: z.int().min(0).max(10),

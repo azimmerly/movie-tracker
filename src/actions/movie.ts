@@ -14,6 +14,7 @@ import { listMovie, movie, movieList, userMovie } from "@/lib/db/schema";
 import type {
   AddMovieData,
   DeleteMovieData,
+  DeleteUserMovieData,
   Movie,
   MovieSearchData,
   UpdateMovieData,
@@ -22,6 +23,7 @@ import {
   PENDING_STATUSES,
   addMovieSchema,
   deleteMovieSchema,
+  deleteUserMovieSchema,
   movieDetailsResponseSchema,
   movieSearchResponseSchema,
   movieSearchSchema,
@@ -170,6 +172,63 @@ export const deleteMovie = async (data: DeleteMovieData) => {
     ]);
 
     return { success: true, data: deletedListMovie };
+  } catch (e) {
+    console.error(e);
+    return { success: false, message: "Something went wrong" };
+  }
+};
+
+export const deleteUserMovie = async (data: DeleteUserMovieData) => {
+  const session = await getSession();
+  if (!session) {
+    return { success: false, message: "Not authenticated" };
+  }
+
+  try {
+    const { movieId } = deleteUserMovieSchema.parse(data);
+
+    await db.transaction(async (tx) => {
+      await tx.delete(listMovie).where(
+        and(
+          eq(listMovie.movieId, movieId),
+          exists(
+            db
+              .select({ id: movieList.id })
+              .from(movieList)
+              .where(
+                and(
+                  eq(movieList.id, listMovie.listId),
+                  eq(movieList.userId, session.user.id),
+                ),
+              ),
+          ),
+        ),
+      );
+
+      const [deleted] = await tx
+        .delete(userMovie)
+        .where(
+          and(
+            eq(userMovie.userId, session.user.id),
+            eq(userMovie.movieId, movieId),
+          ),
+        )
+        .returning({ id: userMovie.id });
+
+      if (!deleted) {
+        throw new Error("User movie not found or unauthorized");
+      }
+    });
+
+    await revalidatePaths([
+      "/",
+      "/dashboard/movies",
+      "/dashboard/lists",
+      `/user/${session.user.id}/movies`,
+      `/user/${session.user.id}/lists`,
+    ]);
+
+    return { success: true };
   } catch (e) {
     console.error(e);
     return { success: false, message: "Something went wrong" };

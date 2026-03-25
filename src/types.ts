@@ -6,6 +6,7 @@ import { addListSchema, updateListSchema } from "@/utils/validation/list";
 import {
   addMovieSchema,
   deleteMovieSchema,
+  deleteUserMovieSchema,
   movieSearchResponseSchema,
   movieSearchSchema,
   updateMovieSchema,
@@ -27,6 +28,7 @@ export type MovieSearchResponseData = z.infer<typeof movieSearchResponseSchema>;
 export type AddMovieData = z.infer<typeof addMovieSchema>;
 export type UpdateMovieData = z.infer<typeof updateMovieSchema>;
 export type DeleteMovieData = z.infer<typeof deleteMovieSchema>;
+export type DeleteUserMovieData = z.infer<typeof deleteUserMovieSchema>;
 
 // db schema types
 export type Movie = InferSelectModel<typeof movie>;

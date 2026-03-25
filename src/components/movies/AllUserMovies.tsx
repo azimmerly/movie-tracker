@@ -107,7 +107,11 @@ export const AllUserMovies = ({
               />
             </div>
           </div>
-          <MovieOptions movieId={movie.id} />
+          <MovieOptions
+            movieId={movie.id}
+            owner={owner}
+            listCount={lists.length}
+          />
         </li>
       ))}
     </ul>
