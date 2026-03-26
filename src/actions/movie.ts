@@ -32,14 +32,16 @@ import {
 
 const getUserMoviesOrderBy = (sort?: string) => {
   switch (sort) {
-    case "rating":
-      return desc(userMovie.rating);
+    case "added":
+      return [desc(userMovie.createdAt)];
     case "title":
-      return asc(movie.title);
+      return [asc(movie.title)];
+    case "rating":
+      return [desc(userMovie.rating), asc(movie.title)];
     case "released":
-      return desc(movie.releaseDate);
+      return [desc(movie.releaseDate), asc(movie.title)];
     default:
-      return desc(userMovie.createdAt);
+      return [desc(userMovie.createdAt)];
   }
 };
 
@@ -377,7 +379,7 @@ export const getUserMovies = async (
       .leftJoin(userListMovies, eq(userListMovies.movieId, movie.id))
       .where(whereClause)
       .groupBy(userMovie.id, movie.id)
-      .orderBy(getUserMoviesOrderBy(sort));
+      .orderBy(...getUserMoviesOrderBy(sort));
 
     return { success: true, data: movies };
   } catch (e) {

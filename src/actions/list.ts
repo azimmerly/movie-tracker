@@ -13,28 +13,28 @@ import { addListSchema, updateListSchema } from "@/utils/validation/list";
 const getMovieListOrderBy = (sort?: string) => {
   switch (sort) {
     case "created":
-      return desc(movieList.createdAt);
+      return [desc(movieList.createdAt)];
     case "title":
-      return asc(movieList.title);
+      return [asc(movieList.title)];
     case "count":
-      return desc(sql`movie_count`);
+      return [desc(sql`movie_count`), asc(movieList.title)];
     default:
-      return desc(movieList.createdAt);
+      return [desc(movieList.createdAt)];
   }
 };
 
 const getMovieOrderBy = (sort?: string) => {
   switch (sort) {
     case "added":
-      return desc(listMovie.createdAt);
-    case "rating":
-      return desc(userMovie.rating);
+      return [desc(listMovie.createdAt)];
     case "title":
-      return asc(movie.title);
+      return [asc(movie.title)];
+    case "rating":
+      return [desc(userMovie.rating), asc(movie.title)];
     case "released":
-      return desc(movie.releaseDate);
+      return [desc(movie.releaseDate), asc(movie.title)];
     default:
-      return desc(listMovie.createdAt);
+      return [desc(listMovie.createdAt)];
   }
 };
 
@@ -153,7 +153,7 @@ export const getAllMovieLists = async (
         .leftJoin(listMovie, eq(movieList.id, listMovie.listId))
         .innerJoin(user, eq(movieList.userId, user.id))
         .groupBy(movieList.id, user.id)
-        .orderBy(getMovieListOrderBy(sort))
+        .orderBy(...getMovieListOrderBy(sort))
         .limit(pageSize)
         .offset(offset ?? 0),
       db.select({ totalCount: count() }).from(movieList).where(whereClause),
@@ -196,7 +196,7 @@ export const getUserMovieLists = async (
       .leftJoin(listMovie, eq(movieList.id, listMovie.listId))
       .innerJoin(user, eq(movieList.userId, user.id))
       .groupBy(movieList.id, user.id)
-      .orderBy(getMovieListOrderBy(sort));
+      .orderBy(...getMovieListOrderBy(sort));
 
     return { success: true, data: userMovieLists };
   } catch (e) {
@@ -260,7 +260,7 @@ export const getMovieListById = async (
         ),
       )
       .where(whereClause)
-      .orderBy(getMovieOrderBy(sort));
+      .orderBy(...getMovieOrderBy(sort));
 
     return { success: true, data: { ...list, movies } };
   } catch (e) {
