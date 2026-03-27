@@ -80,7 +80,7 @@ export const AllUserMovies = ({
                     <span key={list.id} className="flex items-center">
                       <Link
                         href={`/list/${list.id}`}
-                        className="max-w-27 truncate hover:underline"
+                        className="max-w-25 truncate hover:underline sm:max-w-40"
                       >
                         {list.title}
                       </Link>

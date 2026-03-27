@@ -3,12 +3,12 @@ export const formatRuntime = (runtime: number) => {
 
   const hours = Math.floor(runtime / 60);
   if (hours > 0) {
-    result += `${hours} hr`;
+    result += `${hours}hr`;
   }
 
   const minutes = runtime % 60;
   if (minutes > 0) {
-    result += ` ${minutes} min`;
+    result += ` ${minutes}min`;
   }
 
   return result.trim();
