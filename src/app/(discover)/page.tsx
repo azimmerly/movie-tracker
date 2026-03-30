@@ -9,6 +9,7 @@ import { Pagination } from "@/components/Pagination";
 import { SearchParamInput } from "@/components/SearchParamInput";
 import { SearchResultMessage } from "@/components/SearchResultMessage";
 import { Typography } from "@/components/ui/Typography";
+import { GetStartedButton } from "./GetStartedButton";
 
 const LIST_PAGE_SIZE = 8;
 
@@ -34,7 +35,7 @@ const Home = async ({ searchParams }: HomeProps) => {
     <div className="flex flex-col gap-8">
       <Typography.H1>Discover movie lists</Typography.H1>
       <div className="flex flex-col items-end justify-between gap-3 sm:flex-row">
-        <AddListDialog session={session?.session} />
+        {!!session ? <AddListDialog /> : <GetStartedButton />}
         <div className="flex w-full flex-col items-end justify-end gap-2 sm:flex-row">
           <SearchParamInput placeholder="List title" />
           <ListSortSelect />

@@ -35,7 +35,7 @@ const MyLists = async ({ searchParams }: MyListsProps) => {
   return (
     <>
       <div className="flex flex-col items-end justify-between gap-3 sm:flex-row">
-        <AddListDialog session={session.session} />
+        <AddListDialog />
         <div className="flex w-full shrink-0 flex-col gap-2 sm:w-fit sm:flex-row">
           <SearchParamInput placeholder="List title" />
           <ListSortSelect />
