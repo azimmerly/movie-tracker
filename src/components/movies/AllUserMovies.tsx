@@ -5,7 +5,6 @@ import Link from "next/link";
 import { MovieActions } from "@/components/movies/MovieActions";
 import { MovieListsDialog } from "@/components/movies/MovieListsDialog";
 import { MovieOptions } from "@/components/movies/MovieOptions";
-import { NothingFound } from "@/components/NothingFound";
 import { Chip } from "@/components/ui/Chip";
 import { Typography } from "@/components/ui/Typography";
 import type { Movie, MovieList, UserMovie } from "@/types";
@@ -15,23 +14,14 @@ import { getMovieImage } from "@/utils/getMovieImage";
 const MAX_VISIBLE_LISTS = 2;
 
 type AllUserMoviesProps = {
+  owner: boolean;
   movies: ({
     movie: Movie;
     lists: Pick<MovieList, "id" | "title">[];
   } & Pick<UserMovie, "rating" | "favorite">)[];
-  owner: boolean;
-  emptyText: string;
 };
 
-export const AllUserMovies = ({
-  movies,
-  owner,
-  emptyText,
-}: AllUserMoviesProps) => {
-  if (!movies.length) {
-    return <NothingFound text={emptyText} />;
-  }
-
+export const AllUserMovies = ({ movies, owner }: AllUserMoviesProps) => {
   return (
     <ul className="divide-y divide-mist-200 dark:divide-mist-800">
       {movies.map(({ movie, favorite, rating, lists }, index) => (
