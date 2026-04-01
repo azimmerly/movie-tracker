@@ -226,8 +226,10 @@ export const deleteUserMovie = async (data: DeleteUserMovieData) => {
       "/",
       "/dashboard/movies",
       "/dashboard/lists",
+      "/dashboard/stats",
       `/user/${session.user.id}/movies`,
       `/user/${session.user.id}/lists`,
+      `/user/${session.user.id}/stats`,
     ]);
 
     return { success: true };
@@ -274,7 +276,9 @@ export const updateMovie = async (data: UpdateMovieData) => {
     revalidateTag(`movie-avg-rating-${movieId}`, "max");
     await revalidatePaths([
       "/dashboard/movies",
+      "/dashboard/stats",
       `/user/${session.user.id}/movies`,
+      `/user/${session.user.id}/stats`,
       ...listsWithMovie.map(({ listId }) => `/list/${listId}`),
     ]);
 

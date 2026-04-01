@@ -1,10 +1,10 @@
 "use server";
 
-import { count, eq, sql } from "drizzle-orm";
+import { and, avg, count, desc, eq, gt, sql } from "drizzle-orm";
 
 import { getSession } from "@/actions/auth";
 import { db } from "@/lib/db";
-import { account, movieList, user, userMovie } from "@/lib/db/schema";
+import { account, movie, movieList, user, userMovie } from "@/lib/db/schema";
 
 export const getUserProvider = async () => {
   const session = await getSession();
@@ -53,6 +53,28 @@ export const getUserStats = async (userId: string) => {
       success: true,
       data: { totalMovies, totalLists, totalRatings, totalFavorites },
     };
+  } catch (e) {
+    console.error(e);
+    return { success: false, message: "Something went wrong" };
+  }
+};
+
+export const getUserMovieStats = async (userId: string) => {
+  try {
+    const genreRatingStats = await db
+      .select({
+        genre: sql<string>`unnest(${movie.genres}[1:3])`,
+        avg: sql<number>`(avg(${userMovie.rating}) / 2)::float`,
+        count: count(),
+      })
+      .from(userMovie)
+      .innerJoin(movie, eq(movie.id, userMovie.movieId))
+      .where(and(eq(userMovie.userId, userId), gt(userMovie.rating, 0)))
+      .groupBy(sql`unnest(${movie.genres}[1:3])`)
+      .orderBy(desc(avg(userMovie.rating)))
+      .limit(5);
+
+    return { success: true, data: { genreRatingStats } };
   } catch (e) {
     console.error(e);
     return { success: false, message: "Something went wrong" };

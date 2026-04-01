@@ -34,13 +34,13 @@ export const ThemeToggle = ({ className }: { className?: ClassNameValue }) => {
           aria-hidden="true"
           className="absolute inset-0 flex h-full w-full items-center justify-center transition-opacity ease-in group-data-checked:opacity-0 group-data-checked:ease-out"
         >
-          <SunIcon className="size-3.5 text-mist-500" />
+          <SunIcon className="size-3.75 text-mist-500/80" />
         </span>
         <span
           aria-hidden="true"
           className="absolute inset-0 flex h-full w-full items-center justify-center opacity-0 transition-opacity ease-out group-data-checked:opacity-100 group-data-checked:ease-in"
         >
-          <MoonIcon className="size-3.5 text-white" />
+          <MoonIcon className="size-3.75 text-white" />
         </span>
       </span>
     </Switch>
