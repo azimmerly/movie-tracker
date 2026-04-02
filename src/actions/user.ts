@@ -61,20 +61,49 @@ export const getUserStats = async (userId: string) => {
 
 export const getUserMovieStats = async (userId: string) => {
   try {
-    const genreRatingStats = await db
-      .select({
-        genre: sql<string>`unnest(${movie.genres}[1:3])`,
-        avg: sql<number>`(avg(${userMovie.rating}) / 2)::float`,
-        count: count(),
-      })
-      .from(userMovie)
-      .innerJoin(movie, eq(movie.id, userMovie.movieId))
-      .where(and(eq(userMovie.userId, userId), gt(userMovie.rating, 0)))
-      .groupBy(sql`unnest(${movie.genres}[1:3])`)
-      .orderBy(desc(avg(userMovie.rating)))
-      .limit(5);
+    const [genreRatingStats, genreCountStats, decadeStats] = await Promise.all([
+      db
+        .select({
+          genre: sql<string>`unnest(${movie.genres}[1:3])`,
+          avg: sql<number>`(avg(${userMovie.rating}) / 2)::float`,
+          count: count(),
+        })
+        .from(userMovie)
+        .innerJoin(movie, eq(movie.id, userMovie.movieId))
+        .where(and(eq(userMovie.userId, userId), gt(userMovie.rating, 0)))
+        .groupBy(sql`1`)
+        .orderBy(desc(avg(userMovie.rating)))
+        .limit(5),
+      db
+        .select({
+          genre: sql<string>`unnest(${movie.genres}[1:3])`,
+          avg: sql<number>`coalesce(avg(${userMovie.rating}) filter (where ${userMovie.rating} > 0) / 2, 0)::float`,
+          count: count(),
+        })
+        .from(userMovie)
+        .innerJoin(movie, eq(movie.id, userMovie.movieId))
+        .where(eq(userMovie.userId, userId))
+        .groupBy(sql`1`)
+        .orderBy(desc(count()))
+        .limit(5),
+      db
+        .select({
+          decade: sql<number>`case when extract(year from ${movie.releaseDate})::int < 1960 then 1950 else extract(year from ${movie.releaseDate})::int / 10 * 10 end`,
+          percent: sql<number>`round(count(*)::numeric / sum(count(*)) over () * 100, 1)::float`,
+          avg: sql<number>`coalesce(avg(${userMovie.rating}) filter (where ${userMovie.rating} > 0) / 2, 0)::float`,
+          count: count(),
+        })
+        .from(userMovie)
+        .innerJoin(movie, eq(movie.id, userMovie.movieId))
+        .where(eq(userMovie.userId, userId))
+        .groupBy(sql`1`)
+        .orderBy(sql`1 desc`),
+    ]);
 
-    return { success: true, data: { genreRatingStats } };
+    return {
+      success: true,
+      data: { genreRatingStats, genreCountStats, decadeStats },
+    };
   } catch (e) {
     console.error(e);
     return { success: false, message: "Something went wrong" };
