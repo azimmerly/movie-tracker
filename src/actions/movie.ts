@@ -1,13 +1,8 @@
 "use server";
 
-import { and, asc, desc, eq, exists, ilike, sql } from "drizzle-orm";
-import { revalidateTag } from "next/cache";
+import { and, asc, avg, desc, eq, exists, gt, ilike, sql } from "drizzle-orm";
 
 import { getSession } from "@/actions/auth";
-import {
-  getCachedMovieAvgRating,
-  getCachedMovieData,
-} from "@/actions/movie.cache";
 import { movieDbFetch, revalidatePaths } from "@/actions/utils";
 import { db } from "@/lib/db";
 import { listMovie, movie, movieList, userMovie } from "@/lib/db/schema";
@@ -273,8 +268,8 @@ export const updateMovie = async (data: UpdateMovieData) => {
       throw new Error("Failed to update movie");
     }
 
-    revalidateTag(`movie-avg-rating-${movieId}`, "max");
     await revalidatePaths([
+      `/movie/${movieId}`,
       "/dashboard/movies",
       "/dashboard/stats",
       `/user/${session.user.id}/movies`,
@@ -291,7 +286,7 @@ export const updateMovie = async (data: UpdateMovieData) => {
 
 export const getMovie = async (id: Movie["id"]) => {
   try {
-    let movieData = await getCachedMovieData(id);
+    let movieData = await db.query.movie.findFirst({ where: eq(movie.id, id) });
 
     if (movieData && PENDING_STATUSES.has(movieData.status)) {
       const today = new Date().toISOString().split("T")[0];
@@ -310,7 +305,6 @@ export const getMovie = async (id: Movie["id"]) => {
             .where(eq(movie.id, id))
             .returning()
             .then(([data]) => data);
-          revalidateTag(`movie-${id}`, "max");
         }
       }
     }
@@ -324,7 +318,12 @@ export const getMovie = async (id: Movie["id"]) => {
 
 export const getMovieAvgRating = async (id: Movie["id"]) => {
   try {
-    return await getCachedMovieAvgRating(id);
+    const result = await db
+      .select({ avg: avg(userMovie.rating) })
+      .from(userMovie)
+      .where(and(eq(userMovie.movieId, id), gt(userMovie.rating, 0)))
+      .then(([row]) => row?.avg);
+    return result ? parseFloat(result) / 2 : null;
   } catch (e) {
     console.error(e);
     return null;
