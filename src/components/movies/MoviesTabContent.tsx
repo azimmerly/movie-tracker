@@ -7,7 +7,6 @@ import { MovieSortSelect } from "@/components/movies/MovieSortSelect";
 import { NothingFound } from "@/components/NothingFound";
 import { SearchParamInput } from "@/components/SearchParamInput";
 import { SearchResultMessage } from "@/components/SearchResultMessage";
-import { ScrollToTopButton } from "@/components/ui/ScrollToTopButton";
 import { Typography } from "@/components/ui/Typography";
 
 type MoviesTabContentProps = {
@@ -31,7 +30,6 @@ export const MoviesTabContent = async ({
 
   return (
     <>
-      <ScrollToTopButton />
       <div className="flex flex-col items-end justify-between gap-3 sm:flex-row">
         <div className="mb-2 flex w-full min-w-0 items-center gap-1">
           <Squares2X2Icon className="size-4 shrink-0 text-blue-600/70 dark:text-blue-500/70" />

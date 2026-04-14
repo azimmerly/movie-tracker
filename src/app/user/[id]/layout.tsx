@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getUserById, getUserStats } from "@/actions/user";
 import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { DashboardTabs } from "@/components/dashboard/DashboardTabs";
+import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { Avatar } from "@/components/ui/Avatar";
 import { Typography } from "@/components/ui/Typography";
 import { formatDate } from "@/utils/formatDate";
@@ -47,6 +48,7 @@ const UserLayout = async ({
       <hr className="border-mist-200 dark:border-mist-700" />
       <DashboardTabs basePath={`/user/${id}`} />
       {children}
+      <ScrollToTopButton />
     </div>
   );
 };

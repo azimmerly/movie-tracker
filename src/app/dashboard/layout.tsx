@@ -4,6 +4,7 @@ import { getSession } from "@/actions/auth";
 import { getUserStats } from "@/actions/user";
 import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { DashboardTabs } from "@/components/dashboard/DashboardTabs";
+import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { Typography } from "@/components/ui/Typography";
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
@@ -22,6 +23,7 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
       <hr className="border-mist-200 dark:border-mist-700" />
       <DashboardTabs basePath="/dashboard" />
       {children}
+      <ScrollToTopButton />
     </div>
   );
 };

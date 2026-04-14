@@ -19,6 +19,7 @@ const buttonVariants = tv({
       sm: "text-xs rounded-md px-2 py-1.25 gap-1",
       md: "text-sm font-semibold rounded-md px-3.5 py-2 gap-1.5",
       lg: "text-base font-semibold rounded-md px-4 py-3 gap-1.5",
+      circle: "size-10 rounded-full p-0",
     },
     disabled: {
       true: "opacity-60 pointer-events-none",
@@ -38,6 +39,7 @@ const iconVariants = tv({
       sm: "size-3.25",
       md: "size-4",
       lg: "size-5",
+      circle: "size-5",
     },
   },
 });
