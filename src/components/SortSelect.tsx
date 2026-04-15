@@ -21,7 +21,7 @@ export const SortSelect = ({ sortOptions }: SortSelectProps) => {
     if (option.value === sortBy.value) {
       return;
     }
-    setQueryParams({ sort: option.value });
+    setQueryParams({ sort: option.value, page: null });
   };
 
   return (

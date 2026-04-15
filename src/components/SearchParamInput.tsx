@@ -15,7 +15,7 @@ type SearchParamInputProps = {
 
 export const SearchParamInput = ({ placeholder }: SearchParamInputProps) => {
   const searchParams = useSearchParams();
-  const { setQueryParams, clearQueryParam } = useQueryString();
+  const { setQueryParams } = useQueryString();
   const searchParam = searchParams.get("search") ?? "";
   const [search, setSearch] = useState(searchParam);
 
@@ -35,7 +35,7 @@ export const SearchParamInput = ({ placeholder }: SearchParamInputProps) => {
 
   const clearSearch = () => {
     setSearch("");
-    clearQueryParam("search");
+    setQueryParams({ search: null, page: null });
   };
 
   return (

@@ -16,7 +16,7 @@ export const SearchResultMessage = ({
   searchTerm,
   className,
 }: SearchResultMessageProps) => {
-  const { clearQueryParam } = useQueryString();
+  const { setQueryParams } = useQueryString();
 
   return (
     <div
@@ -33,7 +33,7 @@ export const SearchResultMessage = ({
         variant="secondary"
         className="text-mist-600 dark:text-mist-200"
         icon={XCircleIcon}
-        onClick={() => clearQueryParam("search")}
+        onClick={() => setQueryParams({ search: null, page: null })}
       >
         Clear
       </Button>

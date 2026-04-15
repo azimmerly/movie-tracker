@@ -24,11 +24,5 @@ export const useQueryString = () => {
     setUrlWithParams(params);
   };
 
-  const clearQueryParam = (name: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.delete(name);
-    setUrlWithParams(params);
-  };
-
-  return { setQueryParams, clearQueryParam };
+  return { setQueryParams };
 };
