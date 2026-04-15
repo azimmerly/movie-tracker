@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 import { Select, type SelectOption } from "@/components/ui/Select";
 import { useQueryString } from "@/utils/useQueryString";
@@ -10,7 +10,6 @@ type SortSelectProps = {
 };
 
 export const SortSelect = ({ sortOptions }: SortSelectProps) => {
-  const pathname = usePathname();
   const searchParams = useSearchParams();
   const { setQueryParams } = useQueryString();
   const sortBy =
@@ -26,7 +25,6 @@ export const SortSelect = ({ sortOptions }: SortSelectProps) => {
 
   return (
     <Select
-      key={pathname}
       label="Sort by"
       options={sortOptions}
       selected={sortBy}

@@ -2,7 +2,6 @@
 
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import type { User } from "better-auth";
-import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 import { DropdownMenu } from "@/components/ui/DropdownMenu";
@@ -14,7 +13,6 @@ type OptionsDropdownProps = {
 };
 
 export const OptionsDropdown = ({ user }: OptionsDropdownProps) => {
-  const pathname = usePathname();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
 
@@ -34,7 +32,6 @@ export const OptionsDropdown = ({ user }: OptionsDropdownProps) => {
   return (
     <>
       <DropdownMenu
-        key={pathname}
         buttonText="Options"
         options={menuOptions}
         ellipsisOnMobile

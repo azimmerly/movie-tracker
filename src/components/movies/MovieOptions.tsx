@@ -2,7 +2,7 @@
 
 import { EllipsisVerticalIcon } from "@heroicons/react/16/solid";
 import { InformationCircleIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { DropdownMenu } from "@/components/ui/DropdownMenu";
@@ -21,7 +21,6 @@ export const MovieOptions = ({
   listCount,
 }: MovieOptionsProps) => {
   const router = useRouter();
-  const pathname = usePathname();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const menuOptions = [
@@ -41,7 +40,6 @@ export const MovieOptions = ({
   return (
     <>
       <DropdownMenu
-        key={pathname}
         options={menuOptions}
         iconButton={
           <EllipsisVerticalIcon className="size-5 text-mist-400 hover:text-mist-500 dark:text-mist-500 dark:hover:text-mist-400" />

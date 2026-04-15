@@ -6,7 +6,6 @@ import {
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
-import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -21,7 +20,6 @@ type ListOptionsProps = {
 };
 
 export const ListOptions = ({ list }: ListOptionsProps) => {
-  const pathname = usePathname();
   const { id, private: isPrivate } = list;
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
@@ -57,7 +55,6 @@ export const ListOptions = ({ list }: ListOptionsProps) => {
   return (
     <div className="shrink-0 pl-6">
       <DropdownMenu
-        key={pathname}
         buttonText="List options"
         options={menuOptions}
         ellipsisOnMobile
