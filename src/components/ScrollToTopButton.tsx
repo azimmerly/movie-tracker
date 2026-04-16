@@ -23,7 +23,7 @@ export const ScrollToTopButton = () => {
       icon={ArrowUpIcon}
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       className={twMerge(
-        "fixed right-6 bottom-6 z-50 shadow-lg transition-opacity duration-250",
+        "fixed right-6 bottom-8 z-50 shadow-lg transition-opacity duration-250",
         visible ? "opacity-100" : "pointer-events-none opacity-0",
       )}
     />
