@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { searchMovies } from "@/actions/movie";
 import { Button } from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
+import { DialogHeader } from "@/components/ui/DialogHeader";
 import { InputField } from "@/components/ui/InputField";
 import { Typography } from "@/components/ui/Typography";
 import type {
@@ -85,17 +86,7 @@ export const AddMovieDialog = ({
         }}
         className="sm:max-w-xl"
       >
-        <div className="mb-3 flex flex-col items-center gap-3 sm:mb-5 sm:flex-row">
-          <div className="mx-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10 dark:bg-mist-800">
-            <FilmIcon
-              aria-hidden="true"
-              className="size-5.5 text-blue-600 dark:text-blue-500"
-            />
-          </div>
-          <Typography.H3 className="text-center sm:text-left">
-            Add a movie
-          </Typography.H3>
-        </div>
+        <DialogHeader icon={FilmIcon} title="Add a movie" />
         <form
           className="flex flex-col gap-3"
           onSubmit={handleSubmit(handleSearchMovie)}
@@ -151,9 +142,7 @@ export const AddMovieDialog = ({
                       onMovieAddFailed={handleMovieAddFailed}
                     />
                   ))}
-                  {movies.length > 3 && (
-                    <div className="from-offwhite via-offwhite pointer-events-none absolute right-0 bottom-0 left-0 h-16 bg-linear-to-t to-transparent dark:from-mist-900 dark:via-mist-900" />
-                  )}
+                  {movies.length > 3 && <div className="scroll-fade" />}
                 </ul>
               )}
             </div>

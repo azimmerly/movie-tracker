@@ -33,7 +33,7 @@ const Account = async () => {
     <>
       <div className="mb-8 flex items-center justify-between">
         <Typography.H1>My Account</Typography.H1>
-        <OptionsDropdown user={user} />
+        <OptionsDropdown username={user.name} />
       </div>
       <Card className="p-5 sm:p-6">
         <div className="flex flex-col items-center gap-4 sm:flex-row">

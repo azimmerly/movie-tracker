@@ -13,22 +13,16 @@ type MovieOptionsProps = {
   owner: boolean;
   movieId: Movie["id"];
   listId: MovieList["id"];
-  movie: Movie;
 };
 
-export const MovieOptions = ({
-  owner,
-  movieId,
-  listId,
-  movie,
-}: MovieOptionsProps) => {
+export const MovieOptions = ({ owner, movieId, listId }: MovieOptionsProps) => {
   const router = useRouter();
 
   const menuOptions = [
     {
       label: "Movie details",
       icon: InformationCircleIcon,
-      onClick: () => router.push(`/movie/${movie.id}`),
+      onClick: () => router.push(`/movie/${movieId}`),
     },
     {
       hidden: !owner,

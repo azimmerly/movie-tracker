@@ -1,7 +1,6 @@
 "use client";
 
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
-import type { User } from "better-auth";
 import { useState } from "react";
 
 import { DropdownMenu } from "@/components/ui/DropdownMenu";
@@ -9,10 +8,10 @@ import { DeleteAccountDialog } from "./DeleteAccountDialog";
 import { UpdateAccountDialog } from "./UpdateAccountDialog";
 
 type OptionsDropdownProps = {
-  user: User;
+  username: string;
 };
 
-export const OptionsDropdown = ({ user }: OptionsDropdownProps) => {
+export const OptionsDropdown = ({ username }: OptionsDropdownProps) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
 
@@ -37,7 +36,7 @@ export const OptionsDropdown = ({ user }: OptionsDropdownProps) => {
         ellipsisOnMobile
       />
       <UpdateAccountDialog
-        user={user}
+        username={username}
         open={isUpdateDialogOpen}
         onClose={() => setIsUpdateDialogOpen(false)}
       />

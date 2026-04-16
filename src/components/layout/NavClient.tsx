@@ -18,21 +18,17 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import type { User } from "better-auth";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 
-import logoImage from "@/assets/logo.png";
+import { NavLogo } from "@/components/layout/NavLogo";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
 import { DropdownMenu } from "@/components/ui/DropdownMenu";
-import { Typography } from "@/components/ui/Typography";
-import { APP_NAME } from "@/consts";
-import { pacificoFont } from "@/fonts";
 import { authClient } from "@/lib/authClient";
 
 type NavClientProps = {
@@ -59,46 +55,32 @@ export const NavClient = ({ user }: NavClientProps) => {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const accountOptions = [
-    {
-      label: "Account",
-      icon: Cog6ToothIcon,
-      onClick: () => router.push("/account"),
-    },
-    {
-      label: "Sign out",
-      icon: ArrowRightStartOnRectangleIcon,
-      onClick: async () => {
-        toast.success("Signed out");
-        await authClient.signOut();
-        router.refresh();
-      },
-    },
-  ] as const;
+  const accountOptions = useMemo(
+    () =>
+      [
+        {
+          label: "Account",
+          icon: Cog6ToothIcon,
+          onClick: () => router.push("/account"),
+        },
+        {
+          label: "Sign out",
+          icon: ArrowRightStartOnRectangleIcon,
+          onClick: async () => {
+            toast.success("Signed out");
+            await authClient.signOut();
+            router.refresh();
+          },
+        },
+      ] as const,
+    [router],
+  );
 
   return (
     <>
       <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between p-3.5 sm:px-6">
         <div className="flex items-center gap-12">
-          <Link
-            href="/"
-            className="-m-1 flex items-center gap-1.5 rounded-md p-1 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden"
-          >
-            <Image
-              draggable={false}
-              src={logoImage}
-              alt="logo"
-              className="size-6.5 sm:size-7"
-            />
-            <Typography.Large
-              className={twMerge(
-                "text-xl font-bold tracking-tight sm:text-2xl",
-                pacificoFont.className,
-              )}
-            >
-              {APP_NAME}
-            </Typography.Large>
-          </Link>
+          <NavLogo />
           <div className="hidden gap-1.5 lg:flex">
             {navLinks.map(({ label, href, icon: Icon, isActive }) => {
               const active = isActive(pathname);
@@ -166,26 +148,10 @@ export const NavClient = ({ user }: NavClientProps) => {
       >
         <DialogPanel className="bg-offwhite fixed inset-y-0 right-0 z-10 w-full overflow-y-auto px-3.5 sm:max-w-sm sm:px-6 sm:ring-1 sm:ring-mist-900/10 dark:bg-mist-950 dark:sm:ring-mist-800">
           <div className="flex h-20 items-center justify-between sm:justify-end">
-            <Link
-              href="/"
-              className="-m-1 flex items-center gap-1.5 rounded-md p-1 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden sm:hidden"
+            <NavLogo
+              className="sm:hidden"
               onClick={() => setMobileMenuOpen(false)}
-            >
-              <Image
-                draggable={false}
-                src={logoImage}
-                alt="logo"
-                className="size-6.5 sm:size-7"
-              />
-              <Typography.Large
-                className={twMerge(
-                  "text-xl font-bold tracking-tight sm:text-2xl",
-                  pacificoFont.className,
-                )}
-              >
-                {APP_NAME}
-              </Typography.Large>
-            </Link>
+            />
             <div className="flex items-center">
               <ThemeToggle className="mr-5" />
               <HeadlessButton

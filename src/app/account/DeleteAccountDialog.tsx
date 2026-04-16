@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { revalidatePaths } from "@/actions/utils";
 import { Button } from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
-import { Typography } from "@/components/ui/Typography";
+import { DialogHeader } from "@/components/ui/DialogHeader";
 import { authClient } from "@/lib/authClient";
 
 type DeleteAccountDialogProps = {
@@ -34,21 +34,12 @@ export const DeleteAccountDialog = ({
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <div className="sm:flex sm:items-start">
-        <div className="mx-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10 dark:bg-mist-800">
-          <ExclamationTriangleIcon
-            aria-hidden="true"
-            className="size-6 text-red-600 dark:text-red-500"
-          />
-        </div>
-        <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-          <Typography.H3>Delete account</Typography.H3>
-          <Typography.Small className="mt-2" muted>
-            Are you sure you want to delete your account? This action cannot be
-            undone.
-          </Typography.Small>
-        </div>
-      </div>
+      <DialogHeader
+        icon={ExclamationTriangleIcon}
+        title="Delete account"
+        variant="destructive"
+        subtitle="Are you sure you want to delete your account? This action cannot be undone."
+      />
       <div className="mt-5 flex flex-col gap-2 sm:flex-row-reverse">
         <Button
           variant="destructive"

@@ -103,7 +103,6 @@ export const MovieList = ({ movies, owner, listId }: MoviesListProps) => {
                   owner={owner}
                   movieId={movie.id}
                   listId={listId}
-                  movie={movie}
                 />
               </li>
             ))}

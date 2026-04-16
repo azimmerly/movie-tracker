@@ -5,7 +5,7 @@ export const NavServer = async () => {
   const session = await getSession();
 
   return (
-    <header className="w-screen">
+    <header className="w-full">
       <NavClient user={session?.user} />
     </header>
   );

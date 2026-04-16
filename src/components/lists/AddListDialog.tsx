@@ -11,9 +11,9 @@ import { addMovieList } from "@/actions/list";
 import { Button } from "@/components/ui/Button";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { Dialog } from "@/components/ui/Dialog";
+import { DialogHeader } from "@/components/ui/DialogHeader";
 import { InputField } from "@/components/ui/InputField";
 import { TextareaField } from "@/components/ui/TextareaField";
-import { Typography } from "@/components/ui/Typography";
 import type { AddListData } from "@/types";
 import { addListSchema } from "@/utils/validation/list";
 
@@ -52,17 +52,7 @@ export const AddListDialog = () => {
         onClose={() => setIsDialogOpen(false)}
         onTransitionEnd={() => reset()}
       >
-        <div className="mb-3 flex flex-col items-center gap-3 sm:mb-5 sm:flex-row">
-          <div className="mx-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10 dark:bg-mist-800">
-            <ListBulletIcon
-              aria-hidden="true"
-              className="size-5.5 text-blue-600 dark:text-blue-500"
-            />
-          </div>
-          <Typography.H3 className="text-center sm:text-left">
-            Create a new movie list
-          </Typography.H3>
-        </div>
+        <DialogHeader icon={ListBulletIcon} title="Create a new movie list" />
         <form
           className="flex flex-col gap-3"
           onSubmit={handleSubmit(handleAddList)}

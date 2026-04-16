@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { Dialog } from "@/components/ui/Dialog";
-import { Typography } from "@/components/ui/Typography";
+import { DialogHeader } from "@/components/ui/DialogHeader";
 import type { MovieList } from "@/types";
 
 type MovieListsDialogProps = {
@@ -31,20 +31,11 @@ export const MovieListsDialog = ({
         +{overflowCount} more
       </button>
       <Dialog open={open} onClose={() => setOpen(false)}>
-        <div className="mb-7 flex flex-col items-center gap-3 sm:flex-row">
-          <div className="mx-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-100 sm:mx-0 dark:bg-mist-800">
-            <ListBulletIcon
-              aria-hidden="true"
-              className="size-5.5 text-blue-600 dark:text-blue-500"
-            />
-          </div>
-          <div className="text-center sm:text-left">
-            <Typography.H3>{movieTitle}</Typography.H3>
-            <Typography.Tiny muted>
-              Appears in the following lists
-            </Typography.Tiny>
-          </div>
-        </div>
+        <DialogHeader
+          icon={ListBulletIcon}
+          title={movieTitle}
+          subtitle="Found in the following lists"
+        />
         <div className="max-h-60 overflow-y-auto pb-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <ul className="divide-y divide-mist-200 dark:divide-mist-800">
             {lists.map(({ id, title }) => (
@@ -61,9 +52,7 @@ export const MovieListsDialog = ({
             ))}
           </ul>
         </div>
-        {lists.length > 5 && (
-          <div className="from-offwhite via-offwhite pointer-events-none absolute right-0 bottom-0 left-0 h-16 rounded-b-xl bg-linear-to-t to-transparent dark:from-mist-900 dark:via-mist-900" />
-        )}
+        {lists.length > 5 && <div className="scroll-fade" />}
       </Dialog>
     </>
   );

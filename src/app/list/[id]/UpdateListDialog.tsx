@@ -7,9 +7,9 @@ import { toast } from "sonner";
 import { updateMovieList } from "@/actions/list";
 import { Button } from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
+import { DialogHeader } from "@/components/ui/DialogHeader";
 import { InputField } from "@/components/ui/InputField";
 import { TextareaField } from "@/components/ui/TextareaField";
-import { Typography } from "@/components/ui/Typography";
 import type { MovieList, UpdateListData } from "@/types";
 import { updateListSchema } from "@/utils/validation/list";
 
@@ -52,17 +52,7 @@ export const UpdateListDialog = ({
         reset({ id, title, description: description ?? undefined });
       }}
     >
-      <div className="mb-3 flex flex-col items-center gap-3 sm:mb-5 sm:flex-row">
-        <div className="mx-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10 dark:bg-mist-800">
-          <PencilSquareIcon
-            aria-hidden="true"
-            className="size-5.5 text-blue-600 dark:text-blue-500"
-          />
-        </div>
-        <Typography.H3 className="text-center sm:text-left">
-          Edit list
-        </Typography.H3>
-      </div>
+      <DialogHeader icon={PencilSquareIcon} title="Edit list" />
       <form
         className="flex flex-col gap-3"
         onSubmit={handleSubmit(handleUpdateList)}
