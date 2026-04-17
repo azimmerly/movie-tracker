@@ -1,9 +1,12 @@
+"use client";
+
 import {
   CalendarDaysIcon,
   CheckCircleIcon,
   PlusCircleIcon,
 } from "@heroicons/react/16/solid";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { addMovie } from "@/actions/movie";
@@ -29,11 +32,14 @@ export const SearchMovie = ({
   onMovieAdded,
   onMovieAddFailed,
 }: SearchMovieProps) => {
+  const router = useRouter();
+
   const handleAddMovie = async () => {
     onMovieAdded(movie.id);
     const res = await addMovie({ listId, movieId: movie.id });
     if (res.success) {
       toast.success("Movie added");
+      router.refresh();
     } else {
       onMovieAddFailed(movie.id);
       toast.error(res.message);

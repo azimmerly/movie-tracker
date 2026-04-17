@@ -1,10 +1,12 @@
+"use client";
+
 import { CheckCircleIcon } from "@heroicons/react/16/solid";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { revalidatePaths } from "@/actions/utils";
 import { Button } from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
 import { DialogHeader } from "@/components/ui/DialogHeader";
@@ -24,6 +26,7 @@ export const UpdateAccountDialog = ({
   onClose,
   username,
 }: UpdateAccountDialogProps) => {
+  const router = useRouter();
   const { register, reset, handleSubmit, formState } = useForm<UpdateUserData>({
     defaultValues: { name: username },
     resolver: zodResolver(updateUserSchema),
@@ -48,7 +51,7 @@ export const UpdateAccountDialog = ({
     );
 
     onClose();
-    await revalidatePaths(["/account"]);
+    router.refresh();
   };
 
   return (

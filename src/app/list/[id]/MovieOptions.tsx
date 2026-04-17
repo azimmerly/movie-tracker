@@ -32,6 +32,7 @@ export const MovieOptions = ({ owner, movieId, listId }: MovieOptionsProps) => {
         const res = await deleteMovie({ movieId, listId });
         if (res.success) {
           toast.success("Movie removed");
+          router.refresh();
         } else {
           toast.error(res.message);
         }

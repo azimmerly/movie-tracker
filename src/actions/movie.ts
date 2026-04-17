@@ -1,9 +1,19 @@
 "use server";
 
-import { and, asc, avg, desc, eq, exists, gt, ilike, sql } from "drizzle-orm";
+import {
+  and,
+  asc,
+  avg,
+  desc,
+  eq,
+  exists,
+  gt,
+  ilike,
+  inArray,
+} from "drizzle-orm";
 
 import { getSession } from "@/actions/auth";
-import { movieDbFetch, revalidatePaths } from "@/actions/utils";
+import { movieDbFetch } from "@/actions/utils";
 import { db } from "@/lib/db";
 import { listMovie, movie, movieList, userMovie } from "@/lib/db/schema";
 import type {
@@ -109,15 +119,6 @@ export const addMovie = async (data: AddMovieData) => {
       return inserted;
     });
 
-    await revalidatePaths([
-      "/",
-      "/dashboard/lists",
-      "/dashboard/movies",
-      `/list/${listId}`,
-      `/user/${session.user.id}/lists`,
-      `/user/${session.user.id}/movies`,
-    ]);
-
     return { success: true, data: newListMovie };
   } catch (e) {
     console.error(e);
@@ -159,15 +160,6 @@ export const deleteMovie = async (data: DeleteMovieData) => {
       throw new Error("List movie not found or unauthorized");
     }
 
-    await revalidatePaths([
-      "/",
-      `/list/${listId}`,
-      "/dashboard/lists",
-      "/dashboard/movies",
-      `/user/${session.user.id}/lists`,
-      `/user/${session.user.id}/movies`,
-    ]);
-
     return { success: true, data: deletedListMovie };
   } catch (e) {
     console.error(e);
@@ -185,47 +177,38 @@ export const deleteUserMovie = async (data: DeleteUserMovieData) => {
     const { movieId } = deleteUserMovieSchema.parse(data);
 
     await db.transaction(async (tx) => {
-      await tx.delete(listMovie).where(
-        and(
-          eq(listMovie.movieId, movieId),
-          exists(
-            db
-              .select({ id: movieList.id })
-              .from(movieList)
-              .where(
-                and(
-                  eq(movieList.id, listMovie.listId),
-                  eq(movieList.userId, session.user.id),
+      const [, [deleted]] = await Promise.all([
+        tx.delete(listMovie).where(
+          and(
+            eq(listMovie.movieId, movieId),
+            exists(
+              db
+                .select({ id: movieList.id })
+                .from(movieList)
+                .where(
+                  and(
+                    eq(movieList.id, listMovie.listId),
+                    eq(movieList.userId, session.user.id),
+                  ),
                 ),
-              ),
+            ),
           ),
         ),
-      );
-
-      const [deleted] = await tx
-        .delete(userMovie)
-        .where(
-          and(
-            eq(userMovie.userId, session.user.id),
-            eq(userMovie.movieId, movieId),
-          ),
-        )
-        .returning({ id: userMovie.id });
+        tx
+          .delete(userMovie)
+          .where(
+            and(
+              eq(userMovie.userId, session.user.id),
+              eq(userMovie.movieId, movieId),
+            ),
+          )
+          .returning({ id: userMovie.id }),
+      ]);
 
       if (!deleted) {
         throw new Error("User movie not found or unauthorized");
       }
     });
-
-    await revalidatePaths([
-      "/",
-      "/dashboard/movies",
-      "/dashboard/lists",
-      "/dashboard/stats",
-      `/user/${session.user.id}/movies`,
-      `/user/${session.user.id}/lists`,
-      `/user/${session.user.id}/stats`,
-    ]);
 
     return { success: true };
   } catch (e) {
@@ -243,39 +226,18 @@ export const updateMovie = async (data: UpdateMovieData) => {
   try {
     const { movieId, favorite, rating } = updateMovieSchema.parse(data);
 
-    const [[updatedUserMovie], listsWithMovie] = await Promise.all([
-      db
-        .insert(userMovie)
-        .values({ userId: session.user.id, movieId, favorite, rating })
-        .onConflictDoUpdate({
-          target: [userMovie.userId, userMovie.movieId],
-          set: { favorite, rating },
-        })
-        .returning({ id: userMovie.id, movieId: userMovie.movieId }),
-      db
-        .select({ listId: listMovie.listId })
-        .from(listMovie)
-        .innerJoin(movieList, eq(movieList.id, listMovie.listId))
-        .where(
-          and(
-            eq(listMovie.movieId, movieId),
-            eq(movieList.userId, session.user.id),
-          ),
-        ),
-    ]);
+    const [updatedUserMovie] = await db
+      .insert(userMovie)
+      .values({ userId: session.user.id, movieId, favorite, rating })
+      .onConflictDoUpdate({
+        target: [userMovie.userId, userMovie.movieId],
+        set: { favorite, rating },
+      })
+      .returning({ id: userMovie.id, movieId: userMovie.movieId });
 
     if (!updatedUserMovie) {
       throw new Error("Failed to update movie");
     }
-
-    await revalidatePaths([
-      `/movie/${movieId}`,
-      "/dashboard/movies",
-      "/dashboard/stats",
-      `/user/${session.user.id}/movies`,
-      `/user/${session.user.id}/stats`,
-      ...listsWithMovie.map(({ listId }) => `/list/${listId}`),
-    ]);
 
     return { success: true, data: updatedUserMovie };
   } catch (e) {
@@ -344,47 +306,41 @@ export const getUserMovies = async (
       search ? ilike(movie.title, `%${search}%`) : undefined,
     );
 
-    const userListMovies = db
-      .select({
-        movieId: listMovie.movieId,
-        listId: movieList.id,
-        listTitle: movieList.title,
-        createdAt: listMovie.createdAt,
-      })
-      .from(listMovie)
-      .innerJoin(
-        movieList,
-        and(
-          eq(movieList.id, listMovie.listId),
-          eq(movieList.userId, userId),
-          includePrivate ? undefined : eq(movieList.private, false),
-        ),
-      )
-      .as("userListMovies");
-
     const movies = await db
-      .select({
-        rating: userMovie.rating,
-        favorite: userMovie.favorite,
-        movie: movie,
-        lists: sql<{ id: string; title: string }[]>`
-          coalesce(
-            json_agg(
-              json_build_object('id', ${userListMovies.listId}, 'title', ${userListMovies.listTitle})
-              order by ${userListMovies.createdAt} asc
-            ) filter (where ${userListMovies.listId} is not null),
-            '[]'::json
-          )
-        `.as("lists"),
-      })
+      .select({ rating: userMovie.rating, favorite: userMovie.favorite, movie })
       .from(userMovie)
       .innerJoin(movie, eq(movie.id, userMovie.movieId))
-      .leftJoin(userListMovies, eq(userListMovies.movieId, movie.id))
       .where(whereClause)
-      .groupBy(userMovie.id, movie.id)
       .orderBy(...getUserMoviesOrderBy(sort));
 
-    return { success: true, data: movies };
+    const movieIds = movies.map(({ movie }) => movie.id);
+    const memberships = movieIds.length
+      ? await db
+          .select({
+            movieId: listMovie.movieId,
+            list: { id: movieList.id, title: movieList.title },
+          })
+          .from(listMovie)
+          .innerJoin(
+            movieList,
+            and(
+              eq(movieList.id, listMovie.listId),
+              eq(movieList.userId, userId),
+              includePrivate ? undefined : eq(movieList.private, false),
+            ),
+          )
+          .where(inArray(listMovie.movieId, movieIds))
+          .orderBy(asc(listMovie.createdAt))
+      : [];
+
+    const listsByMovieId = Map.groupBy(memberships, ({ movieId }) => movieId);
+
+    const data = movies.map((m) => {
+      const movieMemberships = listsByMovieId.get(m.movie.id) ?? [];
+      return { ...m, lists: movieMemberships.map(({ list }) => list) };
+    });
+
+    return { success: true, data };
   } catch (e) {
     console.error(e);
     return { success: false, message: "Something went wrong" };

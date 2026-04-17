@@ -4,6 +4,7 @@ import { Checkbox, Field, Fieldset, Label } from "@headlessui/react";
 import { StarIcon } from "@heroicons/react/16/solid";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm, Watch } from "react-hook-form";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
@@ -25,6 +26,7 @@ export const MovieActions = ({
   rating,
   favorite,
 }: MovieActionsProps) => {
+  const router = useRouter();
   const { control, formState, setValue, getValues } = useForm<UpdateMovieData>({
     defaultValues: { favorite, rating, movieId },
     resolver: zodResolver(updateMovieSchema),
@@ -47,7 +49,9 @@ export const MovieActions = ({
 
     try {
       const res = await updateMovie(getValues());
-      if (!res.success) {
+      if (res.success) {
+        router.refresh();
+      } else {
         revertUpdate();
         toast.error(res.message);
       }

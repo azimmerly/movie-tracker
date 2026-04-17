@@ -6,6 +6,7 @@ import {
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -20,6 +21,7 @@ type ListOptionsProps = {
 };
 
 export const ListOptions = ({ list }: ListOptionsProps) => {
+  const router = useRouter();
   const { id, private: isPrivate } = list;
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
@@ -40,6 +42,7 @@ export const ListOptions = ({ list }: ListOptionsProps) => {
         });
         if (res.success) {
           toast.success("List visibility updated");
+          router.refresh();
         } else {
           toast.error(res.message);
         }

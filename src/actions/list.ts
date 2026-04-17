@@ -4,7 +4,6 @@ import type { User } from "better-auth";
 import { and, asc, count, desc, eq, ilike, sql } from "drizzle-orm";
 
 import { getSession } from "@/actions/auth";
-import { revalidatePaths } from "@/actions/utils";
 import { db } from "@/lib/db";
 import { listMovie, movie, movieList, user, userMovie } from "@/lib/db/schema";
 import type { AddListData, MovieList, UpdateListData } from "@/types";
@@ -51,12 +50,6 @@ export const addMovieList = async (data: AddListData) => {
       .values({ ...validated, userId: session.user.id })
       .returning({ id: movieList.id });
 
-    await revalidatePaths([
-      "/",
-      "/dashboard/lists",
-      `/user/${session.user.id}/lists`,
-    ]);
-
     return { success: true, data: newList };
   } catch (e) {
     console.error(e);
@@ -82,13 +75,6 @@ export const updateMovieList = async (data: UpdateListData) => {
       throw new Error("Movie list not found or unauthorized");
     }
 
-    await revalidatePaths([
-      "/",
-      `/list/${id}`,
-      "/dashboard/lists",
-      `/user/${session.user.id}/lists`,
-    ]);
-
     return { success: true, data: updatedList };
   } catch (e) {
     console.error(e);
@@ -111,12 +97,6 @@ export const deleteMovieList = async (id: MovieList["id"]) => {
     if (!deletedList) {
       throw new Error("Movie list not found or unauthorized");
     }
-
-    await revalidatePaths([
-      "/",
-      "/dashboard/lists",
-      `/user/${session.user.id}/lists`,
-    ]);
 
     return { success: true, data: deletedList };
   } catch (e) {

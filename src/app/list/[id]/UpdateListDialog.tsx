@@ -1,6 +1,9 @@
+"use client";
+
 import { CheckCircleIcon } from "@heroicons/react/16/solid";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -24,6 +27,7 @@ export const UpdateListDialog = ({
   open,
   onClose,
 }: UpdateListDialogProps) => {
+  const router = useRouter();
   const { id, title, description } = list;
   const { register, reset, handleSubmit, formState } = useForm<UpdateListData>({
     defaultValues: { id, title, description: description ?? undefined },
@@ -39,6 +43,7 @@ export const UpdateListDialog = ({
     const res = await updateMovieList(formData);
     if (res.success) {
       toast.success("List updated");
+      router.refresh();
     } else {
       toast.error(res.message);
     }

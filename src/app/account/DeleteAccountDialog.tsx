@@ -1,8 +1,10 @@
+"use client";
+
 import { TrashIcon } from "@heroicons/react/20/solid";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import { revalidatePaths } from "@/actions/utils";
 import { Button } from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
 import { DialogHeader } from "@/components/ui/DialogHeader";
@@ -17,6 +19,8 @@ export const DeleteAccountDialog = ({
   open,
   onClose,
 }: DeleteAccountDialogProps) => {
+  const router = useRouter();
+
   const handleDeleteAccount = async () => {
     onClose();
     await authClient.deleteUser({
@@ -24,9 +28,9 @@ export const DeleteAccountDialog = ({
         onError: ({ error }) => {
           toast.error(error.message);
         },
-        onSuccess: async () => {
+        onSuccess: () => {
           toast.warning("Account deleted");
-          await revalidatePaths(["/account"]);
+          router.refresh();
         },
       },
     });

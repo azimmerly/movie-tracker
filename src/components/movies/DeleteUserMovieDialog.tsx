@@ -2,6 +2,7 @@
 
 import { TrashIcon } from "@heroicons/react/20/solid";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { deleteUserMovie } from "@/actions/movie";
@@ -23,11 +24,14 @@ export const DeleteUserMovieDialog = ({
   movieId,
   listCount,
 }: DeleteMovieDialogProps) => {
+  const router = useRouter();
+
   const handleDelete = async () => {
     onClose();
     const res = await deleteUserMovie({ movieId });
     if (res.success) {
       toast.success("Movie removed");
+      router.refresh();
     } else {
       toast.error(res.message);
     }
