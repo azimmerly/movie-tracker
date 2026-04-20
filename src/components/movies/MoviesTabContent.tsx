@@ -1,4 +1,5 @@
 import { Squares2X2Icon } from "@heroicons/react/16/solid";
+import { notFound } from "next/navigation";
 
 import { getUserMovies } from "@/actions/movie";
 import { ErrorMessage } from "@/components/ErrorMessage";
@@ -10,8 +11,6 @@ import { SearchParamInput } from "@/components/SearchParamInput";
 import { SearchResultMessage } from "@/components/SearchResultMessage";
 import { Typography } from "@/components/ui/Typography";
 
-const MOVIES_PAGE_SIZE = 20;
-
 type MoviesTabContentProps = {
   userId: string;
   owner: boolean;
@@ -19,6 +18,8 @@ type MoviesTabContentProps = {
   sort?: string;
   page?: number;
 };
+
+const MOVIES_PAGE_SIZE = 20;
 
 export const MoviesTabContent = async ({
   userId,
@@ -38,6 +39,10 @@ export const MoviesTabContent = async ({
 
   const movies = data?.movies;
   const totalCount = data?.totalCount ?? 0;
+
+  if (totalCount > 0 && page > Math.ceil(totalCount / MOVIES_PAGE_SIZE)) {
+    notFound();
+  }
 
   if (!success) {
     return <ErrorMessage />;

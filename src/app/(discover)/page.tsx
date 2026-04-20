@@ -1,3 +1,5 @@
+import { notFound } from "next/navigation";
+
 import { getSession } from "@/actions/auth";
 import { getAllMovieLists } from "@/actions/list";
 import { ErrorMessage } from "@/components/ErrorMessage";
@@ -32,6 +34,10 @@ const Home = async ({ searchParams }: HomeProps) => {
   }
 
   const { lists, totalCount } = data;
+
+  if (totalCount > 0 && currentPage > Math.ceil(totalCount / LIST_PAGE_SIZE)) {
+    notFound();
+  }
 
   return (
     <div className="flex flex-col gap-8">

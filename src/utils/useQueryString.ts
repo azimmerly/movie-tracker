@@ -6,13 +6,20 @@ export const useQueryString = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const setUrlWithParams = (params: URLSearchParams) => {
+  const navigate = (params: URLSearchParams, push: boolean) => {
     const queryString = params.toString();
     const pathWithQuery = queryString ? `${pathname}?${queryString}` : pathname;
-    router.replace(pathWithQuery as Route);
+    if (push) {
+      router.push(pathWithQuery as Route);
+    } else {
+      router.replace(pathWithQuery as Route);
+    }
   };
 
-  const setQueryParams = (newParams: Record<string, string | null>) => {
+  const setQueryParams = (
+    newParams: Record<string, string | null>,
+    push = false,
+  ) => {
     const params = new URLSearchParams(searchParams.toString());
     Object.entries(newParams).forEach(([key, val]) => {
       if (val === null || !val.length) {
@@ -21,7 +28,7 @@ export const useQueryString = () => {
         params.set(key, val);
       }
     });
-    setUrlWithParams(params);
+    navigate(params, push);
   };
 
   return { setQueryParams };

@@ -30,7 +30,7 @@ export const Pagination = ({
   }, [currentPage, pageSize, totalCount]);
 
   const setPage = (page: number) => {
-    setQueryParams({ page: page === 1 ? null : page.toString() });
+    setQueryParams({ page: page === 1 ? null : page.toString() }, true);
   };
 
   return (
