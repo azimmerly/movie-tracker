@@ -4,11 +4,12 @@ import { getSession } from "@/actions/auth";
 import { MoviesTabContent } from "@/components/movies/MoviesTabContent";
 
 type MyMoviesProps = {
-  searchParams: Promise<{ search?: string; sort?: string }>;
+  searchParams: Promise<{ search?: string; sort?: string; page?: string }>;
 };
 
 const MyMovies = async ({ searchParams }: MyMoviesProps) => {
-  const { search, sort } = await searchParams;
+  const { search, sort, page = "1" } = await searchParams;
+  const currentPage = parseInt(page) || 1;
   const session = await getSession();
 
   if (!session) {
@@ -21,6 +22,7 @@ const MyMovies = async ({ searchParams }: MyMoviesProps) => {
       owner={true}
       search={search}
       sort={sort}
+      page={currentPage}
     />
   );
 };

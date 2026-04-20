@@ -22,14 +22,16 @@ const Home = async ({ searchParams }: HomeProps) => {
   const currentPage = parseInt(page) || 1;
   const offset = LIST_PAGE_SIZE * (currentPage - 1);
 
-  const [session, { data: lists, totalCount, success }] = await Promise.all([
+  const [session, { data, success }] = await Promise.all([
     getSession(),
-    getAllMovieLists(LIST_PAGE_SIZE, search, sort, offset),
+    getAllMovieLists(LIST_PAGE_SIZE, offset, search, sort),
   ]);
 
-  if (!success || !lists) {
+  if (!success || !data) {
     return <ErrorMessage />;
   }
+
+  const { lists, totalCount } = data;
 
   return (
     <div className="flex flex-col gap-8">

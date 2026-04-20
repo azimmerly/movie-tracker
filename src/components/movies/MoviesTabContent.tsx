@@ -5,15 +5,19 @@ import { ErrorMessage } from "@/components/ErrorMessage";
 import { AllUserMovies } from "@/components/movies/AllUserMovies";
 import { MovieSortSelect } from "@/components/movies/MovieSortSelect";
 import { NothingFound } from "@/components/NothingFound";
+import { Pagination } from "@/components/Pagination";
 import { SearchParamInput } from "@/components/SearchParamInput";
 import { SearchResultMessage } from "@/components/SearchResultMessage";
 import { Typography } from "@/components/ui/Typography";
+
+const MOVIES_PAGE_SIZE = 20;
 
 type MoviesTabContentProps = {
   userId: string;
   owner: boolean;
   search?: string;
   sort?: string;
+  page?: number;
 };
 
 export const MoviesTabContent = async ({
@@ -21,8 +25,19 @@ export const MoviesTabContent = async ({
   owner,
   search,
   sort,
+  page = 1,
 }: MoviesTabContentProps) => {
-  const { data: movies, success } = await getUserMovies(userId, search, sort);
+  const offset = MOVIES_PAGE_SIZE * (page - 1);
+  const { data, success } = await getUserMovies(
+    userId,
+    MOVIES_PAGE_SIZE,
+    offset,
+    search,
+    sort,
+  );
+
+  const movies = data?.movies;
+  const totalCount = data?.totalCount ?? 0;
 
   if (!success) {
     return <ErrorMessage />;
@@ -56,6 +71,15 @@ export const MoviesTabContent = async ({
               ? "Movies added to your lists will appear here."
               : "No movies here… yet."
           }
+        />
+      )}
+
+      {totalCount > MOVIES_PAGE_SIZE && (
+        <Pagination
+          totalCount={totalCount}
+          currentPage={page}
+          pageSize={MOVIES_PAGE_SIZE}
+          itemLabel="movies"
         />
       )}
     </>

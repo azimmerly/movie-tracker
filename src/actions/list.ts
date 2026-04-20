@@ -107,9 +107,9 @@ export const deleteMovieList = async (id: MovieList["id"]) => {
 
 export const getAllMovieLists = async (
   pageSize: number,
+  offset: number,
   search?: string,
   sort?: string,
-  offset?: number,
 ) => {
   try {
     const whereClause = and(
@@ -135,11 +135,11 @@ export const getAllMovieLists = async (
         .groupBy(movieList.id, user.id)
         .orderBy(...getMovieListOrderBy(sort))
         .limit(pageSize)
-        .offset(offset ?? 0),
+        .offset(offset),
       db.select({ totalCount: count() }).from(movieList).where(whereClause),
     ]);
 
-    return { success: true, data: allMovieLists, totalCount };
+    return { success: true, data: { lists: allMovieLists, totalCount } };
   } catch (e) {
     console.error(e);
     return { success: false, message: "Something went wrong" };

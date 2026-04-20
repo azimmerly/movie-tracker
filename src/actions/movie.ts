@@ -4,6 +4,7 @@ import {
   and,
   asc,
   avg,
+  count,
   desc,
   eq,
   exists,
@@ -294,6 +295,8 @@ export const getMovieAvgRating = async (id: Movie["id"]) => {
 
 export const getUserMovies = async (
   userId: string,
+  pageSize: number,
+  offset: number,
   search?: string,
   sort?: string,
 ) => {
@@ -306,12 +309,25 @@ export const getUserMovies = async (
       search ? ilike(movie.title, `%${search}%`) : undefined,
     );
 
-    const movies = await db
-      .select({ rating: userMovie.rating, favorite: userMovie.favorite, movie })
-      .from(userMovie)
-      .innerJoin(movie, eq(movie.id, userMovie.movieId))
-      .where(whereClause)
-      .orderBy(...getUserMoviesOrderBy(sort));
+    const [movies, [{ totalCount }]] = await Promise.all([
+      db
+        .select({
+          rating: userMovie.rating,
+          favorite: userMovie.favorite,
+          movie,
+        })
+        .from(userMovie)
+        .innerJoin(movie, eq(movie.id, userMovie.movieId))
+        .where(whereClause)
+        .orderBy(...getUserMoviesOrderBy(sort))
+        .limit(pageSize)
+        .offset(offset),
+      db
+        .select({ totalCount: count() })
+        .from(userMovie)
+        .innerJoin(movie, eq(movie.id, userMovie.movieId))
+        .where(whereClause),
+    ]);
 
     const movieIds = movies.map(({ movie }) => movie.id);
     const memberships = movieIds.length
@@ -335,12 +351,12 @@ export const getUserMovies = async (
 
     const listsByMovieId = Map.groupBy(memberships, ({ movieId }) => movieId);
 
-    const data = movies.map((m) => {
+    const moviesWithLists = movies.map((m) => {
       const movieMemberships = listsByMovieId.get(m.movie.id) ?? [];
       return { ...m, lists: movieMemberships.map(({ list }) => list) };
     });
 
-    return { success: true, data };
+    return { success: true, data: { movies: moviesWithLists, totalCount } };
   } catch (e) {
     console.error(e);
     return { success: false, message: "Something went wrong" };

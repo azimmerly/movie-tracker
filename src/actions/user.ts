@@ -31,7 +31,7 @@ export const getUserStats = async (userId: string) => {
       await Promise.all([
         db
           .select({
-            totalMovies: count(userMovie.id),
+            totalMovies: count(),
             totalRatings:
               sql<number>`count(case when ${userMovie.rating} > 0 then 1 end)`.mapWith(
                 Number,
@@ -44,7 +44,7 @@ export const getUserStats = async (userId: string) => {
           .from(userMovie)
           .where(eq(userMovie.userId, userId)),
         db
-          .select({ totalLists: count(movieList.id) })
+          .select({ totalLists: count() })
           .from(movieList)
           .where(eq(movieList.userId, userId)),
       ]);
