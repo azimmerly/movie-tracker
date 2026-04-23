@@ -1,3 +1,11 @@
 # Movie Tracker
 
-A full-stack web app that lets you create and share personalized lists of your favorite movies. Authentication options include email/password and social login via GitHub. Users can rate movies and designate favorites, making it easy to keep tabs on your watch history and see what friends are enjoying. Movie data is fetched from The Movie Database API and stored securely in a PostgreSQL database.
+A full-stack web app for tracking, rating, and organizing movies into public or private lists. Search movies via The Movie Database API, rate them, mark favorites, and explore a stats dashboard showing your top genres and rating trends. Authentication supports email/password and GitHub social login, with data stored in PostgreSQL.
+
+## Local Development
+
+1. Install dependencies: `npm install`
+2. Copy `.env.example` to `.env.local` and populate the values
+3. Start the database (requires Docker): `npm run db:up`
+4. Push the database schema: `npm run db:push`
+5. Start the dev server: `npm run dev`

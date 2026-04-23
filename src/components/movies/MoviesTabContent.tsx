@@ -79,14 +79,12 @@ export const MoviesTabContent = async ({
         />
       )}
 
-      {totalCount > MOVIES_PAGE_SIZE && (
-        <Pagination
-          totalCount={totalCount}
-          currentPage={page}
-          pageSize={MOVIES_PAGE_SIZE}
-          itemLabel="movies"
-        />
-      )}
+      <Pagination
+        totalCount={totalCount}
+        currentPage={page}
+        pageSize={MOVIES_PAGE_SIZE}
+        itemLabel="movies"
+      />
     </>
   );
 };

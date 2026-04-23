@@ -13,20 +13,20 @@ import { SearchResultMessage } from "@/components/SearchResultMessage";
 import { Typography } from "@/components/ui/Typography";
 import { GetStartedButton } from "./GetStartedButton";
 
-const LIST_PAGE_SIZE = 8;
-
-type HomeProps = {
+type DiscoverProps = {
   searchParams: Promise<{ search?: string; sort?: string; page?: string }>;
 };
 
-const Home = async ({ searchParams }: HomeProps) => {
+const DISCOVER_PAGE_SIZE = 10;
+
+const Discover = async ({ searchParams }: DiscoverProps) => {
   const { search, sort, page = "1" } = await searchParams;
   const currentPage = parseInt(page) || 1;
-  const offset = LIST_PAGE_SIZE * (currentPage - 1);
+  const offset = DISCOVER_PAGE_SIZE * (currentPage - 1);
 
   const [session, { data, success }] = await Promise.all([
     getSession(),
-    getAllMovieLists(LIST_PAGE_SIZE, offset, search, sort),
+    getAllMovieLists(DISCOVER_PAGE_SIZE, offset, search, sort),
   ]);
 
   if (!success || !data) {
@@ -35,7 +35,10 @@ const Home = async ({ searchParams }: HomeProps) => {
 
   const { lists, totalCount } = data;
 
-  if (totalCount > 0 && currentPage > Math.ceil(totalCount / LIST_PAGE_SIZE)) {
+  if (
+    totalCount > 0 &&
+    currentPage > Math.ceil(totalCount / DISCOVER_PAGE_SIZE)
+  ) {
     notFound();
   }
 
@@ -67,16 +70,14 @@ const Home = async ({ searchParams }: HomeProps) => {
         )}
       </div>
 
-      {totalCount > LIST_PAGE_SIZE && (
-        <Pagination
-          totalCount={totalCount}
-          currentPage={currentPage}
-          pageSize={LIST_PAGE_SIZE}
-          itemLabel="movie lists"
-        />
-      )}
+      <Pagination
+        totalCount={totalCount}
+        currentPage={currentPage}
+        pageSize={DISCOVER_PAGE_SIZE}
+        itemLabel="movie lists"
+      />
     </div>
   );
 };
 
-export default Home;
+export default Discover;

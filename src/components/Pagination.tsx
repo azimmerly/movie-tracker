@@ -33,6 +33,10 @@ export const Pagination = ({
     setQueryParams({ page: page === 1 ? null : page.toString() }, true);
   };
 
+  if (totalCount <= pageSize) {
+    return null;
+  }
+
   return (
     <nav
       aria-label="Pagination"
