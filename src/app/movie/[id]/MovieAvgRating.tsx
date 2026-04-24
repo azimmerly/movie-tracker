@@ -1,4 +1,5 @@
 import { StarIcon } from "@heroicons/react/16/solid";
+import { twMerge } from "tailwind-merge";
 
 import { getMovieAvgRating } from "@/actions/movie";
 import { Typography } from "@/components/ui/Typography";
@@ -11,14 +12,17 @@ type MovieAvgRatingProps = {
 export const MovieAvgRating = async ({ movieId }: MovieAvgRatingProps) => {
   const avgRating = await getMovieAvgRating(movieId);
 
-  if (!avgRating) {
-    return null;
-  }
-
   return (
     <Typography.Small muted className="flex items-center gap-0.75">
-      <StarIcon className="mb-px size-4.5 fill-amber-400 dark:fill-amber-500" />
-      {avgRating.toFixed(1)} average rating
+      <StarIcon
+        className={twMerge(
+          "mb-px size-4.5",
+          avgRating
+            ? "fill-amber-400 dark:fill-amber-500"
+            : "fill-mist-400 dark:fill-mist-500",
+        )}
+      />
+      {avgRating ? `${avgRating.toFixed(1)} average rating` : "No ratings yet"}
     </Typography.Small>
   );
 };
