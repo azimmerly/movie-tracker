@@ -1,8 +1,8 @@
 "use client";
 
-import { Checkbox, Field, Fieldset, Label } from "@headlessui/react";
+import { Checkbox, Field, Fieldset } from "@headlessui/react";
 import { StarIcon } from "@heroicons/react/16/solid";
-import { HeartIcon } from "@heroicons/react/24/outline";
+import { HeartIcon } from "@heroicons/react/20/solid";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm, Watch } from "react-hook-form";
@@ -11,7 +11,6 @@ import { twMerge } from "tailwind-merge";
 
 import { updateMovie } from "@/actions/movie";
 import { Tooltip } from "@/components/ui/Tooltip";
-import { Typography } from "@/components/ui/Typography";
 import type { Movie, UpdateMovieData, UserMovie } from "@/types";
 import { updateMovieSchema } from "@/utils/validation/movie";
 
@@ -61,7 +60,7 @@ export const MovieActions = ({
     }
   };
 
-  const renderStars = (rating: number) => {
+  const renderStars = (rating: UserMovie["rating"]) => {
     return Array.from({ length: 5 }, (_, index) => {
       const fullValue = (index + 1) * 2;
       const halfValue = fullValue - 1;
@@ -70,7 +69,7 @@ export const MovieActions = ({
 
       return (
         <span key={index} className="relative -mx-px size-5.25">
-          <StarIcon className="size-5.25 fill-mist-200 dark:fill-mist-700/70" />
+          <StarIcon className="size-5.25 fill-mist-200 dark:fill-mist-700" />
           {(isFull || isHalf) && (
             <StarIcon
               className={twMerge(
@@ -102,31 +101,29 @@ export const MovieActions = ({
     });
   };
 
-  const renderCheckbox = (favorite: boolean) => (
+  const renderCheckbox = (favorite: UserMovie["favorite"]) => (
     <Checkbox
       tabIndex={-1}
       checked={favorite}
       onChange={owner ? (e) => handleUpdate("favorite", e) : undefined}
       className={twMerge(
-        "flex items-center gap-1",
+        "mt-px ml-px flex items-center",
         owner ? "cursor-pointer" : "cursor-default",
       )}
     >
       <HeartIcon
-        strokeWidth={2}
         className={twMerge(
-          "size-4.75 text-rose-400 dark:text-rose-500",
-          favorite && "fill-rose-400 dark:fill-rose-500",
+          "size-5",
+          favorite
+            ? "fill-rose-400 dark:fill-rose-500"
+            : "fill-mist-200 dark:fill-mist-700",
         )}
       />
-      <Label as={Typography.Tiny} muted>
-        Favorite
-      </Label>
     </Checkbox>
   );
 
   const fieldset = (
-    <Fieldset className="mt-2.25 flex flex-col gap-1.25">
+    <Fieldset className="mt-2.25 flex items-center">
       <Field className="flex">
         <Watch name={"rating"} control={control} render={renderStars} />
       </Field>

@@ -60,12 +60,18 @@ export const AllUserMovies = ({ movies, owner }: AllUserMoviesProps) => {
                   />
                 ))}
               </div>
+              <MovieActions
+                owner={owner}
+                movieId={movie.id}
+                rating={rating}
+                favorite={favorite}
+              />
               {!!lists.length && (
                 <Typography.Small
                   muted
-                  className="mt-2 -mb-1 flex flex-wrap items-center gap-x-1 gap-y-0.5"
+                  className="mt-2 flex flex-wrap items-center gap-x-1 gap-y-0.5"
                 >
-                  <ListBulletIcon className="size-3.5 shrink-0" />
+                  <ListBulletIcon className="mt-px size-3.5 shrink-0" />
                   {lists.slice(0, MAX_VISIBLE_LISTS).map((list, i, arr) => (
                     <span key={list.id} className="flex items-center">
                       <Link
@@ -89,12 +95,6 @@ export const AllUserMovies = ({ movies, owner }: AllUserMoviesProps) => {
                   )}
                 </Typography.Small>
               )}
-              <MovieActions
-                owner={owner}
-                movieId={movie.id}
-                rating={rating}
-                favorite={favorite}
-              />
             </div>
           </div>
           <MovieOptions
