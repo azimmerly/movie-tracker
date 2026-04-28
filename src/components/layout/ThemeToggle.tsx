@@ -1,6 +1,6 @@
 "use client";
 
-import { Switch } from "@headlessui/react";
+import { Button } from "@headlessui/react";
 import { MoonIcon, SunIcon } from "@heroicons/react/16/solid";
 import { useTheme } from "next-themes";
 import { twMerge, type ClassNameValue } from "tailwind-merge";
@@ -16,33 +16,30 @@ export const ThemeToggle = ({ className }: { className?: ClassNameValue }) => {
   };
 
   if (!isMounted || !resolvedTheme) {
-    return <div className="h-6 w-11" />;
+    return <div className="size-8" />;
   }
 
   return (
-    <Switch
+    <Button
+      type="button"
+      onClick={toggleTheme}
       className={twMerge(
-        "group inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-mist-200/70 transition-colors ease-in-out focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden data-checked:bg-blue-600",
+        "flex size-8 cursor-pointer items-center justify-center rounded-full text-mist-400 transition-colors hover:bg-mist-200/60 hover:text-mist-600 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden dark:hover:bg-mist-800/70 dark:hover:text-mist-300",
         className,
       )}
-      onChange={toggleTheme}
-      checked={resolvedTheme === "dark"}
     >
       <span className="sr-only">Toggle theme</span>
-      <span className="pointer-events-none relative inline-block h-5 w-5 transform rounded-full bg-white shadow-sm ring-0 transition ease-in-out group-data-checked:translate-x-5 dark:bg-mist-700">
-        <span
-          aria-hidden="true"
-          className="absolute inset-0 flex h-full w-full items-center justify-center transition-opacity ease-in group-data-checked:opacity-0 group-data-checked:ease-out"
-        >
-          <SunIcon className="size-3.75 text-mist-500/80" />
-        </span>
-        <span
-          aria-hidden="true"
-          className="absolute inset-0 flex h-full w-full items-center justify-center opacity-0 transition-opacity ease-out group-data-checked:opacity-100 group-data-checked:ease-in"
-        >
-          <MoonIcon className="size-3.75 text-white" />
-        </span>
+      <span
+        key={resolvedTheme}
+        aria-hidden="true"
+        className="animate-spin-in block"
+      >
+        {resolvedTheme === "dark" ? (
+          <SunIcon className="size-5" />
+        ) : (
+          <MoonIcon className="size-5" />
+        )}
       </span>
-    </Switch>
+    </Button>
   );
 };
