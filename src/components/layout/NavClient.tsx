@@ -78,7 +78,7 @@ export const NavClient = ({ user }: NavClientProps) => {
 
   return (
     <>
-      <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between p-3.5 sm:px-6">
+      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between p-3.5 sm:px-6">
         <div className="flex items-center gap-12">
           <NavLogo />
           <div className="hidden gap-1.5 lg:flex">
@@ -147,7 +147,7 @@ export const NavClient = ({ user }: NavClientProps) => {
         className="lg:hidden"
       >
         <DialogPanel className="bg-offwhite fixed inset-y-0 right-0 z-10 w-full overflow-y-auto px-3.5 sm:max-w-sm sm:px-6 sm:ring-1 sm:ring-mist-900/10 dark:bg-mist-950 dark:sm:ring-mist-800">
-          <div className="flex h-20 items-center justify-between sm:justify-end">
+          <div className="flex h-16 items-center justify-between sm:justify-end">
             <NavLogo
               className="sm:hidden"
               onClick={() => setMobileMenuOpen(false)}
