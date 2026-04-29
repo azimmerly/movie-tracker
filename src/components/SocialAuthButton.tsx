@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
-import GitHubIcon from "@/assets/github.svg";
+import { GitHubIcon } from "@/assets/GitHubIcon";
 import { Button } from "@/components/ui/Button";
 import { authClient } from "@/lib/authClient";
 

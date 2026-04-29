@@ -51,7 +51,7 @@ export const SearchParamInput = ({ placeholder }: SearchParamInputProps) => {
           onChange={handleSearch}
           autoComplete="off"
           placeholder={placeholder}
-          className="col-start-1 row-start-1 rounded-md border-none bg-white px-8 py-1.5 text-sm text-mist-900 shadow-xs ring-1 ring-mist-300 ring-inset placeholder:text-mist-400 focus:ring-2 focus:ring-blue-600 focus:ring-inset dark:bg-mist-900 dark:text-white dark:ring-mist-800"
+          className="col-start-1 row-start-1 rounded-md border-none bg-white px-8 py-1.5 text-sm text-mist-900 shadow-xs ring-1 ring-mist-300 outline-none ring-inset placeholder:text-mist-400 focus:ring-2 focus:ring-blue-600 focus:ring-inset dark:bg-mist-900 dark:text-white dark:ring-mist-800"
         />
         <MagnifyingGlassIcon
           aria-hidden="true"

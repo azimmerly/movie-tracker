@@ -34,7 +34,7 @@ export const TextareaField = ({
       id={id}
       rows={3}
       {...textareaProps}
-      className="block w-full resize-none rounded-md border-0 bg-white py-2 text-sm text-mist-900 shadow-xs ring-1 ring-mist-300 ring-inset placeholder:text-mist-400 focus:ring-2 focus:ring-blue-600 focus:ring-inset dark:bg-mist-800/50 dark:text-white dark:ring-mist-700/50 dark:placeholder:text-mist-500"
+      className="block w-full resize-none rounded-md border-0 bg-white px-3 py-2 text-sm text-mist-900 shadow-xs ring-1 ring-mist-300 outline-none ring-inset placeholder:text-mist-400 focus:ring-2 focus:ring-blue-600 focus:ring-inset dark:bg-mist-800/50 dark:text-white dark:ring-mist-700/50 dark:placeholder:text-mist-500"
     />
   </Field>
 );

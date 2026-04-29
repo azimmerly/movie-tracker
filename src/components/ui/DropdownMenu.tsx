@@ -60,7 +60,7 @@ export const DropdownMenu = ({
       className="absolute right-0 z-10 mt-1.25 min-w-44 origin-top-right rounded-md bg-white p-1 whitespace-nowrap shadow-lg ring-1 ring-mist-200/70 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in dark:bg-mist-900 dark:ring-mist-800"
     >
       {header && (
-        <div className="mb-1 border-b border-mist-100 p-2 dark:border-mist-800">
+        <div className="mb-1 border-b border-mist-100 px-3 py-2 dark:border-mist-800">
           {header}
         </div>
       )}

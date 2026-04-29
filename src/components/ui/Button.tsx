@@ -5,7 +5,7 @@ import { tv, type VariantProps } from "tailwind-variants";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 const buttonVariants = tv({
-  base: "shadow-xs focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 flex items-center justify-center w-fit h-fit",
+  base: "flex h-fit w-fit items-center justify-center shadow-xs transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 active:translate-y-[0.5px] active:scale-[0.995]",
   variants: {
     variant: {
       primary:
@@ -15,7 +15,6 @@ const buttonVariants = tv({
       destructive: "bg-red-600 text-white hover:bg-red-500",
     },
     size: {
-      xs: "text-xs rounded-full px-2 py-0.75 gap-0.75",
       sm: "text-xs rounded-md px-2 py-1.25 gap-1",
       md: "text-sm font-semibold rounded-md px-3.5 py-2 gap-1.5",
       lg: "text-base font-semibold rounded-md px-4 py-3 gap-1.5",
@@ -35,7 +34,6 @@ const buttonVariants = tv({
 const iconVariants = tv({
   variants: {
     size: {
-      xs: "size-2.75",
       sm: "size-3.25",
       md: "size-4",
       lg: "size-5",

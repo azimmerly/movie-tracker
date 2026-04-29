@@ -26,7 +26,7 @@ export const ListCard = ({
 }: ListCardProps) => (
   <Link href={`/list/${id}`}>
     <Card className="transition-transform ease-out will-change-transform backface-hidden hover:-translate-y-px hover:scale-[1.005] hover:shadow-md">
-      <div className="sm:flex-row sm:items-start sm:justify-between mb-3 flex flex-col gap-2">
+      <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex min-w-0 flex-col gap-1.5">
           <Typography.Large className="leading-5 font-bold">
             {title}
