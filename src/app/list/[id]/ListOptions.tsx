@@ -57,11 +57,7 @@ export const ListOptions = ({ list }: ListOptionsProps) => {
 
   return (
     <div className="shrink-0 pl-6">
-      <DropdownMenu
-        buttonText="List options"
-        options={menuOptions}
-        ellipsisOnMobile
-      />
+      <DropdownMenu text="List options" options={menuOptions} />
       <UpdateListDialog
         list={list}
         open={isUpdateDialogOpen}

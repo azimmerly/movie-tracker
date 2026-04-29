@@ -17,7 +17,7 @@ export const NavLogo = ({ className, onClick }: NavLogoProps) => (
     href="/"
     onClick={onClick}
     className={twMerge(
-      "-m-1 flex items-center gap-1.5 rounded-md p-1 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden",
+      "-m-1 flex items-center gap-1.5 rounded-md p-1 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-hidden",
       className,
     )}
   >

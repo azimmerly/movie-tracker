@@ -5,7 +5,7 @@ import { tv, type VariantProps } from "tailwind-variants";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 const buttonVariants = tv({
-  base: "shadow-xs focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 flex items-center justify-center w-fit h-fit",
+  base: "shadow-xs focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 flex items-center justify-center w-fit h-fit",
   variants: {
     variant: {
       primary:

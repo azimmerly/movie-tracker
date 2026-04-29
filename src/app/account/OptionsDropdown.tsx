@@ -30,11 +30,7 @@ export const OptionsDropdown = ({ username }: OptionsDropdownProps) => {
 
   return (
     <>
-      <DropdownMenu
-        buttonText="Options"
-        options={menuOptions}
-        ellipsisOnMobile
-      />
+      <DropdownMenu text="Options" options={menuOptions} />
       <UpdateAccountDialog
         username={username}
         open={isUpdateDialogOpen}

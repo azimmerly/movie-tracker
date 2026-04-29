@@ -29,6 +29,7 @@ import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
 import { DropdownMenu } from "@/components/ui/DropdownMenu";
+import { Typography } from "@/components/ui/Typography";
 import { authClient } from "@/lib/authClient";
 
 type NavClientProps = {
@@ -90,7 +91,7 @@ export const NavClient = ({ user }: NavClientProps) => {
                   href={href}
                   aria-current={active ? "page" : undefined}
                   className={twMerge(
-                    "flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-semibold hover:bg-mist-200/60 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden dark:hover:bg-mist-800/70",
+                    "flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-semibold hover:bg-mist-200/60 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-hidden dark:hover:bg-mist-800/70",
                     active &&
                       "pointer-events-none bg-mist-200/60 dark:bg-mist-800/70",
                   )}
@@ -107,7 +108,7 @@ export const NavClient = ({ user }: NavClientProps) => {
           <div className="flex lg:hidden">
             <HeadlessButton
               onClick={() => setMobileMenuOpen(true)}
-              className="-m-1.5 rounded-md p-1.5 text-mist-500 hover:bg-mist-100 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden dark:text-mist-400 dark:hover:bg-mist-800"
+              className="-m-1.5 rounded-md p-1.5 text-mist-500 hover:bg-mist-100 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-hidden dark:text-mist-400 dark:hover:bg-mist-800"
             >
               <span className="sr-only">Open main menu</span>
               <Bars3Icon aria-hidden="true" className="size-6" />
@@ -132,8 +133,15 @@ export const NavClient = ({ user }: NavClientProps) => {
               </div>
             ) : (
               <DropdownMenu
-                iconButton={
-                  <Avatar userImage={user.image} className="size-9" />
+                text={user.name}
+                icon={<Avatar userImage={user.image} className="size-5.5" />}
+                header={
+                  <div className="flex flex-col gap-0.5">
+                    <Typography.Tiny className="font-medium">
+                      {user.name}
+                    </Typography.Tiny>
+                    <Typography.Tiny muted>{user.email}</Typography.Tiny>
+                  </div>
                 }
                 options={accountOptions}
               />
@@ -146,7 +154,7 @@ export const NavClient = ({ user }: NavClientProps) => {
         onClose={setMobileMenuOpen}
         className="lg:hidden"
       >
-        <DialogPanel className="bg-offwhite fixed inset-y-0 right-0 z-10 w-full overflow-y-auto px-3.5 sm:max-w-sm sm:px-6 sm:ring-1 sm:ring-mist-900/10 dark:bg-mist-950 dark:sm:ring-mist-800">
+        <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-mist-50 px-3.5 sm:max-w-sm sm:px-6 sm:ring-1 sm:ring-mist-900/10 dark:bg-mist-950 dark:sm:ring-mist-800">
           <div className="flex h-16 items-center justify-between sm:justify-end">
             <NavLogo
               className="sm:hidden"
@@ -156,7 +164,7 @@ export const NavClient = ({ user }: NavClientProps) => {
               <ThemeToggle className="mr-5" />
               <HeadlessButton
                 onClick={() => setMobileMenuOpen(false)}
-                className="-m-1.5 rounded-md p-1.5 text-mist-500 hover:bg-mist-100 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden dark:text-mist-400 dark:hover:bg-mist-800"
+                className="-m-1.5 rounded-md p-1.5 text-mist-500 hover:bg-mist-100 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-hidden dark:text-mist-400 dark:hover:bg-mist-800"
               >
                 <span className="sr-only">Close menu</span>
                 <XMarkIcon aria-hidden="true" className="size-6" />
@@ -174,7 +182,7 @@ export const NavClient = ({ user }: NavClientProps) => {
                     onClick={() => setMobileMenuOpen(false)}
                     aria-current={active ? "page" : undefined}
                     className={twMerge(
-                      "flex items-center gap-2 rounded-md px-3 py-2 hover:bg-mist-200/60 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden dark:hover:bg-mist-800/70",
+                      "flex items-center gap-2 rounded-md px-3 py-2 hover:bg-mist-200/60 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-hidden dark:hover:bg-mist-800/70",
                       active &&
                         "pointer-events-none bg-mist-200/60 dark:bg-mist-800/70",
                     )}
@@ -219,7 +227,7 @@ export const NavClient = ({ user }: NavClientProps) => {
                         onClick();
                         setMobileMenuOpen(false);
                       }}
-                      className="flex w-full cursor-pointer items-center gap-2 rounded-md px-3 py-2 hover:bg-mist-200/60 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden dark:hover:bg-mist-800/70"
+                      className="flex w-full cursor-pointer items-center gap-2 rounded-md px-3 py-2 hover:bg-mist-200/60 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-hidden dark:hover:bg-mist-800/70"
                     >
                       <Icon className="size-5" />
                       {label}

@@ -3,11 +3,6 @@
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-@theme {
-  --breakpoint-xs: 375px;
-  --color-offwhite: #fcfdfe;
-}
-
 @keyframes spin-in {
   from {
     opacity: 0;
@@ -39,8 +34,8 @@
     height: 4rem;
     background-image: linear-gradient(
       to top,
-      var(--color-offwhite),
-      var(--color-offwhite),
+      var(--color-mist-50),
+      var(--color-mist-50),
       transparent
     );
 

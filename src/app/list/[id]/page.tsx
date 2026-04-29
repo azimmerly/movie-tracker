@@ -55,21 +55,21 @@ const ListPage = async ({ params, searchParams }: ListPageProps) => {
 
   return (
     <div className="flex flex-col">
-      <div className="mb-6 flex items-start justify-between">
-        <div className="flex flex-col gap-4">
+      <div className="mb-6 flex flex-col gap-4">
+        <div className="flex items-center justify-between gap-4">
           <Typography.H1 className="leading-8 hyphens-auto">
             {title}
           </Typography.H1>
-          {description && (
-            <Typography.Small
-              muted
-              className="max-w-2xl border-l-2 border-mist-300 pl-2 text-pretty italic dark:border-mist-600"
-            >
-              {description}
-            </Typography.Small>
-          )}
+          {owner && <ListOptions list={list} />}
         </div>
-        {owner && <ListOptions list={list} />}
+        {description && (
+          <Typography.Small
+            muted
+            className="max-w-2xl border-l-2 border-mist-300 pl-2 text-pretty italic dark:border-mist-600"
+          >
+            {description}
+          </Typography.Small>
+        )}
       </div>
       <div className="flex flex-col gap-0.5">
         <Typography.Small className="flex items-center gap-1.75 font-medium">

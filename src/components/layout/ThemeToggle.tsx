@@ -24,7 +24,7 @@ export const ThemeToggle = ({ className }: { className?: ClassNameValue }) => {
       type="button"
       onClick={toggleTheme}
       className={twMerge(
-        "flex size-8 cursor-pointer items-center justify-center rounded-full text-mist-400 transition-colors hover:bg-mist-200/60 hover:text-mist-600 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden dark:hover:bg-mist-800/70 dark:hover:text-mist-300",
+        "flex size-8 cursor-pointer items-center justify-center rounded-full text-mist-400 transition-colors hover:bg-mist-200/60 hover:text-mist-600 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-hidden dark:hover:bg-mist-800/70 dark:hover:text-mist-300",
         className,
       )}
     >

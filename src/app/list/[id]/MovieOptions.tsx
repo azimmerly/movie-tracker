@@ -1,6 +1,5 @@
 "use client";
 
-import { EllipsisVerticalIcon } from "@heroicons/react/16/solid";
 import { InformationCircleIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -40,12 +39,5 @@ export const MovieOptions = ({ owner, movieId, listId }: MovieOptionsProps) => {
     },
   ] as const;
 
-  return (
-    <DropdownMenu
-      options={menuOptions}
-      iconButton={
-        <EllipsisVerticalIcon className="size-5 text-mist-400 hover:text-mist-500 dark:text-mist-500 dark:hover:text-mist-400" />
-      }
-    />
-  );
+  return <DropdownMenu options={menuOptions} />;
 };

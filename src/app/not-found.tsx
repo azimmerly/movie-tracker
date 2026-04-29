@@ -11,7 +11,7 @@ const NotFound = () => (
     <Link
       replace
       href="/"
-      className="mx-auto mt-8 flex w-fit items-center gap-1 rounded-sm p-1 text-sm font-semibold hover:opacity-70 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-hidden"
+      className="mx-auto mt-8 flex w-fit items-center gap-1 rounded-sm p-1 text-sm font-semibold hover:opacity-70 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:outline-hidden"
     >
       Go back
       <ArrowRightIcon className="size-4" />
