@@ -1,15 +1,14 @@
 export const formatRuntime = (runtime: number) => {
-  let result = "";
-
+  const segments: string[] = [];
   const hours = Math.floor(runtime / 60);
-  if (hours > 0) {
-    result += `${hours}hr`;
-  }
-
   const minutes = runtime % 60;
-  if (minutes > 0) {
-    result += ` ${minutes}min`;
+
+  if (hours) {
+    segments.push(`${hours}hr`);
+  }
+  if (minutes) {
+    segments.push(`${minutes}min`);
   }
 
-  return result.trim();
+  return segments.join(" ");
 };

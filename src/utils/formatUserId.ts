@@ -1,3 +1,1 @@
-export const formatUserId = (id: string) => {
-  return `#${id.slice(-6)}`;
-};
+export const formatUserId = (id: string) => `#${id.slice(-6)}`;

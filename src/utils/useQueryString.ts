@@ -6,29 +6,21 @@ export const useQueryString = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const navigate = (params: URLSearchParams, push: boolean) => {
-    const queryString = params.toString();
-    const pathWithQuery = queryString ? `${pathname}?${queryString}` : pathname;
-    if (push) {
-      router.push(pathWithQuery as Route);
-    } else {
-      router.replace(pathWithQuery as Route);
-    }
-  };
-
   const setQueryParams = (
     newParams: Record<string, string | null>,
-    push = false,
+    method: "push" | "replace" = "replace",
   ) => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParams);
     Object.entries(newParams).forEach(([key, val]) => {
-      if (val === null || !val.length) {
+      if (!val) {
         params.delete(key);
       } else {
         params.set(key, val);
       }
     });
-    navigate(params, push);
+    const updatedParams = params.toString();
+    const route = updatedParams ? `${pathname}?${updatedParams}` : pathname;
+    router[method](route as Route);
   };
 
   return { setQueryParams };
