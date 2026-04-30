@@ -24,7 +24,7 @@ export const Dialog = ({ className, children, ...props }: DialogProps) => (
         <DialogPanel
           transition
           className={twMerge(
-            "bg-mist-25 relative w-full transform overflow-hidden rounded-xl p-3 pt-5 text-left shadow-xl ring-1 ring-transparent transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:max-w-lg sm:p-6 sm:data-closed:translate-y-0 sm:data-closed:scale-95 dark:bg-mist-900 dark:ring-mist-800",
+            "relative w-full transform overflow-hidden rounded-xl bg-mist-50 p-3 pt-5 text-left shadow-xl ring-1 ring-transparent transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:max-w-lg sm:p-6 sm:data-closed:translate-y-0 sm:data-closed:scale-95 dark:bg-mist-900 dark:ring-mist-800",
             className,
           )}
         >

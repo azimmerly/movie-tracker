@@ -2,10 +2,6 @@
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-@theme {
-  --color-mist-25: #fcfdfe;
-}
-
 @layer base {
   html {
     overflow-x: hidden;
@@ -67,8 +63,8 @@
     height: 4rem;
     background-image: linear-gradient(
       to top,
-      var(--color-mist-25),
-      var(--color-mist-25),
+      var(--color-mist-50),
+      var(--color-mist-50),
       transparent
     );
 
