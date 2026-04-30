@@ -154,7 +154,7 @@ export const NavClient = ({ user }: NavClientProps) => {
         onClose={setMobileMenuOpen}
         className="lg:hidden"
       >
-        <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-mist-50 px-3.5 sm:max-w-sm sm:px-6 sm:ring-1 sm:ring-mist-900/10 dark:bg-mist-950 dark:sm:ring-mist-800">
+        <DialogPanel className="bg-mist-25 fixed inset-y-0 right-0 z-10 w-full overflow-y-auto px-3.5 sm:max-w-sm sm:px-6 sm:ring-1 sm:ring-mist-900/10 dark:bg-mist-950 dark:sm:ring-mist-800">
           <div className="flex h-16 items-center justify-between sm:justify-end">
             <NavLogo
               className="sm:hidden"

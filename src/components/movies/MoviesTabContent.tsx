@@ -19,7 +19,7 @@ type MoviesTabContentProps = {
   page?: number;
 };
 
-const MOVIES_PAGE_SIZE = 20;
+const MOVIES_PAGE_SIZE = 15;
 
 export const MoviesTabContent = async ({
   userId,

@@ -5,6 +5,7 @@ import { StarIcon } from "@heroicons/react/16/solid";
 import { HeartIcon } from "@heroicons/react/20/solid";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm, Watch } from "react-hook-form";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
@@ -26,6 +27,7 @@ export const MovieActions = ({
   favorite,
 }: MovieActionsProps) => {
   const router = useRouter();
+  const [starTick, setStarTick] = useState(0);
   const { control, formState, setValue, getValues } = useForm<UpdateMovieData>({
     defaultValues: { favorite, rating, movieId },
     resolver: zodResolver(updateMovieSchema),
@@ -66,14 +68,21 @@ export const MovieActions = ({
       const halfValue = fullValue - 1;
       const isFull = rating >= fullValue;
       const isHalf = !isFull && rating >= halfValue;
+      const isFilled = isFull || isHalf;
 
       return (
-        <span key={index} className="relative -mx-px size-5.25">
-          <StarIcon className="size-5.25 fill-mist-200 dark:fill-mist-700" />
+        <span
+          key={isFilled ? `${index}-${starTick}` : `${index}-stable`}
+          className={twMerge(
+            "relative -mx-px size-5.5",
+            isFilled && "animate-pop-in",
+          )}
+        >
+          <StarIcon className="size-5.5 fill-mist-200 dark:fill-mist-700" />
           {(isFull || isHalf) && (
             <StarIcon
               className={twMerge(
-                "absolute inset-0 size-5.25 fill-amber-400 dark:fill-amber-500",
+                "absolute inset-0 size-5.5 fill-amber-400 dark:fill-amber-500",
                 isHalf && "[clip-path:inset(0_50%_0_0)]",
               )}
             />
@@ -83,16 +92,18 @@ export const MovieActions = ({
               <span
                 role="button"
                 className="absolute top-0 left-0 h-full w-1/2 cursor-pointer"
-                onClick={() =>
-                  handleUpdate("rating", rating === halfValue ? 0 : halfValue)
-                }
+                onClick={() => {
+                  setStarTick((t) => t + 1);
+                  handleUpdate("rating", rating === halfValue ? 0 : halfValue);
+                }}
               />
               <span
                 role="button"
                 className="absolute top-0 right-0 h-full w-1/2 cursor-pointer"
-                onClick={() =>
-                  handleUpdate("rating", rating === fullValue ? 0 : fullValue)
-                }
+                onClick={() => {
+                  setStarTick((t) => t + 1);
+                  handleUpdate("rating", rating === fullValue ? 0 : fullValue);
+                }}
               />
             </>
           )}
@@ -105,17 +116,18 @@ export const MovieActions = ({
     <Checkbox
       tabIndex={-1}
       checked={favorite}
-      onChange={owner ? (e) => handleUpdate("favorite", e) : undefined}
+      onChange={(e) => handleUpdate("favorite", e)}
       className={twMerge(
         "mt-px ml-px flex items-center",
         owner ? "cursor-pointer" : "cursor-default",
       )}
     >
       <HeartIcon
+        key={+favorite}
         className={twMerge(
-          "size-5",
+          "size-5.25",
           favorite
-            ? "fill-rose-400 dark:fill-rose-500"
+            ? "animate-pop-in fill-rose-400 dark:fill-rose-500"
             : "fill-mist-200 dark:fill-mist-700",
         )}
       />
@@ -136,6 +148,8 @@ export const MovieActions = ({
   return owner ? (
     fieldset
   ) : (
-    <Tooltip label="You can only rate your own movies">{fieldset}</Tooltip>
+    <Tooltip label="You can only rate/favorite your own movies">
+      {fieldset}
+    </Tooltip>
   );
 };
