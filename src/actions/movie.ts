@@ -14,7 +14,7 @@ import {
 } from "drizzle-orm";
 
 import { getSession } from "@/actions/auth";
-import { movieDbFetch } from "@/actions/utils";
+import { movieDbFetch } from "@/actions/movieDb";
 import { db } from "@/lib/db";
 import { listMovie, movie, movieList, userMovie } from "@/lib/db/schema";
 import type {
@@ -25,6 +25,7 @@ import type {
   MovieSearchData,
   UpdateMovieData,
 } from "@/types";
+import { logError } from "@/utils/logError";
 import {
   PENDING_STATUSES,
   addMovieSchema,
@@ -66,7 +67,7 @@ export const searchMovies = async (data: MovieSearchData) => {
     });
     return { success: true, data: movies };
   } catch (e) {
-    console.error(e);
+    logError("movie/searchMovies", e);
     return { success: false, message: "Something went wrong" };
   }
 };
@@ -122,7 +123,7 @@ export const addMovie = async (data: AddMovieData) => {
 
     return { success: true, data: newListMovie };
   } catch (e) {
-    console.error(e);
+    logError("movie/addMovie", e);
     return { success: false, message: "Something went wrong" };
   }
 };
@@ -163,7 +164,7 @@ export const deleteMovie = async (data: DeleteMovieData) => {
 
     return { success: true, data: deletedListMovie };
   } catch (e) {
-    console.error(e);
+    logError("movie/deleteMovie", e);
     return { success: false, message: "Something went wrong" };
   }
 };
@@ -213,7 +214,7 @@ export const deleteUserMovie = async (data: DeleteUserMovieData) => {
 
     return { success: true };
   } catch (e) {
-    console.error(e);
+    logError("movie/deleteUserMovie", e);
     return { success: false, message: "Something went wrong" };
   }
 };
@@ -242,7 +243,7 @@ export const updateMovie = async (data: UpdateMovieData) => {
 
     return { success: true, data: updatedUserMovie };
   } catch (e) {
-    console.error(e);
+    logError("movie/updateMovie", e);
     return { success: false, message: "Something went wrong" };
   }
 };
@@ -274,7 +275,7 @@ export const getMovie = async (id: Movie["id"]) => {
 
     return { success: true, data: movieData };
   } catch (e) {
-    console.error(e);
+    logError("movie/getMovie", e);
     return { success: false, message: "Something went wrong" };
   }
 };
@@ -288,7 +289,7 @@ export const getMovieAvgRating = async (id: Movie["id"]) => {
       .then(([row]) => row?.avg);
     return result ? parseFloat(result) / 2 : null;
   } catch (e) {
-    console.error(e);
+    logError("movie/getMovieAvgRating", e);
     return null;
   }
 };
@@ -358,7 +359,7 @@ export const getUserMovies = async (
 
     return { success: true, data: { movies: moviesWithLists, totalCount } };
   } catch (e) {
-    console.error(e);
+    logError("movie/getUserMovies", e);
     return { success: false, message: "Something went wrong" };
   }
 };

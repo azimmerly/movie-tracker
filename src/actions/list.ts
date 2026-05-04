@@ -7,6 +7,7 @@ import { getSession } from "@/actions/auth";
 import { db } from "@/lib/db";
 import { listMovie, movie, movieList, user, userMovie } from "@/lib/db/schema";
 import type { AddListData, MovieList, UpdateListData } from "@/types";
+import { logError } from "@/utils/logError";
 import { addListSchema, updateListSchema } from "@/utils/validation/list";
 
 const getMovieListOrderBy = (sort?: string) => {
@@ -52,7 +53,7 @@ export const addMovieList = async (data: AddListData) => {
 
     return { success: true, data: newList };
   } catch (e) {
-    console.error(e);
+    logError("list/addMovieList", e);
     return { success: false, message: "Something went wrong" };
   }
 };
@@ -77,7 +78,7 @@ export const updateMovieList = async (data: UpdateListData) => {
 
     return { success: true, data: updatedList };
   } catch (e) {
-    console.error(e);
+    logError("list/updateMovieList", e);
     return { success: false, message: "Something went wrong" };
   }
 };
@@ -100,7 +101,7 @@ export const deleteMovieList = async (id: MovieList["id"]) => {
 
     return { success: true, data: deletedList };
   } catch (e) {
-    console.error(e);
+    logError("list/deleteMovieList", e);
     return { success: false, message: "Something went wrong" };
   }
 };
@@ -141,7 +142,7 @@ export const getAllMovieLists = async (
 
     return { success: true, data: { lists: allMovieLists, totalCount } };
   } catch (e) {
-    console.error(e);
+    logError("list/getAllMovieLists", e);
     return { success: false, message: "Something went wrong" };
   }
 };
@@ -180,7 +181,7 @@ export const getUserMovieLists = async (
 
     return { success: true, data: userMovieLists };
   } catch (e) {
-    console.error(e);
+    logError("list/getUserMovieLists", e);
     return { success: false, message: "Something went wrong" };
   }
 };
@@ -244,7 +245,7 @@ export const getMovieListById = async (
 
     return { success: true, data: { ...list, movies } };
   } catch (e) {
-    console.error(e);
+    logError("list/getMovieListById", e);
     return { success: false, message: "Something went wrong" };
   }
 };

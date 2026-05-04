@@ -5,6 +5,7 @@ import { and, avg, count, desc, eq, gt, sql } from "drizzle-orm";
 import { getSession } from "@/actions/auth";
 import { db } from "@/lib/db";
 import { account, movie, movieList, user, userMovie } from "@/lib/db/schema";
+import { logError } from "@/utils/logError";
 
 export const getUserProvider = async () => {
   const session = await getSession();
@@ -20,7 +21,7 @@ export const getUserProvider = async () => {
 
     return { success: true, data: userAccount?.providerId };
   } catch (e) {
-    console.error(e);
+    logError("user/getUserProvider", e);
     return { success: false, message: "Something went wrong" };
   }
 };
@@ -54,7 +55,7 @@ export const getUserStats = async (userId: string) => {
       data: { totalMovies, totalLists, totalRatings, totalFavorites },
     };
   } catch (e) {
-    console.error(e);
+    logError("user/getUserStats", e);
     return { success: false, message: "Something went wrong" };
   }
 };
@@ -105,7 +106,7 @@ export const getUserMovieStats = async (userId: string) => {
       data: { genreRatingStats, genreCountStats, decadeStats },
     };
   } catch (e) {
-    console.error(e);
+    logError("user/getUserMovieStats", e);
     return { success: false, message: "Something went wrong" };
   }
 };
@@ -119,7 +120,7 @@ export const getUserById = async (id: string) => {
 
     return { success: true, data: userData };
   } catch (e) {
-    console.error(e);
+    logError("user/getUserById", e);
     return { success: false, message: "Something went wrong" };
   }
 };
