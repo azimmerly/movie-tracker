@@ -22,6 +22,7 @@ export const NavLogo = ({ className, onClick }: NavLogoProps) => (
     )}
   >
     <Image
+      priority
       draggable={false}
       src={logoImage}
       alt="logo"

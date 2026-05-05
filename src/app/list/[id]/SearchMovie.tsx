@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { addMovie } from "@/actions/movie";
 import { Button } from "@/components/ui/Button";
 import { Chip } from "@/components/ui/Chip";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { Typography } from "@/components/ui/Typography";
 import type { Movie, MovieList, MovieSearchResponseData } from "@/types";
 import { formatDate } from "@/utils/formatDate";
@@ -49,14 +50,18 @@ export const SearchMovie = ({
   return (
     <li className="flex justify-between py-2">
       <div className="flex gap-3">
-        <Image
-          width={60}
-          height={90}
-          alt={movie.title}
-          draggable={false}
-          src={getMovieImage(movie.posterPath, "sm")}
-          className="h-22.5 w-15 rounded shadow-sm"
-        />
+        <div className="relative h-22.5 w-15">
+          <Skeleton className="absolute inset-0 rounded" />
+          <Image
+            width={60}
+            height={90}
+            alt={movie.title}
+            draggable={false}
+            src={getMovieImage(movie.posterPath, "sm")}
+            sizes="60px"
+            className="relative h-22.5 w-15 rounded shadow-xs"
+          />
+        </div>
         <div className="flex flex-col gap-0.5">
           <Typography.Small className="font-semibold">
             {movie.title}

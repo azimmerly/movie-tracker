@@ -40,15 +40,19 @@ const MoviePage = async ({ params }: MoviePageProps) => {
 
   return (
     <div className="mt-12 flex flex-col items-center gap-8 lg:mt-16 lg:flex-row lg:items-start lg:justify-center lg:gap-12">
-      <Image
-        priority
-        width={320}
-        height={480}
-        alt={movie.title}
-        draggable={false}
-        src={getMovieImage(movie.posterPath, "lg")}
-        className="h-84 w-56 rounded-lg shadow lg:h-120 lg:w-80 lg:shrink-0"
-      />
+      <div className="relative h-84 w-56 lg:h-120 lg:w-80 lg:shrink-0">
+        <Skeleton className="absolute inset-0" />
+        <Image
+          priority
+          width={320}
+          height={480}
+          alt={movie.title}
+          draggable={false}
+          src={getMovieImage(movie.posterPath, "lg")}
+          sizes="(min-width: 1024px) 320px, 224px"
+          className="relative h-84 w-56 rounded-lg shadow lg:h-120 lg:w-80"
+        />
+      </div>
       <div className="flex flex-col items-center gap-9 lg:max-w-lg lg:items-start">
         <div className="flex flex-col items-center gap-2.5 lg:items-start">
           <Typography.H1 className="max-w-2xl text-center lg:text-left">

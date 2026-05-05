@@ -2,8 +2,8 @@ import { MOVIE_DB_IMAGE_URL } from "@/consts";
 
 const SIZE = {
   sm: "w154",
-  md: "w342",
-  lg: "w500",
+  md: "w185",
+  lg: "w780",
 } as const;
 
 export const getMovieImage = (imagePath: string, size: keyof typeof SIZE) =>

@@ -11,6 +11,7 @@ import { NothingFound } from "@/components/NothingFound";
 import { SearchParamInput } from "@/components/SearchParamInput";
 import { SearchResultMessage } from "@/components/SearchResultMessage";
 import { Chip } from "@/components/ui/Chip";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { Typography } from "@/components/ui/Typography";
 import type { Movie, MovieList as MovieListType, UserMovie } from "@/types";
 import { formatDate } from "@/utils/formatDate";
@@ -55,7 +56,11 @@ export const MovieList = ({ movies, owner, listId }: MoviesListProps) => {
             {movies.map(({ movie, favorite, rating }, index) => (
               <li key={movie.id} className="flex justify-between py-3">
                 <div className="flex gap-3">
-                  <Link href={`/movie/${movie.id}`} className="rounded">
+                  <Link
+                    href={`/movie/${movie.id}`}
+                    className="relative rounded"
+                  >
+                    <Skeleton className="absolute inset-0 rounded-md" />
                     <Image
                       width={80}
                       height={120}
@@ -63,7 +68,7 @@ export const MovieList = ({ movies, owner, listId }: MoviesListProps) => {
                       draggable={false}
                       priority={index < 5}
                       src={getMovieImage(movie.posterPath, "md")}
-                      className="h-27 w-18 min-w-18 rounded-md shadow sm:h-33 sm:w-22 sm:min-w-22"
+                      className="relative h-27 w-18 min-w-18 rounded-md shadow sm:h-33 sm:w-22 sm:min-w-22"
                     />
                   </Link>
                   <div>

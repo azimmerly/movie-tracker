@@ -18,8 +18,8 @@ export const Avatar = ({ userImage, className }: AvatarProps) => (
       <Image
         src={userImage}
         alt="avatar"
-        width={112}
-        height={112}
+        width={60}
+        height={60}
         draggable={false}
       />
     ) : (

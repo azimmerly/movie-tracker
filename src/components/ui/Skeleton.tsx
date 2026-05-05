@@ -8,7 +8,7 @@ export const Skeleton = ({ className }: SkeletonProps) => (
   <div
     aria-hidden="true"
     className={twMerge(
-      "animate-pulse rounded-lg bg-mist-100 dark:bg-mist-900",
+      "animate-pulse rounded-lg bg-mist-200/60 dark:bg-mist-900",
       className,
     )}
   />
