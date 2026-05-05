@@ -5,12 +5,12 @@ import {
   LanguageIcon,
 } from "@heroicons/react/20/solid";
 import { ClockIcon } from "@heroicons/react/24/outline";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import { getMovie } from "@/actions/movie";
 import { ErrorMessage } from "@/components/ErrorMessage";
+import { MoviePoster } from "@/components/movies/MoviePoster";
 import { Chip } from "@/components/ui/Chip";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { Tooltip } from "@/components/ui/Tooltip";
@@ -19,7 +19,6 @@ import { IMDB_MOVIE_URL } from "@/consts";
 import { formatDate } from "@/utils/formatDate";
 import { formatLanguage } from "@/utils/formatLanguage";
 import { formatRuntime } from "@/utils/formatRuntime";
-import { getMovieImage } from "@/utils/getMovieImage";
 import { MovieAvgRating } from "./MovieAvgRating";
 
 type MoviePageProps = {
@@ -40,19 +39,12 @@ const MoviePage = async ({ params }: MoviePageProps) => {
 
   return (
     <div className="mt-12 flex flex-col items-center gap-8 lg:mt-16 lg:flex-row lg:items-start lg:justify-center lg:gap-12">
-      <div className="relative h-84 w-56 lg:h-120 lg:w-80 lg:shrink-0">
-        <Skeleton className="absolute inset-0" />
-        <Image
-          priority
-          width={320}
-          height={480}
-          alt={movie.title}
-          draggable={false}
-          src={getMovieImage(movie.posterPath, "lg")}
-          sizes="(min-width: 1024px) 320px, 224px"
-          className="relative h-84 w-56 rounded-lg shadow lg:h-120 lg:w-80"
-        />
-      </div>
+      <MoviePoster
+        size="lg"
+        alt={movie.title}
+        posterPath={movie.posterPath}
+        priority
+      />
       <div className="flex flex-col items-center gap-9 lg:max-w-lg lg:items-start">
         <div className="flex flex-col items-center gap-2.5 lg:items-start">
           <Typography.H1 className="max-w-2xl text-center lg:text-left">

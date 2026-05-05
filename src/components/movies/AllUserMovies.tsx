@@ -1,16 +1,14 @@
 import { CalendarDaysIcon, ListBulletIcon } from "@heroicons/react/16/solid";
-import Image from "next/image";
 import Link from "next/link";
 
 import { MovieActions } from "@/components/movies/MovieActions";
 import { MovieListsDialog } from "@/components/movies/MovieListsDialog";
 import { MovieOptions } from "@/components/movies/MovieOptions";
+import { MoviePoster } from "@/components/movies/MoviePoster";
 import { Chip } from "@/components/ui/Chip";
-import { Skeleton } from "@/components/ui/Skeleton";
 import { Typography } from "@/components/ui/Typography";
 import type { Movie, MovieList, UserMovie } from "@/types";
 import { formatDate } from "@/utils/formatDate";
-import { getMovieImage } from "@/utils/getMovieImage";
 
 const MAX_VISIBLE_LISTS = 2;
 
@@ -28,19 +26,13 @@ export const AllUserMovies = ({ movies, owner }: AllUserMoviesProps) => {
       {movies.map(({ movie, favorite, rating, lists }, index) => (
         <li key={movie.id} className="flex justify-between py-3">
           <div className="flex gap-3">
-            <Link href={`/movie/${movie.id}`} className="relative rounded">
-              <Skeleton className="absolute inset-0 rounded-md" />
-              <Image
-                width={80}
-                height={120}
-                alt={movie.title}
-                draggable={false}
-                priority={index < 5}
-                src={getMovieImage(movie.posterPath, "md")}
-                sizes="(min-width: 640px) 88px, 72px"
-                className="relative h-27 w-18 min-w-18 rounded-md shadow sm:h-33 sm:w-22 sm:min-w-22"
-              />
-            </Link>
+            <MoviePoster
+              size="md"
+              alt={movie.title}
+              posterPath={movie.posterPath}
+              href={`/movie/${movie.id}`}
+              priority={index < 5}
+            />
             <div>
               <span className="flex flex-wrap gap-x-2 gap-y-0.5">
                 <Link href={`/movie/${movie.id}`}>
