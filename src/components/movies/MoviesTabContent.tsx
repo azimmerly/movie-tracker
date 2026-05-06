@@ -60,13 +60,11 @@ export const MoviesTabContent = async ({
           </Typography.Body>
         </div>
         <div className="flex w-full shrink-0 flex-col gap-2 sm:w-fit sm:flex-row">
-          <SearchParamInput placeholder="Movie title" />
+          <SearchParamInput placeholder="Movie title or genre" />
           <MovieSortSelect />
         </div>
       </div>
-
-      {search && <SearchResultMessage searchTerm={search} />}
-
+      <SearchResultMessage searchTerm={search} noun="movies" />
       {movies?.length ? (
         <AllUserMovies movies={movies} owner={owner} />
       ) : (
@@ -78,7 +76,6 @@ export const MoviesTabContent = async ({
           }
         />
       )}
-
       <Pagination
         totalCount={totalCount}
         currentPage={page}

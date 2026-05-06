@@ -5,7 +5,7 @@ import {
   ListboxOption,
   ListboxOptions,
 } from "@headlessui/react";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/16/solid";
 import { type ClassNameValue, twMerge } from "tailwind-merge";
 
 import { Typography } from "@/components/ui/Typography";
@@ -35,11 +35,11 @@ export const Select = ({
     onChange={setSelected}
     className={twMerge("flex flex-col gap-0.5", className)}
   >
-    <Label className="hidden sm:block">
+    <Label className="sr-only sm:not-sr-only">
       <Typography.Tiny muted>{label}</Typography.Tiny>
     </Label>
     <div className="relative">
-      <ListboxButton className="relative w-full rounded-md bg-white py-1.5 pr-10 pl-3 text-left shadow-xs ring-1 ring-mist-200 ring-inset focus:ring-2 focus:ring-blue-600 focus:outline-hidden sm:text-sm/6 dark:bg-mist-900 dark:ring-mist-800">
+      <ListboxButton className="relative w-full rounded-md bg-white py-1.75 pr-10 pl-3 text-left shadow-xs ring-1 ring-mist-200 ring-inset focus:ring-2 focus:ring-blue-600 focus:outline-hidden sm:text-sm/6 dark:bg-mist-900 dark:ring-mist-800">
         <Typography.Small className="block truncate">
           {selected.label}
         </Typography.Small>

@@ -42,7 +42,7 @@ export const DashboardStats = ({ stats }: DashboardStatsProps) => (
               {value}
             </Typography.H3>
             <Typography.Small muted className="flex items-center gap-1">
-              <Icon className="size-3.25" />
+              <Icon className="size-3.5" />
               {value === 1 ? label.slice(0, -1) : label}
             </Typography.Small>
           </div>

@@ -48,13 +48,11 @@ const Discover = async ({ searchParams }: DiscoverProps) => {
       <div className="flex flex-col items-end justify-between gap-3 sm:flex-row">
         {!!session ? <AddListDialog /> : <GetStartedButton />}
         <div className="flex w-full flex-col items-end justify-end gap-2 sm:flex-row">
-          <SearchParamInput placeholder="List title" />
+          <SearchParamInput placeholder="List title or username" />
           <ListSortSelect />
         </div>
       </div>
-
-      {search && <SearchResultMessage searchTerm={search} />}
-
+      <SearchResultMessage searchTerm={search} noun="lists" />
       <div className="flex flex-col gap-2.5">
         {!!lists?.length ? (
           lists.map(({ user, movieCount, ...list }) => (
@@ -69,7 +67,6 @@ const Discover = async ({ searchParams }: DiscoverProps) => {
           <NothingFound text="No movie lists here… yet." />
         )}
       </div>
-
       <Pagination
         totalCount={totalCount}
         currentPage={currentPage}

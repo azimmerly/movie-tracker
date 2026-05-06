@@ -1,7 +1,7 @@
 "use server";
 
 import type { User } from "better-auth";
-import { and, asc, count, desc, eq, ilike, sql } from "drizzle-orm";
+import { and, asc, count, desc, eq, ilike, or, sql } from "drizzle-orm";
 
 import { getSession } from "@/actions/auth";
 import { db } from "@/lib/db";
@@ -113,10 +113,12 @@ export const getAllMovieLists = async (
   sort?: string,
 ) => {
   try {
-    const whereClause = and(
-      eq(movieList.private, false),
-      search ? ilike(movieList.title, `%${search}%`) : undefined,
-    );
+    const searchFilter = search
+      ? or(
+          ilike(movieList.title, `%${search}%`),
+          ilike(user.name, `%${search}%`),
+        )
+      : undefined;
 
     const [allMovieLists, [{ totalCount }]] = await Promise.all([
       db
@@ -130,14 +132,18 @@ export const getAllMovieLists = async (
           user: { name: user.name, image: user.image },
         })
         .from(movieList)
-        .where(whereClause)
         .leftJoin(listMovie, eq(movieList.id, listMovie.listId))
         .innerJoin(user, eq(movieList.userId, user.id))
+        .where(and(eq(movieList.private, false), searchFilter))
         .groupBy(movieList.id, user.id)
         .orderBy(...getMovieListOrderBy(sort))
         .limit(pageSize)
         .offset(offset),
-      db.select({ totalCount: count() }).from(movieList).where(whereClause),
+      db
+        .select({ totalCount: count() })
+        .from(movieList)
+        .innerJoin(user, eq(movieList.userId, user.id))
+        .where(and(eq(movieList.private, false), searchFilter)),
     ]);
 
     return { success: true, data: { lists: allMovieLists, totalCount } };
@@ -219,9 +225,12 @@ export const getMovieListById = async (
       }
     }
 
-    const whereClause = search
-      ? and(eq(listMovie.listId, id), ilike(movie.title, `%${search}%`))
-      : eq(listMovie.listId, id);
+    const searchFilter = search
+      ? or(
+          ilike(movie.title, `%${search}%`),
+          sql`${movie.genres}::text ilike ${"%" + search + "%"}`,
+        )
+      : undefined;
 
     const movies = await db
       .select({
@@ -240,7 +249,7 @@ export const getMovieListById = async (
           eq(userMovie.userId, list.user.id),
         ),
       )
-      .where(whereClause)
+      .where(and(eq(listMovie.listId, id), searchFilter))
       .orderBy(...getMovieOrderBy(sort));
 
     return { success: true, data: { ...list, movies } };

@@ -8,25 +8,31 @@ import { Typography } from "@/components/ui/Typography";
 import { useQueryString } from "@/utils/useQueryString";
 
 type SearchResultMessageProps = {
-  searchTerm: string;
+  noun: string;
+  searchTerm?: string;
   className?: ClassNameValue;
 };
 
 export const SearchResultMessage = ({
+  noun = "results",
   searchTerm,
   className,
 }: SearchResultMessageProps) => {
   const { setQueryParams } = useQueryString();
 
+  if (!searchTerm) {
+    return null;
+  }
+
   return (
     <div
       className={twMerge(
-        "mt-3 flex items-center justify-center gap-1",
+        "mt-5 flex items-center justify-center gap-1",
         className,
       )}
     >
       <Typography.Small muted className="text-center">
-        Showing results for <strong>{`"${searchTerm}"`}</strong>
+        Showing {noun} matching <strong>{`"${searchTerm}"`}</strong>
       </Typography.Small>
       <Button
         onClick={() => setQueryParams({ search: null, page: null })}

@@ -93,7 +93,7 @@ const ListPage = async ({ params, searchParams }: ListPageProps) => {
           {visibilityLabel}
         </Typography.Small>
       </div>
-      <MovieList listId={id} movies={movies} owner={owner} />
+      <MovieList listId={id} movies={movies} owner={owner} search={search} />
       <ScrollToTopButton />
     </div>
   );

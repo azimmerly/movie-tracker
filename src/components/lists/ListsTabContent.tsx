@@ -51,9 +51,7 @@ export const ListsTabContent = async ({
           <ListSortSelect />
         </div>
       </div>
-
-      {search && <SearchResultMessage searchTerm={search} />}
-
+      <SearchResultMessage searchTerm={search} noun="lists" />
       <div className="flex flex-col gap-2.5">
         {lists?.length ? (
           lists.map(({ user, movieCount, ...list }) => (

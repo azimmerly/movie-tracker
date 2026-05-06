@@ -1,8 +1,5 @@
-"use client";
-
 import { CalendarDaysIcon } from "@heroicons/react/16/solid";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 
 import { MovieActions } from "@/components/movies/MovieActions";
 import { MoviePoster } from "@/components/movies/MoviePoster";
@@ -25,11 +22,15 @@ type MoviesListProps = {
   }[];
   owner: boolean;
   listId: MovieListType["id"];
+  search?: string;
 };
 
-export const MovieList = ({ movies, owner, listId }: MoviesListProps) => {
-  const searchParams = useSearchParams();
-  const search = searchParams.get("search");
+export const MovieList = ({
+  movies,
+  owner,
+  listId,
+  search,
+}: MoviesListProps) => {
   const listMovieIds = new Set(movies.map(({ movie }) => movie.id));
 
   return (
@@ -39,13 +40,15 @@ export const MovieList = ({ movies, owner, listId }: MoviesListProps) => {
           <AddMovieDialog listId={listId} listMovieIds={listMovieIds} />
         )}
         <div className="flex w-full flex-col items-end justify-end gap-2 sm:flex-row">
-          <SearchParamInput placeholder="Movie title" />
+          <SearchParamInput placeholder="Movie title or genre" />
           <MovieSortSelect />
         </div>
       </div>
-
-      {search && <SearchResultMessage className="mt-10" searchTerm={search} />}
-
+      <SearchResultMessage
+        className="mt-10"
+        noun="movies"
+        searchTerm={search}
+      />
       <div className="mt-8">
         {!movies.length ? (
           <NothingFound text="No movies here… yet." />

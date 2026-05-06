@@ -11,6 +11,8 @@ import {
   gt,
   ilike,
   inArray,
+  or,
+  sql,
 } from "drizzle-orm";
 
 import { getSession } from "@/actions/auth";
@@ -36,6 +38,8 @@ import {
   movieSearchSchema,
   updateMovieSchema,
 } from "@/utils/validation/movie";
+
+const CACHE_ONE_DAY = 86400;
 
 const getUserMoviesOrderBy = (sort?: string) => {
   switch (sort) {
@@ -63,7 +67,7 @@ export const searchMovies = async (data: MovieSearchData) => {
     const movies = await movieDbFetch("/search/movie", {
       output: movieSearchResponseSchema,
       query: { query: title },
-      next: { revalidate: 86400 },
+      next: { revalidate: CACHE_ONE_DAY },
     });
     return { success: true, data: movies };
   } catch (e) {
@@ -305,10 +309,12 @@ export const getUserMovies = async (
     const session = await getSession();
     const includePrivate = session?.user.id === userId;
 
-    const whereClause = and(
-      eq(userMovie.userId, userId),
-      search ? ilike(movie.title, `%${search}%`) : undefined,
-    );
+    const searchFilter = search
+      ? or(
+          ilike(movie.title, `%${search}%`),
+          sql`${movie.genres}::text ilike ${"%" + search + "%"}`,
+        )
+      : undefined;
 
     const [movies, [{ totalCount }]] = await Promise.all([
       db
@@ -319,7 +325,7 @@ export const getUserMovies = async (
         })
         .from(userMovie)
         .innerJoin(movie, eq(movie.id, userMovie.movieId))
-        .where(whereClause)
+        .where(and(eq(userMovie.userId, userId), searchFilter))
         .orderBy(...getUserMoviesOrderBy(sort))
         .limit(pageSize)
         .offset(offset),
@@ -327,7 +333,7 @@ export const getUserMovies = async (
         .select({ totalCount: count() })
         .from(userMovie)
         .innerJoin(movie, eq(movie.id, userMovie.movieId))
-        .where(whereClause),
+        .where(and(eq(userMovie.userId, userId), searchFilter)),
     ]);
 
     const movieIds = movies.map(({ movie }) => movie.id);

@@ -1,9 +1,9 @@
 "use client";
 
-import { Field, Input, Label } from "@headlessui/react";
+import { Button, Field, Input, Label } from "@headlessui/react";
 import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/16/solid";
 import { useSearchParams } from "next/navigation";
-import { type ChangeEvent, useEffect, useState } from "react";
+import { type ChangeEvent, useState } from "react";
 
 import { Typography } from "@/components/ui/Typography";
 import { useDebouncedCallback } from "@/utils/useDebouncedCallback";
@@ -18,11 +18,12 @@ export const SearchParamInput = ({ placeholder }: SearchParamInputProps) => {
   const { setQueryParams } = useQueryString();
   const searchParam = searchParams.get("search") ?? "";
   const [search, setSearch] = useState(searchParam);
+  const [prevSearchParam, setPrevSearchParam] = useState(searchParam);
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+  if (prevSearchParam !== searchParam) {
+    setPrevSearchParam(searchParam);
     setSearch(searchParam);
-  }, [searchParam]);
+  }
 
   const debouncedUpdateQueryString = useDebouncedCallback((value: string) => {
     setQueryParams({ search: value, page: null });
@@ -41,7 +42,7 @@ export const SearchParamInput = ({ placeholder }: SearchParamInputProps) => {
 
   return (
     <Field className="flex w-full flex-col gap-0.5 sm:max-w-56">
-      <Label className="hidden sm:block">
+      <Label className="sr-only sm:not-sr-only">
         <Typography.Tiny muted>Search</Typography.Tiny>
       </Label>
       <div className="relative grid grid-cols-1">
@@ -51,20 +52,20 @@ export const SearchParamInput = ({ placeholder }: SearchParamInputProps) => {
           onChange={handleSearch}
           autoComplete="off"
           placeholder={placeholder}
-          className="col-start-1 row-start-1 rounded-md border-none bg-white px-8 py-1.5 text-sm text-mist-900 shadow-xs ring-1 ring-mist-300 outline-none ring-inset placeholder:text-mist-400 focus:ring-2 focus:ring-blue-600 focus:ring-inset dark:bg-mist-900 dark:text-white dark:ring-mist-800"
+          className="col-start-1 row-start-1 rounded-md border-none bg-white px-7.5 py-1.75 text-sm text-mist-900 shadow-xs ring-1 ring-mist-300 outline-none ring-inset placeholder:text-mist-400 focus:ring-2 focus:ring-blue-600 focus:ring-inset dark:bg-mist-900 dark:text-white dark:ring-mist-800"
         />
         <MagnifyingGlassIcon
           aria-hidden="true"
           className="pointer-events-none col-start-1 row-start-1 ml-2 size-4 self-center text-mist-400"
         />
         {!!search.length && (
-          <button
+          <Button
             onClick={clearSearch}
             aria-label="Clear search"
-            className="absolute top-1/2 right-0 -translate-y-1/2 cursor-pointer rounded-md p-1.5 text-mist-400 transition hover:text-mist-500 dark:text-mist-400 dark:hover:text-mist-300"
+            className="absolute top-1/2 right-0 mr-1 -translate-y-1/2 cursor-pointer rounded-lg p-1 text-mist-400 transition hover:text-mist-500 dark:text-mist-400 dark:hover:text-mist-300"
           >
             <XMarkIcon className="size-4" />
-          </button>
+          </Button>
         )}
       </div>
     </Field>
