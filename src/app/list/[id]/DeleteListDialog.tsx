@@ -8,7 +8,6 @@ import { toast } from "sonner";
 import { deleteMovieList } from "@/actions/list";
 import { Button } from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
-import { DialogHeader } from "@/components/ui/DialogHeader";
 import type { MovieList } from "@/types";
 
 type DeleteListDialogProps = {
@@ -35,13 +34,17 @@ export const DeleteListDialog = ({
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogHeader
-        icon={ExclamationTriangleIcon}
-        title="Delete movie list"
-        variant="destructive"
-        subtitle="Are you sure you want to delete this movie list? This action cannot be undone."
-      />
+    <Dialog
+      open={open}
+      onClose={onClose}
+      header={{
+        icon: ExclamationTriangleIcon,
+        variant: "destructive",
+        title: "Delete movie list",
+        subtitle:
+          "Are you sure you want to delete this movie list? This action cannot be undone.",
+      }}
+    >
       <div className="mt-5 flex flex-col gap-2 sm:flex-row-reverse">
         <Button
           variant="destructive"

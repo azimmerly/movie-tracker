@@ -9,7 +9,6 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
-import { DialogHeader } from "@/components/ui/DialogHeader";
 import { InputField } from "@/components/ui/InputField";
 import { authClient } from "@/lib/authClient";
 import type { UpdateUserData } from "@/types";
@@ -59,8 +58,8 @@ export const UpdateAccountDialog = ({
       open={open}
       onClose={onClose}
       onTransitionEnd={() => reset({ name: username })}
+      header={{ icon: PencilSquareIcon, title: "Update account" }}
     >
-      <DialogHeader icon={PencilSquareIcon} title="Update account" />
       <form
         className="flex flex-col gap-3"
         onSubmit={handleSubmit(handleUpdateAccount)}

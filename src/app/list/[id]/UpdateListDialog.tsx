@@ -10,7 +10,6 @@ import { toast } from "sonner";
 import { updateMovieList } from "@/actions/list";
 import { Button } from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
-import { DialogHeader } from "@/components/ui/DialogHeader";
 import { InputField } from "@/components/ui/InputField";
 import { TextareaField } from "@/components/ui/TextareaField";
 import type { MovieList, UpdateListData } from "@/types";
@@ -56,8 +55,8 @@ export const UpdateListDialog = ({
       onTransitionEnd={() => {
         reset({ id, title, description: description ?? undefined });
       }}
+      header={{ icon: PencilSquareIcon, title: "Edit list" }}
     >
-      <DialogHeader icon={PencilSquareIcon} title="Edit list" />
       <form
         className="flex flex-col gap-3"
         onSubmit={handleSubmit(handleUpdateList)}

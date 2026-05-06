@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { Dialog } from "@/components/ui/Dialog";
-import { DialogHeader } from "@/components/ui/DialogHeader";
 import type { MovieList } from "@/types";
 
 type MovieListsDialogProps = {
@@ -30,12 +29,15 @@ export const MovieListsDialog = ({
       >
         +{overflowCount} more
       </button>
-      <Dialog open={open} onClose={() => setOpen(false)}>
-        <DialogHeader
-          icon={ListBulletIcon}
-          title={movieTitle}
-          subtitle="Found in the following lists"
-        />
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        header={{
+          icon: ListBulletIcon,
+          title: movieTitle,
+          subtitle: "Found in the following lists",
+        }}
+      >
         <div className="max-h-60 overflow-y-auto pb-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <ul className="divide-y divide-mist-200 dark:divide-mist-800">
             {lists.map(({ id, title }) => (

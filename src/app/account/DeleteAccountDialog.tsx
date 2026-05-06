@@ -7,7 +7,6 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
-import { DialogHeader } from "@/components/ui/DialogHeader";
 import { authClient } from "@/lib/authClient";
 
 type DeleteAccountDialogProps = {
@@ -37,13 +36,17 @@ export const DeleteAccountDialog = ({
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogHeader
-        icon={ExclamationTriangleIcon}
-        title="Delete account"
-        variant="destructive"
-        subtitle="Are you sure you want to delete your account? This action cannot be undone."
-      />
+    <Dialog
+      open={open}
+      onClose={onClose}
+      header={{
+        icon: ExclamationTriangleIcon,
+        variant: "destructive",
+        title: "Delete account",
+        subtitle:
+          "Are you sure you want to delete your account? This action cannot be undone.",
+      }}
+    >
       <div className="mt-5 flex flex-col gap-2 sm:flex-row-reverse">
         <Button
           variant="destructive"

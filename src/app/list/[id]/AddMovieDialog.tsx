@@ -13,7 +13,6 @@ import { toast } from "sonner";
 import { searchMovies } from "@/actions/movie";
 import { Button } from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
-import { DialogHeader } from "@/components/ui/DialogHeader";
 import { InputField } from "@/components/ui/InputField";
 import { Typography } from "@/components/ui/Typography";
 import type {
@@ -85,8 +84,8 @@ export const AddMovieDialog = ({
           setAddedIds(listMovieIds);
         }}
         className="sm:max-w-xl"
+        header={{ icon: FilmIcon, title: "Add a movie" }}
       >
-        <DialogHeader icon={FilmIcon} title="Add a movie" />
         <form
           className="flex flex-col gap-3"
           onSubmit={handleSubmit(handleSearchMovie)}

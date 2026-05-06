@@ -11,7 +11,6 @@ import { addMovieList } from "@/actions/list";
 import { Button } from "@/components/ui/Button";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { Dialog } from "@/components/ui/Dialog";
-import { DialogHeader } from "@/components/ui/DialogHeader";
 import { InputField } from "@/components/ui/InputField";
 import { TextareaField } from "@/components/ui/TextareaField";
 import type { AddListData } from "@/types";
@@ -51,8 +50,8 @@ export const AddListDialog = () => {
         open={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
         onTransitionEnd={() => reset()}
+        header={{ icon: ListBulletIcon, title: "Create a new movie list" }}
       >
-        <DialogHeader icon={ListBulletIcon} title="Create a new movie list" />
         <form
           className="flex flex-col gap-3"
           onSubmit={handleSubmit(handleAddList)}
