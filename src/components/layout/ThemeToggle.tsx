@@ -3,11 +3,15 @@
 import { Button } from "@headlessui/react";
 import { MoonIcon, SunIcon } from "@heroicons/react/16/solid";
 import { useTheme } from "next-themes";
-import { twMerge, type ClassNameValue } from "tailwind-merge";
+import { twMerge } from "tailwind-merge";
 
 import { useIsMounted } from "@/utils/useIsMounted";
 
-export const ThemeToggle = ({ className }: { className?: ClassNameValue }) => {
+type ThemeToggleProps = {
+  className?: string;
+};
+
+export const ThemeToggle = ({ className }: ThemeToggleProps) => {
   const isMounted = useIsMounted();
   const { resolvedTheme, setTheme } = useTheme();
 

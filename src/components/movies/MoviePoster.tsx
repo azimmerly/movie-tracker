@@ -54,7 +54,7 @@ export const MoviePoster = ({
         height={height}
         sizes={sizes}
         src={getMovieImage(posterPath, size)}
-        className="relative h-full w-full"
+        className="relative h-full w-full shadow-xs"
         priority={priority}
         draggable={false}
       />

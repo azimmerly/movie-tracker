@@ -1,4 +1,4 @@
-import { type ClassNameValue, twMerge } from "tailwind-merge";
+import { twMerge } from "tailwind-merge";
 
 import { Typography } from "@/components/ui/Typography";
 import { tv, type VariantProps } from "tailwind-variants";
@@ -21,7 +21,7 @@ const chipVariants = tv({
 type ChipProps = VariantProps<typeof chipVariants> & {
   text: string;
   icon?: React.ElementType;
-  className?: ClassNameValue;
+  className?: string;
 };
 
 export const Chip = ({ text, icon: Icon, variant, className }: ChipProps) => {

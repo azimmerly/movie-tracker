@@ -6,7 +6,7 @@ import {
   ListboxOptions,
 } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/16/solid";
-import { type ClassNameValue, twMerge } from "tailwind-merge";
+import { twMerge } from "tailwind-merge";
 
 import { Typography } from "@/components/ui/Typography";
 
@@ -14,16 +14,14 @@ export type SelectOption = { value: string; label: string };
 
 type SelectProps = {
   label: string;
-  icon?: React.ElementType;
-  options: readonly SelectOption[];
   selected: SelectOption;
   setSelected: (selected: SelectOption) => void;
-  className?: ClassNameValue;
+  options: readonly SelectOption[];
+  className?: string;
 };
 
 export const Select = ({
   label,
-  icon: Icon = ChevronUpDownIcon,
   options,
   selected,
   setSelected,
@@ -44,7 +42,7 @@ export const Select = ({
           {selected.label}
         </Typography.Small>
         <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-          <Icon
+          <ChevronUpDownIcon
             aria-hidden="true"
             className="size-4 text-mist-400 dark:text-mist-400"
           />

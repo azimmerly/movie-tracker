@@ -1,8 +1,8 @@
-import { twMerge, type ClassNameValue } from "tailwind-merge";
+import { twMerge } from "tailwind-merge";
 
 type CardProps = {
   children: React.ReactNode;
-  className?: ClassNameValue;
+  className?: string;
 };
 
 export const Card = ({ className, children }: CardProps) => (

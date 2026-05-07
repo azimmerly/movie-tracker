@@ -12,7 +12,8 @@ const BAR_COLORS = {
 type StatBarListProps = {
   items: {
     label: string;
-    value: React.ReactNode;
+    value: string;
+    icon?: React.ReactNode;
     percent: number;
     description: string;
   }[];
@@ -21,13 +22,14 @@ type StatBarListProps = {
 
 export const StatBarList = ({ items, color }: StatBarListProps) => (
   <ul className="flex flex-col gap-2.5">
-    {items.map(({ label, value, percent, description }, index) => (
+    {items.map(({ label, value, icon, percent, description }, index) => (
       <li key={index}>
         <div className="mb-0.5 flex h-5 items-center justify-between gap-2">
           <Typography.Small className="truncate font-medium">
             {label}
           </Typography.Small>
-          <Typography.Small className="shrink-0 font-semibold">
+          <Typography.Small className="inline-flex shrink-0 items-center gap-1 font-semibold">
+            {icon}
             {value}
           </Typography.Small>
         </div>

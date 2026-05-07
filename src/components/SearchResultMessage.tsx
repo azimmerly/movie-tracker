@@ -2,7 +2,7 @@
 
 import { Button } from "@headlessui/react";
 import { XCircleIcon } from "@heroicons/react/16/solid";
-import { type ClassNameValue, twMerge } from "tailwind-merge";
+import { twMerge } from "tailwind-merge";
 
 import { Typography } from "@/components/ui/Typography";
 import { useQueryString } from "@/utils/useQueryString";
@@ -10,11 +10,11 @@ import { useQueryString } from "@/utils/useQueryString";
 type SearchResultMessageProps = {
   noun: string;
   searchTerm?: string;
-  className?: ClassNameValue;
+  className?: string;
 };
 
 export const SearchResultMessage = ({
-  noun = "results",
+  noun,
   searchTerm,
   className,
 }: SearchResultMessageProps) => {

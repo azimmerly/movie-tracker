@@ -38,11 +38,9 @@ export const StatsTabContent = async ({ userId }: StatsTabContentProps) => {
             color="amber"
             items={genreRatingStats.map(({ genre, avg, count }) => ({
               label: genre,
-              value: (
-                <span className="inline-flex items-center gap-1">
-                  <StarIcon className="size-3.75 text-amber-400" />
-                  {avg.toFixed(1)}
-                </span>
+              value: avg.toFixed(1),
+              icon: (
+                <StarIcon className="size-3.75 text-amber-400 dark:text-amber-500" />
               ),
               percent: (avg / 5) * 100,
               description: `${count} film${count !== 1 ? "s" : ""}`,

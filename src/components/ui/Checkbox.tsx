@@ -5,11 +5,11 @@ import {
   Label,
 } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/16/solid";
-import { type ClassNameValue, twMerge } from "tailwind-merge";
+import { twMerge } from "tailwind-merge";
 
 type CheckboxProps = Omit<HeadlessCheckboxProps, "className" | "children"> & {
   label: string;
-  className?: ClassNameValue;
+  className?: string;
 };
 
 export const Checkbox = ({

@@ -35,8 +35,12 @@ const H1 = ({
   muted,
   children,
   className,
+  ...rest
 }: React.HTMLAttributes<HTMLHeadingElement> & TypographyProps) => (
-  <h1 className={twMerge(typographyVariants({ type: "h1", muted, className }))}>
+  <h1
+    {...rest}
+    className={twMerge(typographyVariants({ type: "h1", muted, className }))}
+  >
     {children}
   </h1>
 );
@@ -45,8 +49,12 @@ const H2 = ({
   muted,
   children,
   className,
+  ...rest
 }: React.HTMLAttributes<HTMLHeadingElement> & TypographyProps) => (
-  <h2 className={twMerge(typographyVariants({ type: "h2", muted, className }))}>
+  <h2
+    {...rest}
+    className={twMerge(typographyVariants({ type: "h2", muted, className }))}
+  >
     {children}
   </h2>
 );
@@ -55,8 +63,12 @@ const H3 = ({
   muted,
   children,
   className,
+  ...rest
 }: React.HTMLAttributes<HTMLHeadingElement> & TypographyProps) => (
-  <h3 className={twMerge(typographyVariants({ type: "h3", muted, className }))}>
+  <h3
+    {...rest}
+    className={twMerge(typographyVariants({ type: "h3", muted, className }))}
+  >
     {children}
   </h3>
 );
@@ -65,8 +77,10 @@ const Body = ({
   muted,
   children,
   className,
+  ...rest
 }: React.HTMLAttributes<HTMLParagraphElement> & TypographyProps) => (
   <p
+    {...rest}
     className={twMerge(typographyVariants({ type: "body", muted, className }))}
   >
     {children}
@@ -77,8 +91,10 @@ const Large = ({
   muted,
   children,
   className,
+  ...rest
 }: React.HTMLAttributes<HTMLParagraphElement> & TypographyProps) => (
   <p
+    {...rest}
     className={twMerge(typographyVariants({ type: "large", muted, className }))}
   >
     {children}
@@ -89,8 +105,10 @@ const Small = ({
   muted,
   children,
   className,
+  ...rest
 }: React.HTMLAttributes<HTMLSpanElement> & TypographyProps) => (
   <span
+    {...rest}
     className={twMerge(typographyVariants({ type: "small", muted, className }))}
   >
     {children}
@@ -101,8 +119,10 @@ const Tiny = ({
   muted,
   children,
   className,
+  ...rest
 }: React.HTMLAttributes<HTMLSpanElement> & TypographyProps) => (
   <span
+    {...rest}
     className={twMerge(typographyVariants({ type: "tiny", muted, className }))}
   >
     {children}
@@ -112,10 +132,10 @@ const Tiny = ({
 const Link = ({
   children,
   className,
-  ...props
+  ...rest
 }: React.ComponentProps<typeof NextLink>) => (
   <NextLink
-    {...props}
+    {...rest}
     className={twMerge(typographyVariants({ type: "link", className }))}
   >
     {children}

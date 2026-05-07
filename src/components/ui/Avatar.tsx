@@ -1,10 +1,9 @@
-import type { User } from "better-auth";
 import Image from "next/image";
-import { type ClassNameValue, twMerge } from "tailwind-merge";
+import { twMerge } from "tailwind-merge";
 
 type AvatarProps = {
-  userImage: User["image"];
-  className?: ClassNameValue;
+  userImage?: string | null;
+  className?: string;
 };
 
 export const Avatar = ({ userImage, className }: AvatarProps) => (
