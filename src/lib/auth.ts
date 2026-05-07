@@ -1,4 +1,5 @@
 import { drizzleAdapter } from "@better-auth/drizzle-adapter";
+import { waitUntil } from "@vercel/functions";
 import { betterAuth } from "better-auth/minimal";
 
 import { APP_NAME } from "@/consts";
@@ -34,6 +35,11 @@ export const auth = betterAuth({
     github: {
       clientId: env.GITHUB_CLIENT_ID,
       clientSecret: env.GITHUB_CLIENT_SECRET,
+    },
+  },
+  advanced: {
+    backgroundTasks: {
+      handler: waitUntil,
     },
   },
 });
