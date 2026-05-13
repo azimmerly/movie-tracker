@@ -31,6 +31,7 @@ import { Button } from "@/components/ui/Button";
 import { DropdownMenu } from "@/components/ui/DropdownMenu";
 import { Typography } from "@/components/ui/Typography";
 import { authClient } from "@/lib/authClient";
+import { broadcastSignOut } from "@/utils/authBroadcast";
 
 type NavClientProps = {
   user?: User;
@@ -70,6 +71,7 @@ export const NavClient = ({ user }: NavClientProps) => {
           onClick: async () => {
             toast.success("Signed out");
             await authClient.signOut();
+            broadcastSignOut();
             router.refresh();
           },
         },

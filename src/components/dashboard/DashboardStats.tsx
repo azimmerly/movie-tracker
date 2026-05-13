@@ -31,7 +31,7 @@ type DashboardStatsProps = {
 };
 
 export const DashboardStats = ({ stats }: DashboardStatsProps) => (
-  <div className="-my-1 w-full overflow-x-auto [scrollbar-width:none] sm:mb-1 [&::-webkit-scrollbar]:hidden">
+  <div className="-my-1 w-full scrollbar-none overflow-x-auto sm:mb-1 [&::-webkit-scrollbar]:hidden">
     <div className="flex w-fit divide-x divide-mist-200 dark:divide-mist-700">
       {Object.keys(STATS).map((key) => {
         const value = stats[key as keyof typeof STATS];

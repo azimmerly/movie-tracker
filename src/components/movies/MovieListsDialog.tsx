@@ -38,7 +38,7 @@ export const MovieListsDialog = ({
           subtitle: "Found in the following lists",
         }}
       >
-        <div className="max-h-60 overflow-y-auto pb-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="max-h-60 scrollbar-none overflow-y-auto pb-5 [&::-webkit-scrollbar]:hidden">
           <ul className="divide-y divide-mist-200 dark:divide-mist-800">
             {lists.map(({ id, title }) => (
               <li key={id} className="py-2.5 first:pt-0 last:pb-0">
