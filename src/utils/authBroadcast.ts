@@ -1,17 +1,21 @@
 const CHANNEL = "auth";
+const SIGN_IN_EVENT = "signed-in";
 const SIGN_OUT_EVENT = "signed-out";
 
-export const broadcastSignOut = () => {
+const broadcast = (type: typeof SIGN_IN_EVENT | typeof SIGN_OUT_EVENT) => {
   const ch = new BroadcastChannel(CHANNEL);
-  ch.postMessage({ type: SIGN_OUT_EVENT });
+  ch.postMessage({ type });
   ch.close();
 };
 
-export const listenForSignOut = (onSignOut: () => void) => {
+export const broadcastSignIn = () => broadcast(SIGN_IN_EVENT);
+export const broadcastSignOut = () => broadcast(SIGN_OUT_EVENT);
+
+export const listenForAuthChange = (onChange: () => void) => {
   const ch = new BroadcastChannel(CHANNEL);
-  ch.onmessage = ({ data }) => {
-    if (data?.type === SIGN_OUT_EVENT) {
-      onSignOut();
+  ch.onmessage = ({ data }: MessageEvent) => {
+    if ([SIGN_IN_EVENT, SIGN_OUT_EVENT].includes(data?.type)) {
+      onChange();
     }
   };
   return () => ch.close();

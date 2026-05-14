@@ -3,14 +3,10 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-import { listenForSignOut } from "@/utils/authBroadcast";
+import { listenForAuthChange } from "@/utils/authBroadcast";
 
 export const AuthSync = () => {
   const router = useRouter();
-
-  useEffect(() => {
-    return listenForSignOut(() => router.refresh());
-  }, [router]);
-
+  useEffect(() => listenForAuthChange(router.refresh), [router]);
   return null;
 };

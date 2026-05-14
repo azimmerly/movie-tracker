@@ -12,6 +12,7 @@ import { Checkbox } from "@/components/ui/Checkbox";
 import { InputField } from "@/components/ui/InputField";
 import { authClient } from "@/lib/authClient";
 import type { SignInData } from "@/types";
+import { broadcastSignIn } from "@/utils/authBroadcast";
 import { signInSchema } from "@/utils/validation/user";
 
 export const SignInForm = () => {
@@ -30,6 +31,7 @@ export const SignInForm = () => {
       },
       onSuccess: () => {
         toast.success("Signed in");
+        broadcastSignIn();
         router.refresh();
       },
     });
