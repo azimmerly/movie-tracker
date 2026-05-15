@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
 import { authClient } from "@/lib/authClient";
+import { broadcastSignOut } from "@/utils/authBroadcast";
 
 type DeleteAccountDialogProps = {
   open: boolean;
@@ -29,6 +30,7 @@ export const DeleteAccountDialog = ({
         },
         onSuccess: () => {
           toast.warning("Account deleted");
+          broadcastSignOut();
           router.refresh();
         },
       },

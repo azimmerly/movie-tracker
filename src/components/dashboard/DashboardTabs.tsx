@@ -24,7 +24,7 @@ export const DashboardTabs = ({ basePath }: DashboardTabsProps) => {
   const pathname = usePathname();
 
   return (
-    <div className="flex gap-1 overflow-x-auto">
+    <div className="flex scrollbar-none gap-1 overflow-x-auto">
       {TABS.map(({ segment, icon: Icon }) => {
         const href = `${basePath}/${segment}`;
         const active = pathname === href;

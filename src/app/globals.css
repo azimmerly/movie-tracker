@@ -48,12 +48,6 @@
     animation: spin-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
   }
 
-  .scrollbar-hide {
-    overflow: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
   .scroll-fade {
     pointer-events: none;
     position: absolute;

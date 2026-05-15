@@ -50,7 +50,7 @@ export const Select = ({
       </ListboxButton>
       <ListboxOptions
         transition
-        className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white p-1 shadow-lg ring-1 ring-mist-200/70 focus:outline-hidden data-leave:transition data-leave:duration-100 data-leave:ease-in data-closed:data-leave:opacity-0 sm:text-sm dark:bg-mist-900 dark:ring-mist-800"
+        className="absolute z-10 mt-1 max-h-60 w-full scrollbar-none overflow-y-auto rounded-md bg-white p-1 shadow-lg ring-1 ring-mist-200/70 focus:outline-hidden data-leave:transition data-leave:duration-100 data-leave:ease-in data-closed:data-leave:opacity-0 sm:text-sm dark:bg-mist-900 dark:ring-mist-800"
       >
         {options.map((option, i) => (
           <ListboxOption
