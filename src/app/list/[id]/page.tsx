@@ -73,7 +73,7 @@ const ListPage = async ({ params, searchParams }: ListPageProps) => {
       </div>
       <div className="flex flex-col gap-0.5">
         <Typography.Small className="flex items-center gap-1.75 font-medium">
-          <Avatar userImage={user.image} className="size-4.5" />
+          <Avatar image={user.image} name={user.name} className="size-4.5" />
           <Typography.Link
             className="flex gap-1.25 text-base"
             href={userListsHref as Route}

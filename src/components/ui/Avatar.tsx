@@ -1,33 +1,54 @@
 import Image from "next/image";
 import { twMerge } from "tailwind-merge";
 
+import { getInitials } from "@/utils/getInitials";
+
 type AvatarProps = {
-  userImage?: string | null;
+  name: string;
+  image?: string | null;
   className?: string;
 };
 
-export const Avatar = ({ userImage, className }: AvatarProps) => (
-  <span
-    className={twMerge(
-      "inline-block shrink-0 overflow-hidden rounded-full shadow-xs",
-      className,
-    )}
-  >
-    {userImage ? (
-      <Image
-        src={userImage}
-        alt="avatar"
-        width={60}
-        height={60}
-        draggable={false}
-      />
-    ) : (
+export const Avatar = ({ image, name, className }: AvatarProps) => {
+  const wrapperClassName = twMerge(
+    "inline-block shrink-0 overflow-hidden rounded-full shadow-xs",
+    className,
+  );
+
+  if (image) {
+    return (
+      <span className={wrapperClassName}>
+        <Image
+          src={image}
+          alt={name}
+          width={60}
+          height={60}
+          draggable={false}
+          className="size-full object-cover"
+        />
+      </span>
+    );
+  }
+
+  return (
+    <span className={wrapperClassName}>
       <svg
+        role="img"
+        aria-label={name}
         viewBox="0 0 24 24"
-        className="size-full bg-mist-200 fill-mist-400 dark:bg-mist-700"
+        className="size-full bg-mist-200 fill-mist-500 dark:bg-mist-700 dark:fill-mist-300"
       >
-        <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+        <text
+          x="12"
+          y="12"
+          textAnchor="middle"
+          dominantBaseline="central"
+          fontSize="11"
+          fontWeight="600"
+        >
+          {getInitials(name)}
+        </text>
       </svg>
-    )}
-  </span>
-);
+    </span>
+  );
+};

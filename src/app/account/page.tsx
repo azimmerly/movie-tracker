@@ -37,7 +37,7 @@ const Account = async () => {
       </div>
       <Card className="p-5 sm:p-6">
         <div className="flex flex-col items-center gap-4 sm:flex-row">
-          <Avatar userImage={user.image} className="size-15" />
+          <Avatar image={user.image} name={user.name} className="size-15" />
           <div className="flex w-full flex-col gap-0.5 text-center sm:text-left">
             <div className="flex justify-center gap-1.5 sm:justify-start">
               <Typography.Large>{user.name}</Typography.Large>
