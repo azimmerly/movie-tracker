@@ -43,7 +43,7 @@ export const Avatar = ({ image, name, className }: AvatarProps) => {
           y="12"
           textAnchor="middle"
           dominantBaseline="central"
-          fontSize="11"
+          fontSize="12"
           fontWeight="600"
         >
           {getInitials(name)}
