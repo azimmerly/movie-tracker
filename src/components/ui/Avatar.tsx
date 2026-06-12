@@ -1,15 +1,16 @@
+import type { User } from "better-auth";
 import Image from "next/image";
 import { twMerge } from "tailwind-merge";
 
 import { getInitials } from "@/utils/getInitials";
 
 type AvatarProps = {
-  name: string;
-  image?: string | null;
+  user: Pick<User, "name" | "image">;
   className?: string;
 };
 
-export const Avatar = ({ image, name, className }: AvatarProps) => {
+export const Avatar = ({ user, className }: AvatarProps) => {
+  const { name, image } = user;
   const wrapperClassName = twMerge(
     "inline-block shrink-0 overflow-hidden rounded-full shadow-xs",
     className,

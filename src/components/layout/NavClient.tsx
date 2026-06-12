@@ -136,13 +136,7 @@ export const NavClient = ({ user }: NavClientProps) => {
             ) : (
               <DropdownMenu
                 text={user.name}
-                icon={
-                  <Avatar
-                    image={user.image}
-                    name={user.name}
-                    className="size-5.5"
-                  />
-                }
+                icon={<Avatar user={user} className="size-5.5" />}
                 header={
                   <div className="flex flex-col gap-0.5">
                     <Typography.Tiny className="font-medium">

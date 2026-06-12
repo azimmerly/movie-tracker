@@ -1,6 +1,10 @@
 import { z } from "zod";
 
-const emailSchema = z.email({ error: "Invalid email" });
+const emailSchema = z
+  .string()
+  .trim()
+  .min(1, { error: "Required" })
+  .pipe(z.email({ error: "Invalid email" }));
 
 const nameSchema = z
   .string()
