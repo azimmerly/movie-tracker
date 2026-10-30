@@ -8,13 +8,17 @@ import { deleteMovie } from "@/actions/movie";
 import { DropdownMenu } from "@/components/ui/DropdownMenu";
 import type { Movie, MovieList } from "@/types";
 
-type MovieOptionsProps = {
+type ListMovieOptionsProps = {
   owner: boolean;
   movieId: Movie["id"];
   listId: MovieList["id"];
 };
 
-export const MovieOptions = ({ owner, movieId, listId }: MovieOptionsProps) => {
+export const ListMovieOptions = ({
+  owner,
+  movieId,
+  listId,
+}: ListMovieOptionsProps) => {
   const router = useRouter();
 
   const menuOptions = [

@@ -8,17 +8,17 @@ import { DropdownMenu } from "@/components/ui/DropdownMenu";
 import type { Movie } from "@/types";
 import { DeleteUserMovieDialog } from "./DeleteUserMovieDialog";
 
-type MovieOptionsProps = {
+type UserMovieOptionsProps = {
   movieId: Movie["id"];
   owner: boolean;
   listCount: number;
 };
 
-export const MovieOptions = ({
+export const UserMovieOptions = ({
   movieId,
   owner,
   listCount,
-}: MovieOptionsProps) => {
+}: UserMovieOptionsProps) => {
   const router = useRouter();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 

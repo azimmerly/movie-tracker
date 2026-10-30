@@ -6,3 +6,6 @@ const dateFormat = new Intl.DateTimeFormat("en-US", {
 
 export const formatDate = (date: Date | string) =>
   dateFormat.format(new Date(date));
+
+export const formatYear = (date: Date | string) =>
+  new Date(date).getUTCFullYear();

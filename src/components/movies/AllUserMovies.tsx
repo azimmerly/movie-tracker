@@ -1,14 +1,11 @@
-import { CalendarDaysIcon, ListBulletIcon } from "@heroicons/react/16/solid";
+import { ListBulletIcon } from "@heroicons/react/16/solid";
 import Link from "next/link";
 
-import { MovieActions } from "@/components/movies/MovieActions";
 import { MovieListsDialog } from "@/components/movies/MovieListsDialog";
-import { MovieOptions } from "@/components/movies/MovieOptions";
-import { MoviePoster } from "@/components/movies/MoviePoster";
-import { Chip } from "@/components/ui/Chip";
+import { MovieRow } from "@/components/movies/MovieRow";
+import { UserMovieOptions } from "@/components/movies/UserMovieOptions";
 import { Typography } from "@/components/ui/Typography";
 import type { Movie, MovieList, UserMovie } from "@/types";
-import { formatDate } from "@/utils/formatDate";
 
 const MAX_VISIBLE_LISTS = 2;
 
@@ -24,80 +21,50 @@ export const AllUserMovies = ({ movies, owner }: AllUserMoviesProps) => {
   return (
     <ul className="divide-y divide-mist-200 dark:divide-mist-800">
       {movies.map(({ movie, favorite, rating, lists }, index) => (
-        <li key={movie.id} className="flex justify-between py-3">
-          <div className="flex gap-3">
-            <MoviePoster
-              size="md"
-              alt={movie.title}
-              posterPath={movie.posterPath}
-              href={`/movie/${movie.id}`}
-              priority={index < 5}
+        <MovieRow
+          key={movie.id}
+          movie={movie}
+          owner={owner}
+          rating={rating}
+          favorite={favorite}
+          priority={index < 5}
+          options={
+            <UserMovieOptions
+              movieId={movie.id}
+              owner={owner}
+              listCount={lists.length}
             />
-            <div>
-              <span className="flex flex-wrap gap-x-2 gap-y-0.5">
-                <Link href={`/movie/${movie.id}`}>
-                  <Typography.Body className="text-sm font-semibold hover:underline sm:text-base">
-                    {movie.title}
-                  </Typography.Body>
-                </Link>
-                <Typography.Tiny muted className="flex items-center gap-0.5">
-                  <CalendarDaysIcon className="mb-px size-3.5" />
-                  {formatDate(movie.releaseDate)}
-                </Typography.Tiny>
-              </span>
-              <div className="mt-1 flex flex-wrap gap-1">
-                {movie.genres.slice(0, 3).map((genre) => (
-                  <Chip
-                    key={genre}
-                    text={genre}
-                    variant="primary"
-                    className="px-1.5 py-0.5 sm:px-2 sm:py-1"
-                  />
-                ))}
-              </div>
-              <MovieActions
-                owner={owner}
-                movieId={movie.id}
-                rating={rating}
-                favorite={favorite}
-              />
-              {!!lists.length && (
-                <Typography.Small
-                  muted
-                  className="mt-2 flex flex-wrap items-center gap-x-1 gap-y-0.5"
-                >
-                  <ListBulletIcon className="mt-px size-3.5 shrink-0" />
-                  {lists.slice(0, MAX_VISIBLE_LISTS).map((list, i, arr) => (
-                    <span key={list.id} className="flex items-center">
-                      <Link
-                        href={`/list/${list.id}`}
-                        className="max-w-25 truncate hover:underline sm:max-w-40"
-                      >
-                        {list.title}
-                      </Link>
-                      {(i < arr.length - 1 ||
-                        lists.length > MAX_VISIBLE_LISTS) && (
-                        <span aria-hidden>,</span>
-                      )}
-                    </span>
-                  ))}
-                  {lists.length > MAX_VISIBLE_LISTS && (
-                    <MovieListsDialog
-                      lists={lists}
-                      movieTitle={movie.title}
-                      overflowCount={lists.length - MAX_VISIBLE_LISTS}
-                    />
+          }
+        >
+          {!!lists.length && (
+            <Typography.Small
+              muted
+              className="mt-2.5 flex flex-wrap items-center gap-x-1 gap-y-0.5"
+            >
+              <ListBulletIcon className="mt-px size-3.5 shrink-0" />
+              {lists.slice(0, MAX_VISIBLE_LISTS).map((list, i, arr) => (
+                <span key={list.id} className="flex items-center">
+                  <Link
+                    href={`/list/${list.id}`}
+                    className="max-w-25 truncate hover:underline sm:max-w-40"
+                  >
+                    {list.title}
+                  </Link>
+                  {(i < arr.length - 1 || lists.length > MAX_VISIBLE_LISTS) && (
+                    <span aria-hidden>,</span>
                   )}
-                </Typography.Small>
+                </span>
+              ))}
+              {lists.length > MAX_VISIBLE_LISTS && (
+                <MovieListsDialog
+                  lists={lists}
+                  movieTitle={movie.title}
+                  overflowCount={lists.length - MAX_VISIBLE_LISTS}
+                />
               )}
-            </div>
-          </div>
-          <MovieOptions
-            movieId={movie.id}
-            owner={owner}
-            listCount={lists.length}
-          />
-        </li>
+            </Typography.Small>
+          )}
+        </MovieRow>
       ))}
     </ul>
   );

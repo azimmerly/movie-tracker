@@ -13,7 +13,7 @@ export const NothingFound = ({ text }: NothingFoundProps) => (
       draggable={false}
       src={ticketImage}
       alt="movie ticket"
-      className="mx-auto size-20"
+      className="mx-auto mb-3 size-20"
     />
     <Typography.Body muted className="font-medium">
       {text}

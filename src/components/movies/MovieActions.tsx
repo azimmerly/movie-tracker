@@ -73,10 +73,7 @@ export const MovieActions = ({
       return (
         <span
           key={isFilled ? `${index}-${starTick}` : `${index}-stable`}
-          className={twMerge(
-            "relative -mx-px size-5.5",
-            isFilled && "animate-pop-in",
-          )}
+          className={twMerge("relative size-5.5", isFilled && "animate-pop-in")}
         >
           <StarIcon className="size-5.5 fill-mist-200 dark:fill-mist-700" />
           {(isFull || isHalf) && (
@@ -118,7 +115,7 @@ export const MovieActions = ({
       checked={favorite}
       onChange={(e) => handleUpdate("favorite", e)}
       className={twMerge(
-        "mt-px ml-px flex items-center",
+        "mt-px ml-2 flex items-center",
         owner ? "cursor-pointer" : "cursor-default",
       )}
     >
@@ -135,7 +132,7 @@ export const MovieActions = ({
   );
 
   const fieldset = (
-    <Fieldset className="mt-2.25 flex items-center">
+    <Fieldset className="mt-3 flex items-center">
       <Field className="flex">
         <Watch name={"rating"} control={control} render={renderStars} />
       </Field>

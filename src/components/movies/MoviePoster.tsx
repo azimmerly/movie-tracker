@@ -24,8 +24,8 @@ const IMAGE_CONFIG = {
   md: {
     width: 80,
     height: 120,
-    wrapperClass: "h-27 w-18 rounded-md sm:h-33 sm:w-22",
-    sizes: "(min-width: 640px) 88px, 72px",
+    wrapperClass: "h-31.5 w-21 rounded-md sm:h-36 sm:w-24",
+    sizes: "(min-width: 640px) 96px, 84px",
   },
   lg: {
     width: 320,
