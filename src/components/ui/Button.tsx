@@ -15,7 +15,7 @@ const buttonVariants = tv({
       destructive: "bg-red-600 text-white hover:bg-red-500",
     },
     size: {
-      sm: "text-xs rounded-md px-2 py-1.25 gap-1",
+      sm: "text-xs font-medium rounded-md px-2 py-1.25 gap-1",
       md: "text-sm font-semibold rounded-md px-3.5 py-2 gap-1.5",
       lg: "text-base font-semibold rounded-md px-4 py-3 gap-1.5",
       circle: "size-10 rounded-full p-0",

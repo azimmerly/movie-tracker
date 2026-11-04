@@ -31,13 +31,13 @@ export const Select = ({
     as="div"
     value={selected}
     onChange={setSelected}
-    className={twMerge("flex flex-col gap-0.5", className)}
+    className={twMerge("flex flex-col gap-1", className)}
   >
     <Label className="sr-only sm:not-sr-only">
       <Typography.Tiny muted>{label}</Typography.Tiny>
     </Label>
     <div className="relative">
-      <ListboxButton className="relative w-full rounded-md bg-white py-1.75 pr-10 pl-3 text-left shadow-xs ring-1 ring-mist-200 ring-inset focus:ring-2 focus:ring-blue-600 focus:outline-hidden sm:text-sm/6 dark:bg-mist-900 dark:ring-mist-800">
+      <ListboxButton className="relative w-full rounded-md bg-white py-2 pr-10 pl-3 text-left shadow-xs ring-1 ring-mist-300 ring-inset focus:ring-2 focus:ring-blue-600 focus:outline-hidden sm:text-sm/6 dark:bg-mist-900 dark:ring-mist-800">
         <Typography.Small className="block truncate">
           {selected.label}
         </Typography.Small>
@@ -56,7 +56,7 @@ export const Select = ({
           <ListboxOption
             key={i}
             value={option}
-            className="group relative rounded-sm px-2 py-1.5 select-none data-focus:bg-blue-600"
+            className="group relative rounded-sm px-2 py-2 select-none data-focus:bg-blue-600"
           >
             <Typography.Small className="block truncate font-normal group-data-focus:text-white group-data-selected:font-semibold">
               {option.label}

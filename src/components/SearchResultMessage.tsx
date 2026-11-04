@@ -36,7 +36,7 @@ export const SearchResultMessage = ({
       </Typography.Small>
       <Button
         onClick={() => setQueryParams({ search: null, page: null })}
-        className="cursor-pointer rounded p-0.5 text-mist-400 transition hover:text-mist-500 dark:text-mist-500 dark:hover:text-mist-400"
+        className="cursor-pointer rounded-md p-0.5 text-mist-400 transition hover:text-mist-500 dark:text-mist-500 dark:hover:text-mist-400"
       >
         <XCircleIcon className="size-3.5" />
       </Button>

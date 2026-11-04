@@ -41,7 +41,7 @@ export const SearchParamInput = ({ placeholder }: SearchParamInputProps) => {
   };
 
   return (
-    <Field className="flex w-full flex-col gap-0.5 sm:max-w-56">
+    <Field className="flex w-full flex-col gap-1 sm:max-w-56">
       <Label className="sr-only sm:not-sr-only">
         <Typography.Tiny muted>Search</Typography.Tiny>
       </Label>
@@ -52,7 +52,7 @@ export const SearchParamInput = ({ placeholder }: SearchParamInputProps) => {
           onChange={handleSearch}
           autoComplete="off"
           placeholder={placeholder}
-          className="col-start-1 row-start-1 rounded-md border-none bg-white px-7.5 py-1.75 text-sm text-mist-900 shadow-xs ring-1 ring-mist-300 outline-none ring-inset placeholder:text-mist-400 focus:ring-2 focus:ring-blue-600 focus:ring-inset dark:bg-mist-900 dark:text-white dark:ring-mist-800"
+          className="col-start-1 row-start-1 rounded-md border-none bg-white px-7.5 py-2 text-sm text-mist-900 shadow-xs ring-1 ring-mist-300 outline-none ring-inset placeholder:text-mist-400 focus:ring-2 focus:ring-blue-600 focus:ring-inset dark:bg-mist-900 dark:text-white dark:ring-mist-800"
         />
         <MagnifyingGlassIcon
           aria-hidden="true"
@@ -62,7 +62,7 @@ export const SearchParamInput = ({ placeholder }: SearchParamInputProps) => {
           <Button
             onClick={clearSearch}
             aria-label="Clear search"
-            className="absolute top-1/2 right-0 mr-1 -translate-y-1/2 cursor-pointer rounded-lg p-1 text-mist-400 transition hover:text-mist-500 dark:text-mist-400 dark:hover:text-mist-300"
+            className="absolute top-1/2 right-0 mr-1 -translate-y-1/2 cursor-pointer rounded-md p-1 text-mist-400 transition hover:text-mist-500 dark:text-mist-400 dark:hover:text-mist-300"
           >
             <XMarkIcon className="size-4" />
           </Button>

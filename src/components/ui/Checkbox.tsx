@@ -18,7 +18,7 @@ export const Checkbox = ({
   className,
   ...props
 }: CheckboxProps) => (
-  <Field className={twMerge("flex items-center gap-1.5", className)}>
+  <Field className={twMerge("flex items-center gap-2", className)}>
     <HeadlessCheckbox
       {...props}
       checked={checked}

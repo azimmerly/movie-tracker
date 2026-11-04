@@ -87,7 +87,7 @@ export const AddMovieDialog = ({
         header={{ icon: FilmIcon, title: "Add a movie" }}
       >
         <form
-          className="flex flex-col gap-3"
+          className="flex flex-col gap-4"
           onSubmit={handleSubmit(handleSearchMovie)}
         >
           <InputField
@@ -99,7 +99,7 @@ export const AddMovieDialog = ({
             {...register("title")}
             errorMessage={formState.errors?.title?.message}
           />
-          <div className="mt-2 flex flex-col gap-2 sm:flex-row-reverse">
+          <div className="mt-2 flex flex-col gap-3 sm:flex-row-reverse">
             <Button
               type="submit"
               variant="primary"
@@ -120,7 +120,7 @@ export const AddMovieDialog = ({
           </div>
         </form>
         {movies && (
-          <div className="mt-4 max-h-96 scrollbar-none overflow-auto pb-4">
+          <div className="mt-4 max-h-102 scrollbar-none overflow-auto pb-4">
             <div className="my-1 flex flex-col gap-2 px-1">
               {!movies.length ? (
                 <Typography.Small
@@ -130,19 +130,21 @@ export const AddMovieDialog = ({
                   No movies found with that title...
                 </Typography.Small>
               ) : (
-                <ul className="divide-y divide-mist-200 dark:divide-mist-800">
-                  {movies.map((movie) => (
-                    <SearchMovie
-                      key={movie.id}
-                      movie={movie}
-                      listId={listId}
-                      isAdded={addedIds.has(movie.id)}
-                      onMovieAdded={handleMovieAdded}
-                      onMovieAddFailed={handleMovieAddFailed}
-                    />
-                  ))}
+                <>
+                  <ul className="divide-y divide-mist-200 dark:divide-mist-800">
+                    {movies.map((movie) => (
+                      <SearchMovie
+                        key={movie.id}
+                        movie={movie}
+                        listId={listId}
+                        isAdded={addedIds.has(movie.id)}
+                        onMovieAdded={handleMovieAdded}
+                        onMovieAddFailed={handleMovieAddFailed}
+                      />
+                    ))}
+                  </ul>
                   {movies.length > 3 && <div className="scroll-fade" />}
-                </ul>
+                </>
               )}
             </div>
           </div>

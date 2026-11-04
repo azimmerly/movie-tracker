@@ -49,7 +49,7 @@ export const DeleteAccountDialog = ({
           "Are you sure you want to delete your account? This action cannot be undone.",
       }}
     >
-      <div className="mt-5 flex flex-col gap-2 sm:flex-row-reverse">
+      <div className="mt-4 flex flex-col gap-3 sm:flex-row-reverse">
         <Button
           variant="destructive"
           className="w-full sm:w-fit"

@@ -47,7 +47,7 @@ export const DeleteUserMovieDialog = ({
         subtitle: `Are you sure you want to remove this movie?${listCount > 0 ? ` This will also remove it from ${listCount} ${listCount === 1 ? "list" : "lists"}.` : ""}`,
       }}
     >
-      <div className="mt-8 flex flex-col gap-2 sm:flex-row-reverse">
+      <div className="mt-4 flex flex-col gap-3 sm:flex-row-reverse">
         <Button
           variant="destructive"
           className="w-full sm:w-fit"

@@ -36,8 +36,8 @@ export const DropdownMenu = ({
     className={twMerge("relative inline-block text-left", className)}
   >
     {icon || text ? (
-      <MenuButton className="group flex cursor-pointer items-center rounded-md focus-visible:outline-2 focus-visible:outline-blue-600 sm:gap-1.75 sm:bg-white sm:px-3 sm:py-2 sm:ring-1 sm:ring-mist-200/70 sm:ring-inset sm:hover:bg-mist-50 sm:dark:bg-mist-900 sm:dark:ring-mist-700/70 sm:dark:hover:bg-mist-800">
-        <EllipsisVerticalIcon className="size-5 text-mist-400 hover:text-mist-500 sm:hidden dark:text-mist-500 dark:hover:text-mist-400" />
+      <MenuButton className="group -m-1 flex cursor-pointer items-center rounded-md p-1 focus-visible:outline-2 focus-visible:outline-blue-600 sm:m-0 sm:gap-1.75 sm:bg-white sm:px-3 sm:py-2 sm:ring-1 sm:ring-mist-200/70 sm:ring-inset sm:hover:bg-mist-50 sm:dark:bg-mist-900 sm:dark:ring-mist-700/70 sm:dark:hover:bg-mist-800">
+        <EllipsisVerticalIcon className="size-5 text-mist-400 group-hover:text-mist-500 sm:hidden dark:text-mist-500 dark:group-hover:text-mist-400" />
         <span className="hidden sm:contents">
           {icon}
           {text && (
@@ -51,8 +51,8 @@ export const DropdownMenu = ({
         </span>
       </MenuButton>
     ) : (
-      <MenuButton className="flex cursor-pointer outline-hidden">
-        <EllipsisVerticalIcon className="size-5 text-mist-400 hover:text-mist-500 dark:text-mist-500 dark:hover:text-mist-400" />
+      <MenuButton className="group -m-1 flex cursor-pointer rounded-md p-1 outline-hidden">
+        <EllipsisVerticalIcon className="size-5 text-mist-400 group-hover:text-mist-500 dark:text-mist-500 dark:group-hover:text-mist-400" />
       </MenuButton>
     )}
     <MenuItems
@@ -74,7 +74,7 @@ export const DropdownMenu = ({
               >
                 <Icon
                   aria-hidden="true"
-                  className="mr-1.5 size-4.5 text-mist-400 group-data-focus:text-mist-500 dark:text-mist-500 dark:group-data-focus:text-white"
+                  className="mr-2 size-4.5 text-mist-400 group-data-focus:text-mist-500 dark:text-mist-500 dark:group-data-focus:text-white"
                 />
                 {label}
               </Button>

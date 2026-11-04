@@ -62,7 +62,7 @@ export const UpdateAccountDialog = ({
       header={{ icon: PencilSquareIcon, title: "Update account" }}
     >
       <form
-        className="flex flex-col gap-3"
+        className="flex flex-col gap-4"
         onSubmit={handleSubmit(handleUpdateAccount)}
       >
         <InputField
@@ -73,7 +73,7 @@ export const UpdateAccountDialog = ({
           {...register("name")}
           errorMessage={formState.errors?.name?.message}
         />
-        <div className="mt-2 flex flex-col gap-2 sm:flex-row-reverse">
+        <div className="mt-4 flex flex-col gap-3 sm:flex-row-reverse">
           <Button
             type="submit"
             variant="primary"

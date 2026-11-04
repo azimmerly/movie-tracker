@@ -58,7 +58,7 @@ export const UpdateListDialog = ({
       header={{ icon: PencilSquareIcon, title: "Edit list" }}
     >
       <form
-        className="flex flex-col gap-3"
+        className="flex flex-col gap-4"
         onSubmit={handleSubmit(handleUpdateList)}
       >
         <InputField
@@ -76,7 +76,7 @@ export const UpdateListDialog = ({
           {...register("description")}
           errorMessage={formState.errors?.description?.message}
         />
-        <div className="mt-2 flex flex-col gap-2 sm:flex-row-reverse">
+        <div className="mt-4 flex flex-col gap-3 sm:flex-row-reverse">
           <Button
             type="submit"
             variant="primary"

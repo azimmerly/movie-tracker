@@ -16,10 +16,10 @@ type MoviePosterProps = {
 
 const IMAGE_CONFIG = {
   sm: {
-    width: 60,
-    height: 90,
-    wrapperClass: "h-22.5 w-15 rounded",
-    sizes: "60px",
+    width: 64,
+    height: 96,
+    wrapperClass: "h-24 w-16 rounded",
+    sizes: "64px",
   },
   md: {
     width: 80,
@@ -30,7 +30,7 @@ const IMAGE_CONFIG = {
   lg: {
     width: 320,
     height: 480,
-    wrapperClass: "h-84 w-56 rounded-lg lg:h-120 lg:w-80",
+    wrapperClass: "h-84 w-56 rounded-lg lg:h-120 lg:w-80 lg:rounded-xl",
     sizes: "(min-width: 1024px) 320px, 224px",
   },
 } as const;

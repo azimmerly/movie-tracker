@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/Button";
 import { Chip } from "@/components/ui/Chip";
 import { Typography } from "@/components/ui/Typography";
 import type { Movie, MovieList, MovieSearchResponseData } from "@/types";
-import { formatDate } from "@/utils/formatDate";
+import { formatYear } from "@/utils/formatDate";
 
 type SearchMovieProps = {
   movie: MovieSearchResponseData[number];
@@ -46,26 +46,26 @@ export const SearchMovie = ({
   };
 
   return (
-    <li className="flex justify-between py-2">
-      <div className="flex gap-3">
+    <li className="flex justify-between py-3">
+      <div className="flex gap-4">
         <MoviePoster
           size="sm"
           alt={movie.title}
           posterPath={movie.posterPath}
         />
-        <div className="flex flex-col gap-0.5">
+        <div className="flex flex-col gap-1">
           <Typography.Small className="font-semibold">
             {movie.title}
           </Typography.Small>
           <Typography.Tiny className="flex items-center gap-0.5" muted>
             <CalendarDaysIcon className="size-3.5" />
-            {formatDate(movie.releaseDate)}
+            {formatYear(movie.releaseDate)}
           </Typography.Tiny>
           {isAdded ? (
             <Chip
               variant="success"
               icon={CheckCircleIcon}
-              className="pointer-events-none mt-1.5 px-2 py-1.25"
+              className="pointer-events-none mt-1.5"
               text="Added to list"
             />
           ) : (

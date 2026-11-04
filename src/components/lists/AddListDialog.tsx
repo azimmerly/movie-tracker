@@ -53,7 +53,7 @@ export const AddListDialog = () => {
         header={{ icon: ListBulletIcon, title: "Create a new movie list" }}
       >
         <form
-          className="flex flex-col gap-3"
+          className="flex flex-col gap-4"
           onSubmit={handleSubmit(handleAddList)}
         >
           <InputField
@@ -84,7 +84,7 @@ export const AddListDialog = () => {
               />
             )}
           />
-          <div className="mt-2 flex flex-col gap-2 sm:flex-row-reverse">
+          <div className="mt-4 flex flex-col gap-3 sm:flex-row-reverse">
             <Button
               type="submit"
               variant="primary"

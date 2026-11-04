@@ -26,7 +26,7 @@ export const TextareaField = ({
           icon={ExclamationTriangleIcon}
           text={errorMessage}
           variant="warning"
-          className="px-1.5 py-px font-normal"
+          className="px-1.5 py-0.5 font-normal"
         />
       )}
     </div>
