@@ -59,7 +59,7 @@ export const MoviesTabContent = async ({
               : "All movies this user has tracked"}
           </Typography.Body>
         </div>
-        <div className="flex w-full shrink-0 flex-col gap-2 sm:w-fit sm:flex-row">
+        <div className="flex w-full shrink-0 flex-col gap-2.25 sm:w-fit sm:flex-row">
           <SearchParamInput placeholder="Movie title or genre" />
           <MovieSortSelect />
         </div>

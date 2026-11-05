@@ -27,12 +27,12 @@ export const MovieList = ({
   const listMovieIds = new Set(movies.map(({ movie }) => movie.id));
 
   return (
-    <div className="mt-6">
+    <div className="mt-8">
       <div className="flex flex-col items-end justify-between gap-3 sm:flex-row">
         {owner && (
           <AddMovieDialog listId={listId} listMovieIds={listMovieIds} />
         )}
-        <div className="flex w-full flex-col items-end justify-end gap-2 sm:flex-row">
+        <div className="flex w-full flex-col items-end justify-end gap-2.25 sm:flex-row">
           <SearchParamInput placeholder="Movie title or genre" />
           <MovieSortSelect />
         </div>

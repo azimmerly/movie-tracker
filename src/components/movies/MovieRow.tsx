@@ -52,7 +52,7 @@ export const MovieRow = ({
             </Typography.Tiny>
           </Tooltip>
         </span>
-        <div className="mt-2 flex flex-wrap gap-1.5">
+        <div className="mt-2 flex flex-wrap gap-1.25">
           {movie.genres.slice(0, 3).map((genre) => (
             <Chip
               key={genre}

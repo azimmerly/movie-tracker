@@ -37,7 +37,10 @@ export const DashboardStats = ({ stats }: DashboardStatsProps) => (
         const value = stats[key as keyof typeof STATS];
         const { label, icon: Icon } = STATS[key as keyof typeof STATS];
         return (
-          <div key={key} className="px-3 first:pl-0 last:pr-0 sm:px-4.5">
+          <div
+            key={key}
+            className="flex flex-col gap-0.5 px-3.5 first:pl-0 last:pr-0 sm:px-4.5"
+          >
             <Typography.H3 className="text-blue-500 dark:text-blue-400">
               {value}
             </Typography.H3>

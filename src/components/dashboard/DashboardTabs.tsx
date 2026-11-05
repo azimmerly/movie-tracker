@@ -24,7 +24,7 @@ export const DashboardTabs = ({ basePath }: DashboardTabsProps) => {
   const pathname = usePathname();
 
   return (
-    <div className="flex scrollbar-none gap-1 overflow-x-auto">
+    <div className="flex scrollbar-none gap-1.5 overflow-x-auto">
       {TABS.map(({ segment, icon: Icon }) => {
         const href = `${basePath}/${segment}`;
         const active = pathname === href;
@@ -34,7 +34,7 @@ export const DashboardTabs = ({ basePath }: DashboardTabsProps) => {
             href={href as Route}
             aria-current={active ? "page" : undefined}
             className={twMerge(
-              "flex items-center gap-1 rounded-md px-3 py-1.25 font-semibold capitalize hover:bg-mist-200/60 sm:px-3.25 sm:py-1.5 dark:hover:bg-mist-800/70",
+              "flex items-center gap-1.5 rounded-md px-3 py-1.5 font-semibold capitalize hover:bg-mist-200/60 sm:px-3.25 sm:py-2 dark:hover:bg-mist-800/70",
               active &&
                 "pointer-events-none bg-mist-200/60 dark:bg-mist-800/70",
             )}

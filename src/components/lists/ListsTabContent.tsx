@@ -46,13 +46,13 @@ export const ListsTabContent = async ({
             </Typography.Body>
           </div>
         )}
-        <div className="flex w-full shrink-0 flex-col gap-2 sm:w-fit sm:flex-row">
+        <div className="flex w-full shrink-0 flex-col gap-2.25 sm:w-fit sm:flex-row">
           <SearchParamInput placeholder="List title" />
           <ListSortSelect />
         </div>
       </div>
       <SearchResultMessage searchTerm={search} noun="lists" />
-      <div className="flex flex-col gap-2.5">
+      <div className="flex flex-col gap-3">
         {lists?.length ? (
           lists.map(({ user, movieCount, ...list }) => (
             <ListCard

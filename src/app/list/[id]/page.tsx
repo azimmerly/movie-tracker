@@ -55,7 +55,7 @@ const ListPage = async ({ params, searchParams }: ListPageProps) => {
 
   return (
     <div className="flex flex-col">
-      <div className="mb-6 flex flex-col gap-4">
+      <div className="mb-8 flex flex-col gap-6">
         <div className="flex items-center justify-between gap-4">
           <Typography.H1 className="leading-8 hyphens-auto">
             {title}
@@ -71,7 +71,7 @@ const ListPage = async ({ params, searchParams }: ListPageProps) => {
           </Typography.Small>
         )}
       </div>
-      <div className="flex flex-col gap-0.5">
+      <div className="flex flex-col gap-1">
         <Typography.Small className="flex items-center gap-1.75 font-medium">
           <Avatar user={user} className="size-4.5" />
           <Typography.Link

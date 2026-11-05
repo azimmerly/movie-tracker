@@ -40,14 +40,14 @@ export const Pagination = ({
   return (
     <nav
       aria-label="Pagination"
-      className="flex flex-col-reverse items-center border-t border-mist-200 py-3 sm:flex-row sm:justify-between dark:border-mist-800"
+      className="flex flex-col-reverse items-center border-t border-mist-200 py-4 sm:flex-row sm:justify-between dark:border-mist-800"
     >
-      <Typography.Small muted className="mt-2 sm:mt-0">
+      <Typography.Small muted className="mt-3 sm:mt-0">
         Showing <span className="font-semibold">{startItem}</span> to
         <span className="font-semibold"> {endItem} </span> of
         <span className="font-semibold"> {totalCount}</span> {itemLabel}
       </Typography.Small>
-      <div className="flex w-full flex-1 gap-2 sm:justify-end">
+      <div className="flex w-full flex-1 gap-3 sm:justify-end">
         <Button
           variant="secondary"
           className="w-1/2 sm:w-fit"

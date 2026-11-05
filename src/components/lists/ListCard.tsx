@@ -25,35 +25,36 @@ export const ListCard = ({
   movieCount,
 }: ListCardProps) => (
   <Link href={`/list/${id}`}>
-    <Card className="transition-transform ease-out will-change-transform backface-hidden hover:-translate-y-px hover:scale-[1.005] hover:shadow-md">
-      <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-        <div className="flex min-w-0 flex-col gap-1.5">
-          <Typography.Large className="leading-5 font-bold">
-            {title}
-          </Typography.Large>
-          {description && (
-            <Typography.Tiny muted className="truncate pe-1 italic">
-              {description}
-            </Typography.Tiny>
-          )}
-        </div>
-        <div className="flex shrink-0 gap-1">
-          {isPrivate && (
-            <Chip variant="secondary" icon={EyeSlashIcon} text="Private" />
-          )}
-          <Chip
-            variant="primary"
-            icon={FilmIcon}
-            text={`${movieCount} ${movieCount === 1 ? "movie" : "movies"}`}
-            className="whitespace-nowrap"
-          />
-        </div>
+    <Card className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-2 transition-transform ease-out will-change-transform backface-hidden hover:-translate-y-px hover:scale-[1.005] hover:shadow-md">
+      <div className="col-span-2 mb-4 flex min-w-0 flex-col gap-2 sm:col-span-1">
+        <Typography.Large className="leading-5 font-bold">
+          {title}
+        </Typography.Large>
+        {description && (
+          <Typography.Tiny muted className="truncate pe-1 italic">
+            {description}
+          </Typography.Tiny>
+        )}
       </div>
-      <Typography.Tiny muted className="mb-1.25 flex items-center gap-1.25">
+      <div className="col-start-2 row-start-3 flex shrink-0 gap-1.25 self-end sm:row-start-1 sm:self-start">
+        {isPrivate && (
+          <Chip variant="secondary" icon={EyeSlashIcon} text="Private" />
+        )}
+        <Chip
+          variant="primary"
+          icon={FilmIcon}
+          text={`${movieCount} ${movieCount === 1 ? "movie" : "movies"}`}
+          className="whitespace-nowrap"
+        />
+      </div>
+      <Typography.Tiny
+        muted
+        className="col-span-2 mb-0 flex items-center gap-1.25 sm:mb-1.5"
+      >
         <Avatar user={user} className="size-3.5" />
         {user.name}
       </Typography.Tiny>
-      <Typography.Tiny className="flex items-start gap-1.25" muted>
+      <Typography.Tiny className="flex items-start gap-1.25 self-end" muted>
         <CalendarDaysIcon className="size-3.5" />
         {formatDate(createdAt)}
       </Typography.Tiny>

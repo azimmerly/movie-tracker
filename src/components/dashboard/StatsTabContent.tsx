@@ -30,7 +30,7 @@ export const StatsTabContent = async ({ userId }: StatsTabContentProps) => {
   return (
     <div className="mt-2 grid gap-3 sm:grid-cols-2">
       <Card className="p-4 sm:p-6">
-        <Typography.Body className="mb-3 font-semibold">
+        <Typography.Body className="mb-4 font-semibold">
           Top Genres by Rating
         </Typography.Body>
         {!!genreRatingStats.length ? (
@@ -51,7 +51,7 @@ export const StatsTabContent = async ({ userId }: StatsTabContentProps) => {
         )}
       </Card>
       <Card className="p-4 sm:p-6">
-        <Typography.Body className="mb-3 font-semibold">
+        <Typography.Body className="mb-4 font-semibold">
           Top Genres by Count
         </Typography.Body>
         {!!genreCountStats.length ? (
@@ -71,7 +71,7 @@ export const StatsTabContent = async ({ userId }: StatsTabContentProps) => {
         )}
       </Card>
       <Card className="p-4 sm:col-span-2 sm:p-6">
-        <Typography.Body className="mb-3 font-semibold">
+        <Typography.Body className="mb-4 font-semibold">
           Movies by Decade
         </Typography.Body>
         {!!decadeStats.length ? (
