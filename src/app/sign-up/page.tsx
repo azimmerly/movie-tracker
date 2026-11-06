@@ -21,7 +21,7 @@ const SignUp = async () => {
           draggable={false}
           src={logoImage}
           alt="logo"
-          className="mx-auto mb-1 size-14"
+          className="mx-auto mb-2 size-14"
         />
         <Typography.H3 className="text-center">Create an account</Typography.H3>
       </div>

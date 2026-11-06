@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import { OrDivider } from "@/components/OrDivider";
 import { SocialAuthButton } from "@/components/SocialAuthButton";
 import { Button } from "@/components/ui/Button";
 import { InputField } from "@/components/ui/InputField";
@@ -36,7 +37,7 @@ export const SignUpForm = () => {
   return (
     <div className="mx-auto w-full max-w-sm">
       <form
-        className="flex flex-col gap-2 sm:gap-3"
+        className="flex flex-col gap-4"
         onSubmit={handleSubmit(handleSignUp)}
       >
         <InputField
@@ -80,7 +81,7 @@ export const SignUpForm = () => {
         >
           Create account
         </Button>
-        <hr className="my-0.5 text-mist-200 sm:my-1 dark:text-mist-800" />
+        <OrDivider />
         <SocialAuthButton provider="github" className="w-full" />
       </form>
     </div>

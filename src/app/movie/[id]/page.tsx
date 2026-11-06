@@ -47,16 +47,16 @@ const MoviePage = async ({ params }: MoviePageProps) => {
       />
       <div className="flex flex-col items-center gap-9 lg:max-w-lg lg:items-start">
         <div className="flex flex-col items-center gap-2.5 lg:items-start">
-          <Typography.H1 className="max-w-2xl text-center lg:text-left">
+          <Typography.H1 className="mb-1.5 max-w-2xl text-center lg:text-left">
             {movie.title}
           </Typography.H1>
           {!!movie.tagline && (
             <Typography.Small
               muted
-              className="max-w-md text-center italic lg:text-left"
+              className="mb-1 max-w-md text-center italic lg:text-left"
             >{`"${movie.tagline}"`}</Typography.Small>
           )}
-          <div className="flex flex-wrap justify-center gap-1 lg:justify-start">
+          <div className="flex flex-wrap justify-center gap-1.25 lg:justify-start">
             {movie.status !== "Released" && (
               <Chip
                 variant="secondary"
@@ -69,7 +69,7 @@ const MoviePage = async ({ params }: MoviePageProps) => {
             ))}
           </div>
         </div>
-        <div className="flex flex-col items-center gap-1.5 lg:items-start">
+        <div className="flex flex-col items-center gap-2 lg:items-start">
           <div className="flex max-w-xl flex-wrap items-center justify-center gap-y-2 lg:justify-start">
             {!!movie.runtime && (
               <Tooltip
@@ -120,9 +120,9 @@ const MoviePage = async ({ params }: MoviePageProps) => {
             </Typography.Link>
           )}
         </div>
-        <div className="flex flex-col items-center gap-4 text-center lg:items-start lg:text-left">
+        <div className="flex flex-col items-center gap-5 text-center lg:items-start lg:text-left">
           {!!movie.directors?.length && (
-            <div className="max-w-md">
+            <div className="flex max-w-md flex-col gap-1">
               <Typography.Small className="font-semibold">
                 Directed by
               </Typography.Small>
@@ -132,7 +132,7 @@ const MoviePage = async ({ params }: MoviePageProps) => {
             </div>
           )}
           {!!movie.cast?.length && (
-            <div className="max-w-md">
+            <div className="flex max-w-md flex-col gap-1">
               <Typography.Small className="font-semibold">
                 Cast
               </Typography.Small>
@@ -142,7 +142,7 @@ const MoviePage = async ({ params }: MoviePageProps) => {
             </div>
           )}
           {!!movie.overview && (
-            <div className="max-w-xl">
+            <div className="flex max-w-xl flex-col gap-1">
               <Typography.Small className="font-semibold">
                 Overview
               </Typography.Small>

@@ -44,16 +44,21 @@ const Discover = async ({ searchParams }: DiscoverProps) => {
 
   return (
     <div className="flex flex-col gap-8">
-      <Typography.H1>Discover movie lists</Typography.H1>
+      <div className="mb-4 flex flex-col gap-2">
+        <Typography.H1>Discover movie lists</Typography.H1>
+        <Typography.Body muted>
+          Browse lists from other movie fans, or start your own.
+        </Typography.Body>
+      </div>
       <div className="flex flex-col items-end justify-between gap-3 sm:flex-row">
         {!!session ? <AddListDialog /> : <GetStartedButton />}
-        <div className="flex w-full flex-col items-end justify-end gap-2 sm:flex-row">
+        <div className="flex w-full flex-col items-end justify-end gap-2.25 sm:flex-row">
           <SearchParamInput placeholder="List title or username" />
           <ListSortSelect />
         </div>
       </div>
       <SearchResultMessage searchTerm={search} noun="lists" />
-      <div className="flex flex-col gap-2.5">
+      <div className="flex flex-col gap-3">
         {!!lists?.length ? (
           lists.map(({ user, movieCount, ...list }) => (
             <ListCard
