@@ -1,5 +1,3 @@
-import { notFound } from "next/navigation";
-
 import { getSession } from "@/actions/auth";
 import { getAllMovieLists } from "@/actions/list";
 import { ErrorMessage } from "@/components/ErrorMessage";
@@ -11,22 +9,22 @@ import { Pagination } from "@/components/Pagination";
 import { SearchParamInput } from "@/components/SearchParamInput";
 import { SearchResultMessage } from "@/components/SearchResultMessage";
 import { Typography } from "@/components/ui/Typography";
+import { LISTS_PAGE_SIZE } from "@/consts";
+import { getOffset, handleInvalidPage, parsePage } from "@/utils/pagination";
 import { GetStartedButton } from "./GetStartedButton";
 
 type DiscoverProps = {
   searchParams: Promise<{ search?: string; sort?: string; page?: string }>;
 };
 
-const DISCOVER_PAGE_SIZE = 10;
-
 const Discover = async ({ searchParams }: DiscoverProps) => {
-  const { search, sort, page = "1" } = await searchParams;
-  const currentPage = parseInt(page) || 1;
-  const offset = DISCOVER_PAGE_SIZE * (currentPage - 1);
+  const { search, sort, page } = await searchParams;
+  const currentPage = parsePage(page);
+  const offset = getOffset(currentPage, LISTS_PAGE_SIZE);
 
   const [session, { data, success }] = await Promise.all([
     getSession(),
-    getAllMovieLists(DISCOVER_PAGE_SIZE, offset, search, sort),
+    getAllMovieLists(LISTS_PAGE_SIZE, offset, search, sort),
   ]);
 
   if (!success || !data) {
@@ -35,12 +33,7 @@ const Discover = async ({ searchParams }: DiscoverProps) => {
 
   const { lists, totalCount } = data;
 
-  if (
-    totalCount > 0 &&
-    currentPage > Math.ceil(totalCount / DISCOVER_PAGE_SIZE)
-  ) {
-    notFound();
-  }
+  handleInvalidPage(currentPage, totalCount, LISTS_PAGE_SIZE);
 
   return (
     <div className="flex flex-col gap-8">
@@ -75,7 +68,7 @@ const Discover = async ({ searchParams }: DiscoverProps) => {
       <Pagination
         totalCount={totalCount}
         currentPage={currentPage}
-        pageSize={DISCOVER_PAGE_SIZE}
+        pageSize={LISTS_PAGE_SIZE}
         itemLabel="movie lists"
       />
     </div>

@@ -136,7 +136,7 @@ export const getAllMovieLists = async (
         .innerJoin(user, eq(movieList.userId, user.id))
         .where(and(eq(movieList.private, false), searchFilter))
         .groupBy(movieList.id, user.id)
-        .orderBy(...getMovieListOrderBy(sort))
+        .orderBy(...getMovieListOrderBy(sort), asc(movieList.id))
         .limit(pageSize)
         .offset(offset),
       db
@@ -155,6 +155,8 @@ export const getAllMovieLists = async (
 
 export const getUserMovieLists = async (
   userId: User["id"],
+  pageSize: number,
+  offset: number,
   search?: string,
   sort?: string,
 ) => {
@@ -168,24 +170,29 @@ export const getUserMovieLists = async (
       search ? ilike(movieList.title, `%${search}%`) : undefined,
     );
 
-    const userMovieLists = await db
-      .select({
-        id: movieList.id,
-        title: movieList.title,
-        description: movieList.description,
-        createdAt: movieList.createdAt,
-        private: movieList.private,
-        movieCount: count(listMovie.id).as("movie_count"),
-        user: { name: user.name, image: user.image },
-      })
-      .from(movieList)
-      .where(whereClause)
-      .leftJoin(listMovie, eq(movieList.id, listMovie.listId))
-      .innerJoin(user, eq(movieList.userId, user.id))
-      .groupBy(movieList.id, user.id)
-      .orderBy(...getMovieListOrderBy(sort));
+    const [userMovieLists, [{ totalCount }]] = await Promise.all([
+      db
+        .select({
+          id: movieList.id,
+          title: movieList.title,
+          description: movieList.description,
+          createdAt: movieList.createdAt,
+          private: movieList.private,
+          movieCount: count(listMovie.id).as("movie_count"),
+          user: { name: user.name, image: user.image },
+        })
+        .from(movieList)
+        .where(whereClause)
+        .leftJoin(listMovie, eq(movieList.id, listMovie.listId))
+        .innerJoin(user, eq(movieList.userId, user.id))
+        .groupBy(movieList.id, user.id)
+        .orderBy(...getMovieListOrderBy(sort), asc(movieList.id))
+        .limit(pageSize)
+        .offset(offset),
+      db.select({ totalCount: count() }).from(movieList).where(whereClause),
+    ]);
 
-    return { success: true, data: userMovieLists };
+    return { success: true, data: { lists: userMovieLists, totalCount } };
   } catch (e) {
     logError("list/getUserMovieLists", e);
     return { success: false, message: "Something went wrong" };
@@ -194,6 +201,8 @@ export const getUserMovieLists = async (
 
 export const getMovieListById = async (
   id: MovieList["id"],
+  pageSize: number,
+  offset: number,
   search?: string,
   sort?: string,
 ) => {
@@ -232,27 +241,38 @@ export const getMovieListById = async (
         )
       : undefined;
 
-    const movies = await db
-      .select({
-        rating: sql<number>`coalesce(${userMovie.rating}, 0)`.as("rating"),
-        favorite: sql<boolean>`coalesce(${userMovie.favorite}, false)`.as(
-          "favorite",
-        ),
-        movie: movie,
-      })
-      .from(listMovie)
-      .innerJoin(movie, eq(movie.id, listMovie.movieId))
-      .leftJoin(
-        userMovie,
-        and(
-          eq(userMovie.movieId, movie.id),
-          eq(userMovie.userId, list.user.id),
-        ),
-      )
-      .where(and(eq(listMovie.listId, id), searchFilter))
-      .orderBy(...getMovieOrderBy(sort));
+    const listFilter = and(eq(listMovie.listId, id), searchFilter);
 
-    return { success: true, data: { ...list, movies } };
+    const [movies, [{ totalCount }]] = await Promise.all([
+      db
+        .select({
+          rating: sql<number>`coalesce(${userMovie.rating}, 0)`.as("rating"),
+          favorite: sql<boolean>`coalesce(${userMovie.favorite}, false)`.as(
+            "favorite",
+          ),
+          movie: movie,
+        })
+        .from(listMovie)
+        .innerJoin(movie, eq(movie.id, listMovie.movieId))
+        .leftJoin(
+          userMovie,
+          and(
+            eq(userMovie.movieId, movie.id),
+            eq(userMovie.userId, list.user.id),
+          ),
+        )
+        .where(listFilter)
+        .orderBy(...getMovieOrderBy(sort), asc(movie.id))
+        .limit(pageSize)
+        .offset(offset),
+      db
+        .select({ totalCount: count() })
+        .from(listMovie)
+        .innerJoin(movie, eq(movie.id, listMovie.movieId))
+        .where(listFilter),
+    ]);
+
+    return { success: true, data: { ...list, movies, totalCount } };
   } catch (e) {
     logError("list/getMovieListById", e);
     return { success: false, message: "Something went wrong" };

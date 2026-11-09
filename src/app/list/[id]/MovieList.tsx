@@ -1,6 +1,7 @@
 import { MovieRow } from "@/components/movies/MovieRow";
 import { MovieSortSelect } from "@/components/movies/MovieSortSelect";
 import { NothingFound } from "@/components/NothingFound";
+import { Pagination } from "@/components/Pagination";
 import { SearchParamInput } from "@/components/SearchParamInput";
 import { SearchResultMessage } from "@/components/SearchResultMessage";
 import type { Movie, MovieList as MovieListType, UserMovie } from "@/types";
@@ -16,6 +17,9 @@ type MoviesListProps = {
   owner: boolean;
   listId: MovieListType["id"];
   search?: string;
+  totalCount: number;
+  page: number;
+  pageSize: number;
 };
 
 export const MovieList = ({
@@ -23,6 +27,9 @@ export const MovieList = ({
   owner,
   listId,
   search,
+  totalCount,
+  page,
+  pageSize,
 }: MoviesListProps) => {
   const listMovieIds = new Set(movies.map(({ movie }) => movie.id));
 
@@ -67,6 +74,12 @@ export const MovieList = ({
           </ul>
         )}
       </div>
+      <Pagination
+        totalCount={totalCount}
+        currentPage={page}
+        pageSize={pageSize}
+        itemLabel="movies"
+      />
     </div>
   );
 };

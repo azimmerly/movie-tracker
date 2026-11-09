@@ -6,15 +6,19 @@ import { AddListDialog } from "@/components/lists/AddListDialog";
 import { ListCard } from "@/components/lists/ListCard";
 import { ListSortSelect } from "@/components/lists/ListSortSelect";
 import { NothingFound } from "@/components/NothingFound";
+import { Pagination } from "@/components/Pagination";
 import { SearchParamInput } from "@/components/SearchParamInput";
 import { SearchResultMessage } from "@/components/SearchResultMessage";
 import { Typography } from "@/components/ui/Typography";
+import { LISTS_PAGE_SIZE } from "@/consts";
+import { getOffset, handleInvalidPage } from "@/utils/pagination";
 
 type ListsTabContentProps = {
   userId: string;
   owner: boolean;
   search?: string;
   sort?: string;
+  page?: number;
 };
 
 export const ListsTabContent = async ({
@@ -22,12 +26,21 @@ export const ListsTabContent = async ({
   owner,
   search,
   sort,
+  page = 1,
 }: ListsTabContentProps) => {
-  const { data: lists, success } = await getUserMovieLists(
+  const offset = getOffset(page, LISTS_PAGE_SIZE);
+  const { data, success } = await getUserMovieLists(
     userId,
+    LISTS_PAGE_SIZE,
+    offset,
     search,
     sort,
   );
+
+  const lists = data?.lists;
+  const totalCount = data?.totalCount ?? 0;
+
+  handleInvalidPage(page, totalCount, LISTS_PAGE_SIZE);
 
   if (!success) {
     return <ErrorMessage />;
@@ -72,6 +85,12 @@ export const ListsTabContent = async ({
           />
         )}
       </div>
+      <Pagination
+        totalCount={totalCount}
+        currentPage={page}
+        pageSize={LISTS_PAGE_SIZE}
+        itemLabel="lists"
+      />
     </>
   );
 };

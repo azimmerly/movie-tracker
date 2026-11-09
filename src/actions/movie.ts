@@ -326,7 +326,7 @@ export const getUserMovies = async (
         .from(userMovie)
         .innerJoin(movie, eq(movie.id, userMovie.movieId))
         .where(and(eq(userMovie.userId, userId), searchFilter))
-        .orderBy(...getUserMoviesOrderBy(sort))
+        .orderBy(...getUserMoviesOrderBy(sort), asc(movie.id))
         .limit(pageSize)
         .offset(offset),
       db
@@ -337,24 +337,22 @@ export const getUserMovies = async (
     ]);
 
     const movieIds = movies.map(({ movie }) => movie.id);
-    const memberships = movieIds.length
-      ? await db
-          .select({
-            movieId: listMovie.movieId,
-            list: { id: movieList.id, title: movieList.title },
-          })
-          .from(listMovie)
-          .innerJoin(
-            movieList,
-            and(
-              eq(movieList.id, listMovie.listId),
-              eq(movieList.userId, userId),
-              includePrivate ? undefined : eq(movieList.private, false),
-            ),
-          )
-          .where(inArray(listMovie.movieId, movieIds))
-          .orderBy(asc(listMovie.createdAt))
-      : [];
+    const memberships = await db
+      .select({
+        movieId: listMovie.movieId,
+        list: { id: movieList.id, title: movieList.title },
+      })
+      .from(listMovie)
+      .innerJoin(
+        movieList,
+        and(
+          eq(movieList.id, listMovie.listId),
+          eq(movieList.userId, userId),
+          includePrivate ? undefined : eq(movieList.private, false),
+        ),
+      )
+      .where(inArray(listMovie.movieId, movieIds))
+      .orderBy(asc(listMovie.createdAt));
 
     const listsByMovieId = Map.groupBy(memberships, ({ movieId }) => movieId);
 

@@ -9,8 +9,10 @@ import { ErrorMessage } from "@/components/ErrorMessage";
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { Avatar } from "@/components/ui/Avatar";
 import { Typography } from "@/components/ui/Typography";
+import { MOVIES_PAGE_SIZE } from "@/consts";
 import { formatDate } from "@/utils/formatDate";
 import { formatUserId } from "@/utils/formatUserId";
+import { getOffset, handleInvalidPage, parsePage } from "@/utils/pagination";
 import { ListOptions } from "./ListOptions";
 import { MovieList } from "./MovieList";
 
@@ -27,15 +29,17 @@ const visibilityConfig = {
 
 type ListPageProps = {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ search?: string; sort?: string }>;
+  searchParams: Promise<{ search?: string; sort?: string; page?: string }>;
 };
 
 const ListPage = async ({ params, searchParams }: ListPageProps) => {
   const { id } = await params;
-  const { search, sort } = await searchParams;
+  const { search, sort, page } = await searchParams;
+  const currentPage = parsePage(page);
+  const offset = getOffset(currentPage, MOVIES_PAGE_SIZE);
   const [session, { data: list, success }] = await Promise.all([
     getSession(),
-    getMovieListById(id, search, sort),
+    getMovieListById(id, MOVIES_PAGE_SIZE, offset, search, sort),
   ]);
 
   if (!success) {
@@ -46,7 +50,10 @@ const ListPage = async ({ params, searchParams }: ListPageProps) => {
     notFound();
   }
 
-  const { user, title, description, createdAt, movies } = list;
+  const { user, title, description, createdAt, movies, totalCount } = list;
+
+  handleInvalidPage(currentPage, totalCount, MOVIES_PAGE_SIZE);
+
   const owner = session?.user.id === user.id;
   const userListsHref = owner ? "/dashboard/lists" : `/user/${user.id}/lists`;
 
@@ -93,7 +100,15 @@ const ListPage = async ({ params, searchParams }: ListPageProps) => {
           {visibilityLabel}
         </Typography.Small>
       </div>
-      <MovieList listId={id} movies={movies} owner={owner} search={search} />
+      <MovieList
+        listId={id}
+        movies={movies}
+        owner={owner}
+        search={search}
+        totalCount={totalCount}
+        page={currentPage}
+        pageSize={MOVIES_PAGE_SIZE}
+      />
       <ScrollToTopButton />
     </div>
   );

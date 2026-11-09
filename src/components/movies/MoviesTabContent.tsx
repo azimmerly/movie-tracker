@@ -1,5 +1,4 @@
 import { Squares2X2Icon } from "@heroicons/react/16/solid";
-import { notFound } from "next/navigation";
 
 import { getUserMovies } from "@/actions/movie";
 import { ErrorMessage } from "@/components/ErrorMessage";
@@ -10,6 +9,8 @@ import { Pagination } from "@/components/Pagination";
 import { SearchParamInput } from "@/components/SearchParamInput";
 import { SearchResultMessage } from "@/components/SearchResultMessage";
 import { Typography } from "@/components/ui/Typography";
+import { MOVIES_PAGE_SIZE } from "@/consts";
+import { getOffset, handleInvalidPage } from "@/utils/pagination";
 
 type MoviesTabContentProps = {
   userId: string;
@@ -19,8 +20,6 @@ type MoviesTabContentProps = {
   page?: number;
 };
 
-const MOVIES_PAGE_SIZE = 15;
-
 export const MoviesTabContent = async ({
   userId,
   owner,
@@ -28,7 +27,7 @@ export const MoviesTabContent = async ({
   sort,
   page = 1,
 }: MoviesTabContentProps) => {
-  const offset = MOVIES_PAGE_SIZE * (page - 1);
+  const offset = getOffset(page, MOVIES_PAGE_SIZE);
   const { data, success } = await getUserMovies(
     userId,
     MOVIES_PAGE_SIZE,
@@ -40,9 +39,7 @@ export const MoviesTabContent = async ({
   const movies = data?.movies;
   const totalCount = data?.totalCount ?? 0;
 
-  if (totalCount > 0 && page > Math.ceil(totalCount / MOVIES_PAGE_SIZE)) {
-    notFound();
-  }
+  handleInvalidPage(page, totalCount, MOVIES_PAGE_SIZE);
 
   if (!success) {
     return <ErrorMessage />;
