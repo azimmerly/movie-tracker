@@ -26,16 +26,12 @@ import { SearchMovie } from "./SearchMovie";
 
 type AddMovieDialogProps = {
   listId: MovieList["id"];
-  listMovieIds: Set<Movie["id"]>;
 };
 
-export const AddMovieDialog = ({
-  listId,
-  listMovieIds,
-}: AddMovieDialogProps) => {
+export const AddMovieDialog = ({ listId }: AddMovieDialogProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [movies, setMovies] = useState<MovieSearchResponseData>();
-  const [addedIds, setAddedIds] = useState<Set<Movie["id"]>>(listMovieIds);
+  const [addedIds, setAddedIds] = useState<Set<Movie["id"]>>(new Set());
 
   const handleMovieAdded = (movieId: Movie["id"]) => {
     setAddedIds((prev) => new Set(prev).add(movieId));
@@ -57,10 +53,11 @@ export const AddMovieDialog = ({
   );
 
   const handleSearchMovie = async (formData: MovieSearchData) => {
-    const res = await searchMovies(formData);
-    if (res.success) {
+    const res = await searchMovies(formData, listId);
+    if (res.success && res.data) {
       reset();
-      setMovies(res.data);
+      setMovies(res.data.movies);
+      setAddedIds(new Set(res.data.addedIds));
     } else {
       toast.error(res.message);
     }
@@ -81,7 +78,7 @@ export const AddMovieDialog = ({
         onTransitionEnd={() => {
           reset();
           setMovies(undefined);
-          setAddedIds(listMovieIds);
+          setAddedIds(new Set());
         }}
         className="sm:max-w-xl"
         header={{ icon: FilmIcon, title: "Add a movie" }}

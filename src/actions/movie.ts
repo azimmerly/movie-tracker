@@ -24,6 +24,7 @@ import type {
   DeleteMovieData,
   DeleteUserMovieData,
   Movie,
+  MovieList,
   MovieSearchData,
   UpdateMovieData,
 } from "@/types";
@@ -56,7 +57,10 @@ const getUserMoviesOrderBy = (sort?: string) => {
   }
 };
 
-export const searchMovies = async (data: MovieSearchData) => {
+export const searchMovies = async (
+  data: MovieSearchData,
+  listId: MovieList["id"],
+) => {
   const session = await getSession();
   if (!session) {
     return { success: false, message: "Not authenticated" };
@@ -64,12 +68,44 @@ export const searchMovies = async (data: MovieSearchData) => {
 
   try {
     const { title } = movieSearchSchema.parse(data);
-    const movies = await movieDbFetch("/search/movie", {
-      output: movieSearchResponseSchema,
-      query: { query: title },
-      next: { revalidate: CACHE_ONE_DAY },
-    });
-    return { success: true, data: movies };
+    const validListId = addMovieSchema.shape.listId.parse(listId);
+
+    const [ownedList, movies] = await Promise.all([
+      db.query.movieList.findFirst({
+        where: and(
+          eq(movieList.id, validListId),
+          eq(movieList.userId, session.user.id),
+        ),
+        columns: { id: true },
+      }),
+      movieDbFetch("/search/movie", {
+        output: movieSearchResponseSchema,
+        query: { query: title },
+        next: { revalidate: CACHE_ONE_DAY },
+      }),
+    ]);
+
+    if (!ownedList) {
+      return { success: false, message: "List not found" };
+    }
+
+    const addedRows = await db
+      .select({ movieId: listMovie.movieId })
+      .from(listMovie)
+      .where(
+        and(
+          eq(listMovie.listId, validListId),
+          inArray(
+            listMovie.movieId,
+            movies.map(({ id }) => id),
+          ),
+        ),
+      );
+
+    return {
+      success: true,
+      data: { movies, addedIds: addedRows.map(({ movieId }) => movieId) },
+    };
   } catch (e) {
     logError("movie/searchMovies", e);
     return { success: false, message: "Something went wrong" };
@@ -84,6 +120,17 @@ export const addMovie = async (data: AddMovieData) => {
 
   try {
     const { listId, movieId } = addMovieSchema.parse(data);
+
+    const ownedList = await db.query.movieList.findFirst({
+      where: and(
+        eq(movieList.id, listId),
+        eq(movieList.userId, session.user.id),
+      ),
+      columns: { id: true },
+    });
+    if (!ownedList) {
+      return { success: false, message: "List not found" };
+    }
 
     const movieExists = await db.query.movie.findFirst({
       where: eq(movie.id, movieId),
