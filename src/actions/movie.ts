@@ -399,7 +399,7 @@ export const getUserMovies = async (
         ),
       )
       .where(inArray(listMovie.movieId, movieIds))
-      .orderBy(asc(listMovie.createdAt));
+      .orderBy(asc(movieList.title));
 
     const listsByMovieId = Map.groupBy(memberships, ({ movieId }) => movieId);
 

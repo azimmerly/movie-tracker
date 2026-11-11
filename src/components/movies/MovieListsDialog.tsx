@@ -10,13 +10,11 @@ import type { MovieList } from "@/types";
 type MovieListsDialogProps = {
   lists: Pick<MovieList, "id" | "title">[];
   movieTitle: string;
-  overflowCount: number;
 };
 
 export const MovieListsDialog = ({
   lists,
   movieTitle,
-  overflowCount,
 }: MovieListsDialogProps) => {
   const [open, setOpen] = useState(false);
 
@@ -27,7 +25,7 @@ export const MovieListsDialog = ({
         onClick={() => setOpen(true)}
         className="cursor-pointer hover:underline"
       >
-        +{overflowCount} more
+        {lists.length} lists
       </button>
       <Dialog
         open={open}
@@ -35,20 +33,20 @@ export const MovieListsDialog = ({
         header={{
           icon: ListBulletIcon,
           title: movieTitle,
-          subtitle: "Found in the following lists",
+          subtitle: `In ${lists.length} lists`,
         }}
       >
-        <div className="max-h-60 scrollbar-none overflow-y-auto pb-5">
-          <ul className="divide-y divide-mist-200 dark:divide-mist-800">
+        <div className="-mx-2 mt-2 max-h-60 scrollbar-none overflow-y-auto px-2 pb-5">
+          <ul className="flex flex-col gap-0.5">
             {lists.map(({ id, title }) => (
-              <li key={id} className="py-2.5 first:pt-0 last:pb-0">
+              <li key={id}>
                 <Link
                   href={`/list/${id}`}
                   onClick={() => setOpen(false)}
-                  className="group flex items-center justify-between text-sm hover:underline"
+                  className="group -mx-2 flex items-center justify-between gap-2 rounded-md px-2 py-2.5 text-sm hover:bg-mist-100 dark:hover:bg-mist-800"
                 >
                   <span className="truncate">{title}</span>
-                  <ChevronRightIcon className="size-4.5 shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
+                  <ChevronRightIcon className="size-4.5 shrink-0 text-mist-400 group-hover:text-mist-600 dark:text-mist-500 dark:group-hover:text-mist-300" />
                 </Link>
               </li>
             ))}
