@@ -1,28 +1,26 @@
 const CHANNEL = "auth";
-const SIGN_IN_EVENT = "signed-in";
-const SIGN_OUT_EVENT = "signed-out";
-const ACCOUNT_UPDATED_EVENT = "account-updated";
+const AUTH_CHANGED = "auth-changed";
 
-const AUTH_EVENTS = [
-  SIGN_IN_EVENT,
-  SIGN_OUT_EVENT,
-  ACCOUNT_UPDATED_EVENT,
-] as const;
+const isSupported = () => typeof BroadcastChannel !== "undefined";
 
-const broadcast = (type: (typeof AUTH_EVENTS)[number]) => {
+export const broadcastAuthChange = () => {
+  if (!isSupported()) {
+    return;
+  }
+
   const ch = new BroadcastChannel(CHANNEL);
-  ch.postMessage({ type });
+  ch.postMessage(AUTH_CHANGED);
   ch.close();
 };
 
-export const broadcastSignIn = () => broadcast(SIGN_IN_EVENT);
-export const broadcastSignOut = () => broadcast(SIGN_OUT_EVENT);
-export const broadcastAccountUpdate = () => broadcast(ACCOUNT_UPDATED_EVENT);
-
 export const listenForAuthChange = (onChange: () => void) => {
+  if (!isSupported()) {
+    return () => {};
+  }
+
   const ch = new BroadcastChannel(CHANNEL);
   ch.onmessage = ({ data }: MessageEvent) => {
-    if (AUTH_EVENTS.includes(data?.type)) {
+    if (data === AUTH_CHANGED) {
       onChange();
     }
   };

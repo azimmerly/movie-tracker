@@ -12,7 +12,7 @@ import { Dialog } from "@/components/ui/Dialog";
 import { InputField } from "@/components/ui/InputField";
 import { authClient } from "@/lib/authClient";
 import type { UpdateUserData } from "@/types";
-import { broadcastAccountUpdate } from "@/utils/authBroadcast";
+import { broadcastAuthChange } from "@/utils/authBroadcast";
 import { updateUserSchema } from "@/utils/validation/user";
 
 type UpdateAccountDialogProps = {
@@ -46,7 +46,7 @@ export const UpdateAccountDialog = ({
         },
         onSuccess: () => {
           toast.success("Updated name");
-          broadcastAccountUpdate();
+          broadcastAuthChange();
           onClose();
           router.refresh();
         },

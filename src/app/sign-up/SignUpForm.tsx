@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/Button";
 import { InputField } from "@/components/ui/InputField";
 import { authClient } from "@/lib/authClient";
 import type { SignUpData } from "@/types";
-import { broadcastSignIn } from "@/utils/authBroadcast";
+import { broadcastAuthChange } from "@/utils/authBroadcast";
 import { signUpSchema } from "@/utils/validation/user";
 
 export const SignUpForm = () => {
@@ -28,7 +28,7 @@ export const SignUpForm = () => {
       },
       onSuccess: () => {
         toast.success("Account created");
-        broadcastSignIn();
+        broadcastAuthChange();
         router.refresh();
       },
     });
