@@ -28,6 +28,7 @@ import type {
   MovieSearchData,
   UpdateMovieData,
 } from "@/types";
+import { ascLower } from "@/utils/ascLower";
 import { logError } from "@/utils/logError";
 import {
   PENDING_STATUSES,
@@ -47,11 +48,11 @@ const getUserMoviesOrderBy = (sort?: string) => {
     case "added":
       return [desc(userMovie.createdAt)];
     case "title":
-      return [asc(movie.title)];
+      return [ascLower(movie.title)];
     case "rating":
-      return [desc(userMovie.rating), asc(movie.title)];
+      return [desc(userMovie.rating), ascLower(movie.title)];
     case "released":
-      return [desc(movie.releaseDate), asc(movie.title)];
+      return [desc(movie.releaseDate), ascLower(movie.title)];
     default:
       return [desc(userMovie.createdAt)];
   }

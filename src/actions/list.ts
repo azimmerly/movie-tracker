@@ -7,6 +7,7 @@ import { getSession } from "@/actions/auth";
 import { db } from "@/lib/db";
 import { listMovie, movie, movieList, user, userMovie } from "@/lib/db/schema";
 import type { AddListData, MovieList, UpdateListData } from "@/types";
+import { ascLower } from "@/utils/ascLower";
 import { logError } from "@/utils/logError";
 import { addListSchema, updateListSchema } from "@/utils/validation/list";
 
@@ -15,9 +16,9 @@ const getMovieListOrderBy = (sort?: string) => {
     case "created":
       return [desc(movieList.createdAt)];
     case "title":
-      return [asc(movieList.title)];
+      return [ascLower(movieList.title)];
     case "count":
-      return [desc(sql`movie_count`), asc(movieList.title)];
+      return [desc(sql`movie_count`), ascLower(movieList.title)];
     default:
       return [desc(movieList.createdAt)];
   }
@@ -28,11 +29,11 @@ const getMovieOrderBy = (sort?: string) => {
     case "added":
       return [desc(listMovie.createdAt)];
     case "title":
-      return [asc(movie.title)];
+      return [ascLower(movie.title)];
     case "rating":
-      return [desc(userMovie.rating), asc(movie.title)];
+      return [desc(userMovie.rating), ascLower(movie.title)];
     case "released":
-      return [desc(movie.releaseDate), asc(movie.title)];
+      return [desc(movie.releaseDate), ascLower(movie.title)];
     default:
       return [desc(listMovie.createdAt)];
   }
