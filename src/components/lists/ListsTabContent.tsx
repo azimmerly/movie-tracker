@@ -55,7 +55,7 @@ export const ListsTabContent = async ({
           <div className="mb-2 flex w-full min-w-0 items-center gap-1">
             <Squares2X2Icon className="size-4 shrink-0 text-blue-600/70 dark:text-blue-500/70" />
             <Typography.Body muted className="truncate">
-              This user&apos;s movie lists
+              Movie lists
             </Typography.Body>
           </div>
         )}
@@ -77,11 +77,7 @@ export const ListsTabContent = async ({
           ))
         ) : (
           <NothingFound
-            text={
-              owner
-                ? "Create a list to get started."
-                : "No movie lists here… yet."
-            }
+            text={owner ? "Create a list to get started." : "No lists yet."}
           />
         )}
       </div>

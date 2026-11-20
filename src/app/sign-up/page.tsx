@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { getSession } from "@/actions/auth";
 import logoImage from "@/assets/logo.png";
 import { Typography } from "@/components/ui/Typography";
+import { APP_NAME } from "@/consts";
 import { SignUpForm } from "./SignUpForm";
 
 const SignUp = async () => {
@@ -20,7 +21,7 @@ const SignUp = async () => {
           priority
           draggable={false}
           src={logoImage}
-          alt="logo"
+          alt={APP_NAME}
           className="mx-auto mb-2 size-14"
         />
         <Typography.H3 className="text-center">Create an account</Typography.H3>

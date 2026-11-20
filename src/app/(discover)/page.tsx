@@ -62,7 +62,7 @@ const Discover = async ({ searchParams }: DiscoverProps) => {
             />
           ))
         ) : (
-          <NothingFound text="No movie lists here… yet." />
+          <NothingFound text="No lists yet." />
         )}
       </div>
       <Pagination

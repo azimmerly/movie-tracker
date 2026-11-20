@@ -29,7 +29,7 @@ export const DeleteAccountDialog = ({
           toast.error(error.message);
         },
         onSuccess: () => {
-          toast.warning("Account deleted");
+          toast.success("Account deleted");
           broadcastAuthChange();
           router.refresh();
         },

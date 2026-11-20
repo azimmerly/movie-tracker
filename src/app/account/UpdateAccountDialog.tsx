@@ -45,7 +45,7 @@ export const UpdateAccountDialog = ({
           toast.error(error.message);
         },
         onSuccess: () => {
-          toast.success("Updated name");
+          toast.success("Name updated");
           broadcastAuthChange();
           onClose();
           router.refresh();
@@ -59,7 +59,7 @@ export const UpdateAccountDialog = ({
       open={open}
       onClose={onClose}
       onTransitionEnd={() => reset({ name: username })}
-      header={{ icon: PencilSquareIcon, title: "Update account" }}
+      header={{ icon: PencilSquareIcon, title: "Edit account" }}
     >
       <form
         className="flex flex-col gap-4"

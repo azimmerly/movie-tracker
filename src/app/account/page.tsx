@@ -32,7 +32,7 @@ const Account = async () => {
   return (
     <>
       <div className="mb-8 flex items-center justify-between">
-        <Typography.H1>My Account</Typography.H1>
+        <Typography.H1>Account</Typography.H1>
         <OptionsDropdown username={user.name} />
       </div>
       <Card className="p-5 sm:p-6">

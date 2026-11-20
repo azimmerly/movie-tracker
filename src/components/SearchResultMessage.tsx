@@ -35,6 +35,7 @@ export const SearchResultMessage = ({
         Showing {noun} matching <strong>{`"${searchTerm}"`}</strong>
       </Typography.Small>
       <Button
+        aria-label="Clear search"
         onClick={() => setQueryParams({ search: null, page: null })}
         className="cursor-pointer rounded-md p-0.5 text-mist-400 transition hover:text-mist-500 dark:text-mist-500 dark:hover:text-mist-400"
       >

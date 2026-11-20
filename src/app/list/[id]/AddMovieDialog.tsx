@@ -124,7 +124,7 @@ export const AddMovieDialog = ({ listId }: AddMovieDialogProps) => {
                   muted
                   className="mt-6 text-center font-medium"
                 >
-                  No movies found with that title...
+                  No movies found for that title.
                 </Typography.Small>
               ) : (
                 <>

@@ -17,7 +17,7 @@ export const OptionsDropdown = ({ username }: OptionsDropdownProps) => {
 
   const menuOptions = [
     {
-      label: "Update account",
+      label: "Edit account",
       icon: PencilSquareIcon,
       onClick: () => setIsUpdateDialogOpen(true),
     },

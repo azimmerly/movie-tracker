@@ -25,7 +25,7 @@ export const NavLogo = ({ className, onClick }: NavLogoProps) => (
       priority
       draggable={false}
       src={logoImage}
-      alt="logo"
+      alt={APP_NAME}
       className="size-6.5 sm:size-7"
     />
     <Typography.Large

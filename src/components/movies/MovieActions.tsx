@@ -145,7 +145,7 @@ export const MovieActions = ({
   return owner ? (
     fieldset
   ) : (
-    <Tooltip label="You can only rate/favorite your own movies">
+    <Tooltip label="You can only rate or favorite your own movies">
       {fieldset}
     </Tooltip>
   );

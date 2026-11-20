@@ -42,7 +42,7 @@ export const MovieList = ({
     <SearchResultMessage className="mt-10" noun="movies" searchTerm={search} />
     <div className="mt-8">
       {!movies.length ? (
-        <NothingFound text="No movies here… yet." />
+        <NothingFound text="No movies yet." />
       ) : (
         <ul className="divide-y divide-mist-200 dark:divide-mist-800">
           {movies.map(({ movie, favorite, rating }, index) => (
