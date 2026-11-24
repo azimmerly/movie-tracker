@@ -4,6 +4,7 @@ import { Button, Field, Input, Label } from "@headlessui/react";
 import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/16/solid";
 import { useSearchParams } from "next/navigation";
 import { type ChangeEvent, useState } from "react";
+import { twMerge } from "tailwind-merge";
 
 import { Typography } from "@/components/ui/Typography";
 import { useDebouncedCallback } from "@/utils/useDebouncedCallback";
@@ -11,9 +12,13 @@ import { useQueryString } from "@/utils/useQueryString";
 
 type SearchParamInputProps = {
   placeholder: string;
+  className?: string;
 };
 
-export const SearchParamInput = ({ placeholder }: SearchParamInputProps) => {
+export const SearchParamInput = ({
+  placeholder,
+  className,
+}: SearchParamInputProps) => {
   const searchParams = useSearchParams();
   const { setQueryParams } = useQueryString();
   const searchParam = searchParams.get("search") ?? "";
@@ -41,7 +46,9 @@ export const SearchParamInput = ({ placeholder }: SearchParamInputProps) => {
   };
 
   return (
-    <Field className="flex w-full flex-col gap-1 sm:max-w-56">
+    <Field
+      className={twMerge("flex w-full flex-col gap-1 sm:max-w-56", className)}
+    >
       <Label className="sr-only sm:not-sr-only">
         <Typography.Tiny muted>Search</Typography.Tiny>
       </Label>

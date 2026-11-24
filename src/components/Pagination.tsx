@@ -12,6 +12,7 @@ type PaginationProps = {
   totalCount: number;
   pageSize: number;
   itemLabel: string;
+  showSummary?: boolean;
 };
 
 export const Pagination = ({
@@ -19,6 +20,7 @@ export const Pagination = ({
   totalCount,
   pageSize,
   itemLabel,
+  showSummary = true,
 }: PaginationProps) => {
   const { setQueryParams } = useQueryString();
 
@@ -42,11 +44,13 @@ export const Pagination = ({
       aria-label="Pagination"
       className="flex flex-col-reverse items-center border-t border-mist-200 py-4 sm:flex-row sm:justify-between dark:border-mist-800"
     >
-      <Typography.Small muted className="mt-3 sm:mt-0">
-        Showing <span className="font-semibold">{startItem}</span> to
-        <span className="font-semibold"> {endItem} </span> of
-        <span className="font-semibold"> {totalCount}</span> {itemLabel}
-      </Typography.Small>
+      {showSummary && (
+        <Typography.Small muted className="mt-3 sm:mt-0">
+          Showing <span className="font-semibold">{startItem}</span> to
+          <span className="font-semibold"> {endItem} </span> of
+          <span className="font-semibold"> {totalCount}</span> {itemLabel}
+        </Typography.Small>
+      )}
       <div className="flex w-full flex-1 gap-3 sm:justify-end">
         <Button
           variant="secondary"

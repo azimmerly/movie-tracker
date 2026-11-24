@@ -4,6 +4,7 @@ const SIZE = {
   sm: "w154",
   md: "w185",
   lg: "w780",
+  fill: "w342",
 } as const;
 
 export type MovieImageSize = keyof typeof SIZE;

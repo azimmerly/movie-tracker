@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { BROWSE_MOVIES_MAX_RESULTS, BROWSE_MOVIES_PAGE_SIZE } from "@/consts";
+
 const listIdSchema = z.uuid();
 const movieIdSchema = z.int().positive();
 
@@ -27,30 +29,39 @@ export const movieSearchSchema = z.object({
   title: z.string().trim().min(1, { error: "Required" }),
 });
 
-export const movieSearchResponseSchema = z
-  .object({
-    results: z.array(
-      z.object({
-        id: z.int().positive(),
-        title: z.string(),
-        release_date: z.string().optional(),
-        poster_path: z.string().nullable(),
-        genre_ids: z.array(z.number()).optional(),
-      }),
-    ),
-  })
-  .transform(({ results }) => {
+const movieResultsSchema = z
+  .array(
+    z.object({
+      id: z.int().positive(),
+      title: z.string(),
+      release_date: z.string().optional(),
+      poster_path: z.string().nullable(),
+      genre_ids: z.array(z.number()).optional(),
+    }),
+  )
+  .transform((results) => {
     const filteredMovies = results.filter(
       (movie) =>
         movie.release_date && movie.poster_path && !!movie.genre_ids?.length,
     );
-    return filteredMovies.slice(0, 20).map((movie) => ({
+    return filteredMovies.slice(0, BROWSE_MOVIES_PAGE_SIZE).map((movie) => ({
       id: movie.id,
       title: movie.title,
       releaseDate: movie.release_date!,
       posterPath: movie.poster_path!,
     }));
   });
+
+export const movieSearchResponseSchema = z
+  .object({ results: movieResultsSchema })
+  .transform(({ results }) => results);
+
+export const movieBrowseResponseSchema = z
+  .object({ results: movieResultsSchema, total_results: z.int() })
+  .transform(({ results, total_results }) => ({
+    movies: results,
+    totalCount: Math.min(total_results, BROWSE_MOVIES_MAX_RESULTS),
+  }));
 
 const MOVIE_STATUSES = [
   "Rumored",

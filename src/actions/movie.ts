@@ -35,6 +35,7 @@ import {
   addMovieSchema,
   deleteMovieSchema,
   deleteUserMovieSchema,
+  movieBrowseResponseSchema,
   movieDetailsResponseSchema,
   movieSearchResponseSchema,
   movieSearchSchema,
@@ -42,6 +43,28 @@ import {
 } from "@/utils/validation/movie";
 
 const CACHE_ONE_DAY = 86400;
+
+const fetchMovieDbMovie = (id: Movie["id"]) =>
+  movieDbFetch("/movie/:id", {
+    params: { id: id.toString() },
+    query: { append_to_response: "credits" },
+    output: movieDetailsResponseSchema,
+    next: { revalidate: CACHE_ONE_DAY },
+  });
+
+const ensureMovie = async (id: Movie["id"]) => {
+  const movieExists = await db.query.movie.findFirst({
+    where: eq(movie.id, id),
+    columns: { id: true },
+  });
+
+  if (movieExists) {
+    return;
+  }
+
+  const fetchedMovieData = await fetchMovieDbMovie(id);
+  await db.insert(movie).values(fetchedMovieData).onConflictDoNothing();
+};
 
 const getUserMoviesOrderBy = (sort?: string) => {
   switch (sort) {
@@ -113,6 +136,26 @@ export const searchMovies = async (
   }
 };
 
+export const browseMovies = async (page: number, search?: string) => {
+  try {
+    const query = search?.trim();
+
+    const data = await movieDbFetch(
+      query ? "/search/movie" : "/movie/popular",
+      {
+        output: movieBrowseResponseSchema,
+        query: query ? { query, page } : { page },
+        next: { revalidate: CACHE_ONE_DAY },
+      },
+    );
+
+    return { success: true, data };
+  } catch (e) {
+    logError("movie/browseMovies", e);
+    return { success: false, message: "Something went wrong" };
+  }
+};
+
 export const addMovie = async (data: AddMovieData) => {
   const session = await getSession();
   if (!session) {
@@ -133,28 +176,9 @@ export const addMovie = async (data: AddMovieData) => {
       return { success: false, message: "List not found" };
     }
 
-    const movieExists = await db.query.movie.findFirst({
-      where: eq(movie.id, movieId),
-      columns: { id: true },
-    });
-
-    let fetchedMovieData = null;
-    if (!movieExists) {
-      fetchedMovieData = await movieDbFetch("/movie/:id", {
-        params: { id: movieId.toString() },
-        query: { append_to_response: "credits" },
-        output: movieDetailsResponseSchema,
-      });
-      if (!fetchedMovieData) {
-        throw new Error("Error fetching movie data");
-      }
-    }
+    await ensureMovie(movieId);
 
     const newListMovie = await db.transaction(async (tx) => {
-      if (fetchedMovieData) {
-        await tx.insert(movie).values(fetchedMovieData).onConflictDoNothing();
-      }
-
       const [inserted] = await tx
         .insert(listMovie)
         .values({ listId, movieId })
@@ -304,15 +328,15 @@ export const getMovie = async (id: Movie["id"]) => {
   try {
     let movieData = await db.query.movie.findFirst({ where: eq(movie.id, id) });
 
-    if (movieData && PENDING_STATUSES.has(movieData.status)) {
+    if (!movieData) {
+      return { success: true, data: await fetchMovieDbMovie(id) };
+    }
+
+    if (PENDING_STATUSES.has(movieData.status)) {
       const today = new Date().toISOString().split("T")[0];
 
       if (movieData.releaseDate <= today) {
-        const fetchedMovieData = await movieDbFetch("/movie/:id", {
-          params: { id: id.toString() },
-          query: { append_to_response: "credits" },
-          output: movieDetailsResponseSchema,
-        });
+        const fetchedMovieData = await fetchMovieDbMovie(id);
 
         if (fetchedMovieData) {
           movieData = await db

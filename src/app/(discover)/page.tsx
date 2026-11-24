@@ -38,9 +38,9 @@ const Discover = async ({ searchParams }: DiscoverProps) => {
   return (
     <div className="flex flex-col gap-8">
       <div className="mb-4 flex flex-col gap-2">
-        <Typography.H1>Discover movie lists</Typography.H1>
+        <Typography.H1>Browse movie lists</Typography.H1>
         <Typography.Body muted>
-          Browse lists from other movie fans, or start your own.
+          Discover lists from other movie fans, or create your own.
         </Typography.Body>
       </div>
       <div className="flex flex-col items-end justify-between gap-3 sm:flex-row">

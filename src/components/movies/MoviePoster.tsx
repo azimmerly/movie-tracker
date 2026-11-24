@@ -33,6 +33,12 @@ const IMAGE_CONFIG = {
     wrapperClass: "h-84 w-56 rounded-lg lg:h-120 lg:w-80 lg:rounded-xl",
     sizes: "(min-width: 1024px) 320px, 224px",
   },
+  fill: {
+    width: 342,
+    height: 513,
+    wrapperClass: "block aspect-2/3 w-full rounded-lg",
+    sizes: "(min-width: 1024px) 240px, (min-width: 640px) 25vw, 50vw",
+  },
 } as const;
 
 export const MoviePoster = ({
@@ -54,7 +60,7 @@ export const MoviePoster = ({
         height={height}
         sizes={sizes}
         src={getMovieImage(posterPath, size)}
-        className="relative h-full w-full shadow-xs"
+        className="relative h-full w-full rounded-[inherit] shadow-xs"
         priority={priority}
         draggable={false}
       />

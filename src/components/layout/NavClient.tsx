@@ -6,8 +6,9 @@ import {
   Button as HeadlessButton,
 } from "@headlessui/react";
 import {
-  GlobeAltIcon,
+  FilmIcon,
   HomeIcon,
+  ListBulletIcon,
   UserCircleIcon,
   UserPlusIcon,
 } from "@heroicons/react/16/solid";
@@ -40,9 +41,15 @@ type NavClientProps = {
 const navLinks = [
   {
     href: "/",
-    label: "Discover",
-    icon: GlobeAltIcon,
+    label: "Lists",
+    icon: ListBulletIcon,
     isActive: (path: string) => path === "/",
+  },
+  {
+    href: "/movies",
+    label: "Movies",
+    icon: FilmIcon,
+    isActive: (path: string) => path === "/movies",
   },
   {
     href: "/dashboard/lists",
