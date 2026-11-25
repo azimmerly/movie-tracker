@@ -21,6 +21,7 @@ import { db } from "@/lib/db";
 import { listMovie, movie, movieList, userMovie } from "@/lib/db/schema";
 import type {
   AddMovieData,
+  AddUserMovieData,
   DeleteMovieData,
   DeleteUserMovieData,
   Movie,
@@ -33,6 +34,7 @@ import { logError } from "@/utils/logError";
 import {
   PENDING_STATUSES,
   addMovieSchema,
+  addUserMovieSchema,
   deleteMovieSchema,
   deleteUserMovieSchema,
   movieBrowseResponseSchema,
@@ -152,6 +154,66 @@ export const browseMovies = async (page: number, search?: string) => {
     return { success: true, data };
   } catch (e) {
     logError("movie/browseMovies", e);
+    return { success: false, message: "Something went wrong" };
+  }
+};
+
+export const addUserMovie = async (data: AddUserMovieData) => {
+  const session = await getSession();
+  if (!session) {
+    return { success: false, message: "Not authenticated" };
+  }
+
+  try {
+    const { movieId } = addUserMovieSchema.parse(data);
+
+    await ensureMovie(movieId);
+
+    await db
+      .insert(userMovie)
+      .values({ userId: session.user.id, movieId })
+      .onConflictDoNothing();
+
+    return { success: true };
+  } catch (e) {
+    logError("movie/addUserMovie", e);
+    return { success: false, message: "Something went wrong" };
+  }
+};
+
+export const getMovieUserState = async (id: Movie["id"]) => {
+  const session = await getSession();
+  if (!session) {
+    return { success: true, data: undefined };
+  }
+
+  try {
+    const [savedUserMovie, lists] = await Promise.all([
+      db.query.userMovie.findFirst({
+        where: and(
+          eq(userMovie.userId, session.user.id),
+          eq(userMovie.movieId, id),
+        ),
+        columns: { id: true },
+      }),
+      db
+        .select({
+          id: movieList.id,
+          title: movieList.title,
+          added: sql<boolean>`${listMovie.id} is not null`,
+        })
+        .from(movieList)
+        .leftJoin(
+          listMovie,
+          and(eq(listMovie.listId, movieList.id), eq(listMovie.movieId, id)),
+        )
+        .where(eq(movieList.userId, session.user.id))
+        .orderBy(ascLower(movieList.title)),
+    ]);
+
+    return { success: true, data: { inLibrary: !!savedUserMovie, lists } };
+  } catch (e) {
+    logError("movie/getMovieUserState", e);
     return { success: false, message: "Something went wrong" };
   }
 };

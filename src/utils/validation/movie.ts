@@ -15,6 +15,10 @@ export const deleteMovieSchema = z.object({
   movieId: movieIdSchema,
 });
 
+export const addUserMovieSchema = z.object({
+  movieId: movieIdSchema,
+});
+
 export const deleteUserMovieSchema = z.object({
   movieId: movieIdSchema,
 });

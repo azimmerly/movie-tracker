@@ -8,7 +8,9 @@ import { ClockIcon } from "@heroicons/react/24/outline";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
-import { getMovie } from "@/actions/movie";
+import { getSession } from "@/actions/auth";
+import { getMovie, getMovieUserState } from "@/actions/movie";
+import { AuthPrompt } from "@/components/AuthPrompt";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { MoviePoster } from "@/components/movies/MoviePoster";
 import { Chip } from "@/components/ui/Chip";
@@ -20,6 +22,7 @@ import { formatDate } from "@/utils/formatDate";
 import { formatLanguage } from "@/utils/formatLanguage";
 import { formatRuntime } from "@/utils/formatRuntime";
 import { MovieAvgRating } from "./MovieAvgRating";
+import { MovieUserActions } from "./MovieUserActions";
 
 type MoviePageProps = {
   params: Promise<{ id: string }>;
@@ -27,7 +30,12 @@ type MoviePageProps = {
 
 const MoviePage = async ({ params }: MoviePageProps) => {
   const { id } = await params;
-  const { data: movie, success } = await getMovie(Number(id));
+  const [{ data: movie, success }, { data: userState }, session] =
+    await Promise.all([
+      getMovie(Number(id)),
+      getMovieUserState(Number(id)),
+      getSession(),
+    ]);
 
   if (!success) {
     return <ErrorMessage />;
@@ -38,13 +46,29 @@ const MoviePage = async ({ params }: MoviePageProps) => {
   }
 
   return (
-    <div className="mt-12 flex flex-col items-center gap-8 lg:mt-16 lg:flex-row lg:items-start lg:justify-center lg:gap-12">
-      <MoviePoster
-        size="lg"
-        alt={movie.title}
-        posterPath={movie.posterPath}
-        priority
-      />
+    <div className="mt-12 flex flex-col items-center gap-8 lg:flex-row lg:items-start lg:justify-center lg:gap-12">
+      <div className="flex shrink-0 flex-col items-center gap-4">
+        <MoviePoster
+          size="lg"
+          alt={movie.title}
+          posterPath={movie.posterPath}
+          priority
+        />
+        {userState ? (
+          <MovieUserActions
+            movie={{ id: movie.id, title: movie.title }}
+            inLibrary={userState.inLibrary}
+            lists={userState.lists}
+          />
+        ) : (
+          !session && (
+            <AuthPrompt
+              action="save this movie"
+              className="text-center text-balance"
+            />
+          )
+        )}
+      </div>
       <div className="flex flex-col items-center gap-9 lg:max-w-lg lg:items-start">
         <div className="flex flex-col items-center gap-2.5 lg:items-start">
           <Typography.H1 className="mb-1.5 max-w-2xl text-center lg:text-left">
