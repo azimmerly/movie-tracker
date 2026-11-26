@@ -1,9 +1,21 @@
 "use server";
 
 import type { User } from "better-auth";
-import { and, asc, count, desc, eq, ilike, or, sql } from "drizzle-orm";
+import {
+  and,
+  asc,
+  count,
+  desc,
+  eq,
+  ilike,
+  inArray,
+  lte,
+  or,
+  sql,
+} from "drizzle-orm";
 
 import { getSession } from "@/actions/auth";
+import { LIST_CARD_POSTERS } from "@/consts";
 import { db } from "@/lib/db";
 import { listMovie, movie, movieList, user, userMovie } from "@/lib/db/schema";
 import type { AddListData, MovieList, UpdateListData } from "@/types";
@@ -37,6 +49,46 @@ const getMovieOrderBy = (sort?: string) => {
     default:
       return [desc(listMovie.createdAt)];
   }
+};
+
+const withPosterPaths = async <T extends { id: MovieList["id"] }>(
+  lists: T[],
+) => {
+  if (!lists.length) {
+    return lists.map((list) => ({ ...list, posterPaths: [] as string[] }));
+  }
+
+  const ranked = db
+    .select({
+      listId: listMovie.listId,
+      posterPath: movie.posterPath,
+      rank: sql<number>`row_number() over (partition by ${listMovie.listId} order by ${listMovie.createdAt} desc)`.as(
+        "rank",
+      ),
+    })
+    .from(listMovie)
+    .innerJoin(movie, eq(movie.id, listMovie.movieId))
+    .where(
+      inArray(
+        listMovie.listId,
+        lists.map(({ id }) => id),
+      ),
+    )
+    .as("ranked");
+
+  const rows = await db
+    .select({ listId: ranked.listId, posterPath: ranked.posterPath })
+    .from(ranked)
+    .where(lte(ranked.rank, LIST_CARD_POSTERS))
+    .orderBy(ranked.rank);
+
+  const rowsByList = Map.groupBy(rows, ({ listId }) => listId);
+
+  return lists.map((list) => ({
+    ...list,
+    posterPaths:
+      rowsByList.get(list.id)?.map(({ posterPath }) => posterPath) ?? [],
+  }));
 };
 
 export const addMovieList = async (data: AddListData) => {
@@ -147,7 +199,10 @@ export const getAllMovieLists = async (
         .where(and(eq(movieList.private, false), searchFilter)),
     ]);
 
-    return { success: true, data: { lists: allMovieLists, totalCount } };
+    return {
+      success: true,
+      data: { lists: await withPosterPaths(allMovieLists), totalCount },
+    };
   } catch (e) {
     logError("list/getAllMovieLists", e);
     return { success: false, message: "Something went wrong" };
@@ -193,7 +248,10 @@ export const getUserMovieLists = async (
       db.select({ totalCount: count() }).from(movieList).where(whereClause),
     ]);
 
-    return { success: true, data: { lists: userMovieLists, totalCount } };
+    return {
+      success: true,
+      data: { lists: await withPosterPaths(userMovieLists), totalCount },
+    };
   } catch (e) {
     logError("list/getUserMovieLists", e);
     return { success: false, message: "Something went wrong" };

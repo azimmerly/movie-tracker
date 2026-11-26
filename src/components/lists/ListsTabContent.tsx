@@ -67,11 +67,12 @@ export const ListsTabContent = async ({
       <SearchResultMessage searchTerm={search} noun="lists" />
       <div className="flex flex-col gap-3">
         {lists?.length ? (
-          lists.map(({ user, movieCount, ...list }) => (
+          lists.map(({ user, movieCount, posterPaths, ...list }) => (
             <ListCard
               list={list}
               user={user}
               movieCount={movieCount}
+              posterPaths={posterPaths}
               key={list.id}
             />
           ))
