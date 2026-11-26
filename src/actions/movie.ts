@@ -16,9 +16,9 @@ import {
 } from "drizzle-orm";
 
 import { getSession } from "@/actions/auth";
-import { movieDbFetch } from "@/actions/movieDb";
 import { db } from "@/lib/db";
 import { listMovie, movie, movieList, userMovie } from "@/lib/db/schema";
+import { browseMovieDb, fetchMovieDbMovie, searchMovieDb } from "@/lib/movieDb";
 import type {
   AddMovieData,
   AddUserMovieData,
@@ -37,22 +37,9 @@ import {
   addUserMovieSchema,
   deleteMovieSchema,
   deleteUserMovieSchema,
-  movieBrowseResponseSchema,
-  movieDetailsResponseSchema,
-  movieSearchResponseSchema,
   movieSearchSchema,
   updateMovieSchema,
 } from "@/utils/validation/movie";
-
-const CACHE_ONE_DAY = 86400;
-
-const fetchMovieDbMovie = (id: Movie["id"]) =>
-  movieDbFetch("/movie/:id", {
-    params: { id: id.toString() },
-    query: { append_to_response: "credits" },
-    output: movieDetailsResponseSchema,
-    next: { revalidate: CACHE_ONE_DAY },
-  });
 
 const ensureMovie = async (id: Movie["id"]) => {
   const movieExists = await db.query.movie.findFirst({
@@ -104,11 +91,7 @@ export const searchMovies = async (
         ),
         columns: { id: true },
       }),
-      movieDbFetch("/search/movie", {
-        output: movieSearchResponseSchema,
-        query: { query: title },
-        next: { revalidate: CACHE_ONE_DAY },
-      }),
+      searchMovieDb(title),
     ]);
 
     if (!ownedList) {
@@ -142,16 +125,12 @@ export const browseMovies = async (page: number, search?: string) => {
   try {
     const query = search?.trim();
 
-    const data = await movieDbFetch(
-      query ? "/search/movie" : "/movie/popular",
-      {
-        output: movieBrowseResponseSchema,
-        query: query ? { query, page } : { page },
-        next: { revalidate: CACHE_ONE_DAY },
-      },
-    );
+    const data = await browseMovieDb(page, query);
 
-    return { success: true, data };
+    return {
+      success: true,
+      data: query ? { ...data, totalCount: data.movies.length } : data,
+    };
   } catch (e) {
     logError("movie/browseMovies", e);
     return { success: false, message: "Something went wrong" };
