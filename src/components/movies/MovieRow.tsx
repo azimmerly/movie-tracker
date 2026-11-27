@@ -1,8 +1,8 @@
 import { CalendarDaysIcon } from "@heroicons/react/16/solid";
 import Link from "next/link";
 
-import { MovieActions } from "@/components/movies/MovieActions";
 import { MoviePoster } from "@/components/movies/MoviePoster";
+import { MovieRatingControls } from "@/components/movies/MovieRatingControls";
 import { Chip } from "@/components/ui/Chip";
 import { Tooltip } from "@/components/ui/Tooltip";
 import { Typography } from "@/components/ui/Typography";
@@ -62,7 +62,7 @@ export const MovieRow = ({
             />
           ))}
         </div>
-        <MovieActions
+        <MovieRatingControls
           owner={owner}
           movieId={movie.id}
           rating={rating}

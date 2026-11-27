@@ -13,8 +13,8 @@ import { MOVIES_PAGE_SIZE } from "@/consts";
 import { formatDate } from "@/utils/formatDate";
 import { formatUserId } from "@/utils/formatUserId";
 import { getOffset, handleInvalidPage, parsePage } from "@/utils/pagination";
+import { ListMovies } from "./ListMovies";
 import { ListOptions } from "./ListOptions";
-import { MovieList } from "./MovieList";
 
 const visibilityConfig = {
   private: {
@@ -100,7 +100,7 @@ const ListPage = async ({ params, searchParams }: ListPageProps) => {
           {visibilityLabel}
         </Typography.Small>
       </div>
-      <MovieList
+      <ListMovies
         listId={id}
         movies={movies}
         owner={owner}

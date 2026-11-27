@@ -1,13 +1,13 @@
 import { Squares2X2Icon } from "@heroicons/react/16/solid";
 
 import { getUserMovies } from "@/actions/movie";
+import { ActiveFilter } from "@/components/ActiveFilter";
 import { ErrorMessage } from "@/components/ErrorMessage";
-import { AllUserMovies } from "@/components/movies/AllUserMovies";
 import { MovieSortSelect } from "@/components/movies/MovieSortSelect";
+import { UserMovieRows } from "@/components/movies/UserMovieRows";
 import { NothingFound } from "@/components/NothingFound";
 import { Pagination } from "@/components/Pagination";
-import { SearchParamInput } from "@/components/SearchParamInput";
-import { SearchResultMessage } from "@/components/SearchResultMessage";
+import { SearchInput } from "@/components/SearchInput";
 import { Typography } from "@/components/ui/Typography";
 import { MOVIES_PAGE_SIZE } from "@/consts";
 import { getOffset, handleInvalidPage } from "@/utils/pagination";
@@ -55,13 +55,13 @@ export const MoviesTabContent = async ({
           </Typography.Body>
         </div>
         <div className="flex w-full shrink-0 flex-col gap-2.25 sm:w-fit sm:flex-row">
-          <SearchParamInput placeholder="Movie title or genre" />
+          <SearchInput placeholder="Movie title or genre" />
           <MovieSortSelect />
         </div>
       </div>
-      <SearchResultMessage searchTerm={search} noun="movies" />
+      <ActiveFilter value={search} resource="movies" />
       {movies?.length ? (
-        <AllUserMovies movies={movies} owner={owner} />
+        <UserMovieRows movies={movies} owner={owner} />
       ) : (
         <NothingFound
           text={

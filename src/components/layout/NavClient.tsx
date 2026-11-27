@@ -40,10 +40,10 @@ type NavClientProps = {
 
 const navLinks = [
   {
-    href: "/",
+    href: "/lists",
     label: "Lists",
     icon: ListBulletIcon,
-    isActive: (path: string) => path === "/",
+    isActive: (path: string) => path === "/lists",
   },
   {
     href: "/movies",

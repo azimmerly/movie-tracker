@@ -1,23 +1,23 @@
 import { getSession } from "@/actions/auth";
 import { getAllMovieLists } from "@/actions/list";
+import { ActiveFilter } from "@/components/ActiveFilter";
+import { AuthPrompt } from "@/components/AuthPrompt";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { AddListDialog } from "@/components/lists/AddListDialog";
 import { ListCard } from "@/components/lists/ListCard";
 import { ListSortSelect } from "@/components/lists/ListSortSelect";
 import { NothingFound } from "@/components/NothingFound";
 import { Pagination } from "@/components/Pagination";
-import { SearchParamInput } from "@/components/SearchParamInput";
-import { SearchResultMessage } from "@/components/SearchResultMessage";
+import { SearchInput } from "@/components/SearchInput";
 import { Typography } from "@/components/ui/Typography";
 import { LISTS_PAGE_SIZE } from "@/consts";
 import { getOffset, handleInvalidPage, parsePage } from "@/utils/pagination";
-import { GetStartedButton } from "./GetStartedButton";
 
-type DiscoverProps = {
+type ListsPageProps = {
   searchParams: Promise<{ search?: string; sort?: string; page?: string }>;
 };
 
-const Discover = async ({ searchParams }: DiscoverProps) => {
+const ListsPage = async ({ searchParams }: ListsPageProps) => {
   const { search, sort, page } = await searchParams;
   const currentPage = parsePage(page);
   const offset = getOffset(currentPage, LISTS_PAGE_SIZE);
@@ -44,13 +44,17 @@ const Discover = async ({ searchParams }: DiscoverProps) => {
         </Typography.Body>
       </div>
       <div className="flex flex-col items-end justify-between gap-3 sm:flex-row">
-        {!!session ? <AddListDialog /> : <GetStartedButton />}
+        {!!session ? (
+          <AddListDialog />
+        ) : (
+          <AuthPrompt action="create your own list" className="mb-2 w-full" />
+        )}
         <div className="flex w-full flex-col items-end justify-end gap-2.25 sm:flex-row">
-          <SearchParamInput placeholder="List title or username" />
+          <SearchInput placeholder="List title or username" />
           <ListSortSelect />
         </div>
       </div>
-      <SearchResultMessage searchTerm={search} noun="lists" />
+      <ActiveFilter value={search} resource="lists" />
       <div className="flex flex-col gap-3">
         {!!lists?.length ? (
           lists.map(({ user, movieCount, posterPaths, ...list }) => (
@@ -76,4 +80,4 @@ const Discover = async ({ searchParams }: DiscoverProps) => {
   );
 };
 
-export default Discover;
+export default ListsPage;

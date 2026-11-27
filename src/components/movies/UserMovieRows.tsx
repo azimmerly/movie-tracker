@@ -7,7 +7,7 @@ import { UserMovieOptions } from "@/components/movies/UserMovieOptions";
 import { Typography } from "@/components/ui/Typography";
 import type { Movie, MovieList, UserMovie } from "@/types";
 
-type AllUserMoviesProps = {
+type UserMovieRowsProps = {
   owner: boolean;
   movies: ({
     movie: Movie;
@@ -15,7 +15,7 @@ type AllUserMoviesProps = {
   } & Pick<UserMovie, "rating" | "favorite">)[];
 };
 
-export const AllUserMovies = ({ movies, owner }: AllUserMoviesProps) => {
+export const UserMovieRows = ({ movies, owner }: UserMovieRowsProps) => {
   return (
     <ul className="divide-y divide-mist-200 dark:divide-mist-800">
       {movies.map(({ movie, favorite, rating, lists }, index) => (

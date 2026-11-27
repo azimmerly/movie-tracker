@@ -1,10 +1,10 @@
 import { browseMovies } from "@/actions/movie";
+import { ActiveFilter } from "@/components/ActiveFilter";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { MoviePoster } from "@/components/movies/MoviePoster";
 import { NothingFound } from "@/components/NothingFound";
 import { Pagination } from "@/components/Pagination";
-import { SearchParamInput } from "@/components/SearchParamInput";
-import { SearchResultMessage } from "@/components/SearchResultMessage";
+import { SearchInput } from "@/components/SearchInput";
 import { Typography } from "@/components/ui/Typography";
 import { BROWSE_MOVIES_MAX_RESULTS, BROWSE_MOVIES_PAGE_SIZE } from "@/consts";
 import { handleInvalidPage, parsePage } from "@/utils/pagination";
@@ -42,12 +42,12 @@ const Movies = async ({ searchParams }: MoviesProps) => {
             See what&apos;s popular, or search for something specific.
           </Typography.Body>
         </div>
-        <SearchParamInput
+        <SearchInput
           placeholder="Movie title"
           className="sm:w-72 sm:max-w-72 sm:shrink-0"
         />
       </div>
-      <SearchResultMessage searchTerm={search} noun="movies" />
+      <ActiveFilter value={search} resource="movies" />
       {!!movies.length ? (
         <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 lg:grid-cols-5">
           {movies.map((movie, index) => (

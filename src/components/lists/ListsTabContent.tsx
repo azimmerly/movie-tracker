@@ -1,14 +1,14 @@
 import { Squares2X2Icon } from "@heroicons/react/16/solid";
 
 import { getUserMovieLists } from "@/actions/list";
+import { ActiveFilter } from "@/components/ActiveFilter";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { AddListDialog } from "@/components/lists/AddListDialog";
 import { ListCard } from "@/components/lists/ListCard";
 import { ListSortSelect } from "@/components/lists/ListSortSelect";
 import { NothingFound } from "@/components/NothingFound";
 import { Pagination } from "@/components/Pagination";
-import { SearchParamInput } from "@/components/SearchParamInput";
-import { SearchResultMessage } from "@/components/SearchResultMessage";
+import { SearchInput } from "@/components/SearchInput";
 import { Typography } from "@/components/ui/Typography";
 import { LISTS_PAGE_SIZE } from "@/consts";
 import { getOffset, handleInvalidPage } from "@/utils/pagination";
@@ -60,11 +60,11 @@ export const ListsTabContent = async ({
           </div>
         )}
         <div className="flex w-full shrink-0 flex-col gap-2.25 sm:w-fit sm:flex-row">
-          <SearchParamInput placeholder="List title" />
+          <SearchInput placeholder="List title" />
           <ListSortSelect />
         </div>
       </div>
-      <SearchResultMessage searchTerm={search} noun="lists" />
+      <ActiveFilter value={search} resource="lists" />
       <div className="flex flex-col gap-3">
         {lists?.length ? (
           lists.map(({ user, movieCount, posterPaths, ...list }) => (

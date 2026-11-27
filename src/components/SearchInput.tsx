@@ -10,15 +10,17 @@ import { Typography } from "@/components/ui/Typography";
 import { useDebouncedCallback } from "@/utils/useDebouncedCallback";
 import { useQueryString } from "@/utils/useQueryString";
 
-type SearchParamInputProps = {
+type SearchInputProps = {
   placeholder: string;
   className?: string;
+  replaces?: string[];
 };
 
-export const SearchParamInput = ({
+export const SearchInput = ({
   placeholder,
   className,
-}: SearchParamInputProps) => {
+  replaces = [],
+}: SearchInputProps) => {
   const searchParams = useSearchParams();
   const { setQueryParams } = useQueryString();
   const searchParam = searchParams.get("search") ?? "";
@@ -31,8 +33,13 @@ export const SearchParamInput = ({
   }
 
   const debouncedUpdateQueryString = useDebouncedCallback((value: string) => {
-    setQueryParams({ search: value, page: null });
-  }, 500);
+    const replaced = value ? replaces : [];
+    setQueryParams({
+      search: value,
+      page: null,
+      ...Object.fromEntries(replaced.map((param) => [param, null])),
+    });
+  }, 800);
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -54,7 +61,7 @@ export const SearchParamInput = ({
       </Label>
       <div className="relative grid grid-cols-1">
         <Input
-          maxLength={25}
+          maxLength={100}
           value={search}
           onChange={handleSearch}
           autoComplete="off"

@@ -15,17 +15,17 @@ import { Tooltip } from "@/components/ui/Tooltip";
 import type { Movie, UpdateMovieData, UserMovie } from "@/types";
 import { updateMovieSchema } from "@/utils/validation/movie";
 
-type MovieActionsProps = {
+type MovieRatingControlsProps = {
   owner: boolean;
   movieId: Movie["id"];
 } & Pick<UserMovie, "rating" | "favorite">;
 
-export const MovieActions = ({
+export const MovieRatingControls = ({
   owner,
   movieId,
   rating,
   favorite,
-}: MovieActionsProps) => {
+}: MovieRatingControlsProps) => {
   const router = useRouter();
   const [starTick, setStarTick] = useState(0);
   const { control, formState, setValue, getValues } = useForm<UpdateMovieData>({
