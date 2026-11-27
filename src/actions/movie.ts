@@ -30,6 +30,7 @@ import type {
   UpdateMovieData,
 } from "@/types";
 import { ascLower } from "@/utils/ascLower";
+import { getGenreId } from "@/utils/getGenreId";
 import { logError } from "@/utils/logError";
 import {
   PENDING_STATUSES,
@@ -121,11 +122,15 @@ export const searchMovies = async (
   }
 };
 
-export const browseMovies = async (page: number, search?: string) => {
+export const browseMovies = async (
+  page: number,
+  search?: string,
+  genre?: string,
+) => {
   try {
     const query = search?.trim();
-
-    const data = await browseMovieDb(page, query);
+    const genreId = getGenreId(genre);
+    const data = await browseMovieDb(page, query, genreId);
 
     return {
       success: true,

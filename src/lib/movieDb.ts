@@ -1,6 +1,6 @@
 import { createFetch } from "@better-fetch/fetch";
 
-import { CACHE_ONE_DAY, MOVIE_DB_API_URL } from "@/consts";
+import { CACHE_ONE_DAY, GENRE_MIN_VOTES, MOVIE_DB_API_URL } from "@/consts";
 import { env } from "@/env";
 import type { Movie } from "@/types";
 import {
@@ -31,7 +31,11 @@ export const fetchMovieDbMovie = (id: Movie["id"]) =>
     next: { revalidate: CACHE_ONE_DAY },
   });
 
-export const browseMovieDb = (page: number, query?: string) => {
+export const browseMovieDb = (
+  page: number,
+  query?: string,
+  genreId?: number,
+) => {
   const options = {
     output: movieBrowseResponseSchema,
     next: { revalidate: CACHE_ONE_DAY },
@@ -41,6 +45,19 @@ export const browseMovieDb = (page: number, query?: string) => {
     return movieDbFetch("/search/movie", {
       ...options,
       query: { query, include_adult: false, language: LANGUAGE },
+    });
+  }
+
+  if (genreId) {
+    return movieDbFetch("/discover/movie", {
+      ...options,
+      query: {
+        page,
+        with_genres: genreId,
+        "vote_count.gte": GENRE_MIN_VOTES,
+        include_adult: false,
+        language: LANGUAGE,
+      },
     });
   }
 

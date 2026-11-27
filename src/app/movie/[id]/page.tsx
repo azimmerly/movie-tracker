@@ -12,6 +12,7 @@ import { getSession } from "@/actions/auth";
 import { getMovie, getMovieUserState } from "@/actions/movie";
 import { AuthPrompt } from "@/components/AuthPrompt";
 import { ErrorMessage } from "@/components/ErrorMessage";
+import { GenreChip } from "@/components/movies/GenreChip";
 import { MoviePoster } from "@/components/movies/MoviePoster";
 import { Chip } from "@/components/ui/Chip";
 import { Skeleton } from "@/components/ui/Skeleton";
@@ -89,7 +90,7 @@ const MoviePage = async ({ params }: MoviePageProps) => {
               />
             )}
             {movie.genres.slice(0, 3).map((genre) => (
-              <Chip key={genre} text={genre} variant="primary" />
+              <GenreChip key={genre} genre={genre} />
             ))}
           </div>
         </div>

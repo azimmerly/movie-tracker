@@ -5,6 +5,7 @@ export const MOVIE_DB_IMAGE_URL = "https://image.tmdb.org/t/p";
 export const IMDB_MOVIE_URL = "https://www.imdb.com/title";
 
 export const CACHE_ONE_DAY = 86400;
+export const GENRE_MIN_VOTES = 50;
 export const LIST_CARD_POSTERS = 4;
 
 export const LISTS_PAGE_SIZE = 10;

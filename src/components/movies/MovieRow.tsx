@@ -1,9 +1,9 @@
 import { CalendarDaysIcon } from "@heroicons/react/16/solid";
 import Link from "next/link";
 
+import { GenreChip } from "@/components/movies/GenreChip";
 import { MoviePoster } from "@/components/movies/MoviePoster";
 import { MovieRatingControls } from "@/components/movies/MovieRatingControls";
-import { Chip } from "@/components/ui/Chip";
 import { Tooltip } from "@/components/ui/Tooltip";
 import { Typography } from "@/components/ui/Typography";
 import type { Movie, UserMovie } from "@/types";
@@ -54,10 +54,9 @@ export const MovieRow = ({
         </span>
         <div className="mt-2 flex flex-wrap gap-1.25">
           {movie.genres.slice(0, 3).map((genre) => (
-            <Chip
+            <GenreChip
               key={genre}
-              text={genre}
-              variant="primary"
+              genre={genre}
               className="text-[11px] sm:text-xs"
             />
           ))}

@@ -1,3 +1,5 @@
+import { notFound } from "next/navigation";
+
 import { browseMovies } from "@/actions/movie";
 import { ActiveFilter } from "@/components/ActiveFilter";
 import { ErrorMessage } from "@/components/ErrorMessage";
@@ -7,15 +9,20 @@ import { Pagination } from "@/components/Pagination";
 import { SearchInput } from "@/components/SearchInput";
 import { Typography } from "@/components/ui/Typography";
 import { BROWSE_MOVIES_MAX_RESULTS, BROWSE_MOVIES_PAGE_SIZE } from "@/consts";
+import { getGenreId } from "@/utils/getGenreId";
 import { handleInvalidPage, parsePage } from "@/utils/pagination";
 
 type MoviesProps = {
-  searchParams: Promise<{ search?: string; page?: string }>;
+  searchParams: Promise<{ search?: string; genre?: string; page?: string }>;
 };
 
 const Movies = async ({ searchParams }: MoviesProps) => {
-  const { search, page } = await searchParams;
+  const { search, genre, page } = await searchParams;
   const currentPage = parsePage(page);
+
+  if (genre && getGenreId(genre) === undefined) {
+    notFound();
+  }
 
   handleInvalidPage(
     currentPage,
@@ -23,7 +30,7 @@ const Movies = async ({ searchParams }: MoviesProps) => {
     BROWSE_MOVIES_PAGE_SIZE,
   );
 
-  const { data, success } = await browseMovies(currentPage, search);
+  const { data, success } = await browseMovies(currentPage, search, genre);
 
   if (!success || !data) {
     return <ErrorMessage />;
@@ -44,10 +51,15 @@ const Movies = async ({ searchParams }: MoviesProps) => {
         </div>
         <SearchInput
           placeholder="Movie title"
+          replaces={["genre"]}
           className="sm:w-72 sm:max-w-72 sm:shrink-0"
         />
       </div>
-      <ActiveFilter value={search} resource="movies" />
+      <ActiveFilter
+        value={search || genre}
+        param={search ? "search" : "genre"}
+        resource="movies"
+      />
       {!!movies.length ? (
         <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 lg:grid-cols-5">
           {movies.map((movie, index) => (
